@@ -1,0 +1,265 @@
+'use strict';
+// Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
+const API = logic.hu.feri.cleveradventure;
+
+// ---------------------------------------------------------------- helpers
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  if (props) for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (k === 'html') el.innerHTML = v;
+    else el.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : String(c));
+  return el;
+}
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/** Timers belong to a scope; leaving a screen or a task clears them. */
+class Scope {
+  constructor() { this.ids = []; this.dead = false; this.cleanups = []; }
+  later(ms, fn) { const id = setTimeout(() => { if (!this.dead) fn(); }, ms); this.ids.push(id); return id; }
+  wait(ms) { return new Promise(res => this.later(ms, res)); }
+  every(ms, fn) { const id = setInterval(() => { if (!this.dead) fn(); }, ms); this.ids.push(id); return id; }
+  onEnd(fn) { this.cleanups.push(fn); }
+  end() { this.dead = true; this.ids.forEach(id => { clearTimeout(id); clearInterval(id); }); this.cleanups.forEach(f => { try { f(); } catch (e) {} }); }
+}
+
+// ---------------------------------------------------------------- storage
+const mem = {};
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('ca_' + k); return v == null ? (k in mem ? mem[k] : d) : JSON.parse(v); } catch (e) { return k in mem ? mem[k] : d; } },
+  set(k, v) { mem[k] = v; try { localStorage.setItem('ca_' + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { delete mem[k]; try { localStorage.removeItem('ca_' + k); } catch (e) {} },
+  keys() { const out = new Set(Object.keys(mem)); try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('ca_')) out.add(k.slice(3)); } } catch (e) {} return [...out]; },
+};
+
+// The web version speaks Hungarian, German and English (Lang ordinals 0, 1, 2).
+const UI_LANGS = [0, 1, 2];
+function defaultLang() {
+  const n = (navigator.language || 'de').toLowerCase();
+  return n.startsWith('hu') ? 0 : n.startsWith('en') ? 2 : 1;
+}
+
+const AVATARS = ['🦁', '🐯', '🐻', '🐼', '🐨', '🐸', '🦊', '🐰', '🐶', '🐱', '🦄', '🐲', '🐵', '🐧', '🦉', '🐙'];
+const MAX_PLAYERS = 6;
+
+const Store = {
+  get lang() { return LS.get('lang', defaultLang()); },
+  set lang(v) { LS.set('lang', v); },
+  get morning() { return LS.get('limit_am', 15); }, set morning(v) { LS.set('limit_am', v); },
+  get afternoon() { return LS.get('limit_pm', 15); }, set afternoon(v) { LS.set('limit_pm', v); },
+  get firstStart() { return LS.get('players', null) == null; },
+  get players() { return LS.get('players', null) || [{ id: 1, avatar: AVATARS[0], name: '' }]; },
+  savePlayers(list) { LS.set('players', list); },
+  get current() { const id = LS.get('current', 1); return this.players.find(p => p.id === id) || this.players[0]; },
+  select(id) { LS.set('current', id); },
+  completeFirstStart(avatar, name) { this.savePlayers([{ id: 1, avatar, name: name.trim() }]); this.select(1); },
+  addPlayer(avatar, name) {
+    const id = Math.max(0, ...this.players.map(p => p.id)) + 1;
+    this.savePlayers([...this.players, { id, avatar, name: name.trim() }]);
+    return id;
+  },
+  deletePlayer(id) {
+    if (this.players.length <= 1) return;
+    LS.keys().filter(k => k.startsWith(`p${id}_`)).forEach(k => LS.del(k));
+    this.savePlayers(this.players.filter(p => p.id !== id));
+    if (LS.get('current', 1) === id) this.select(this.players[0].id);
+  },
+  k(key, id) { return `p${id ?? this.current.id}_${key}`; },
+  starsOf(id) { return LS.get(this.k('stars', id), 0); },
+  get stars() { return this.starsOf(); },
+  addStarsTo(id, n) { LS.set(this.k('stars', id), this.starsOf(id) + n); },
+  addStars(n) { this.addStarsTo(this.current.id, n); },
+  stickersOf(id) { return LS.get(this.k('stickers', id), []); },
+  get stickers() { return this.stickersOf(); },
+  awardStickerTo(id) {
+    const have = this.stickersOf(id);
+    const free = data().stickers.filter(s => !have.includes(s));
+    if (!free.length) return null;
+    const s = pick(free);
+    LS.set(this.k('stickers', id), [...have, s]);
+    return s;
+  },
+  awardSticker() { return this.awardStickerTo(this.current.id); },
+  resetPlayer(id, everything) {
+    LS.del(this.k('stickers', id));
+    if (everything) {
+      LS.del(this.k('stars', id));
+      LS.keys().filter(k => k.startsWith(`p${id}_solved_`) || k.startsWith(`p${id}_level_`)).forEach(k => LS.del(k));
+    }
+  },
+  solved(g) { return LS.get(this.k('solved_' + g), 0); },
+  addSolved(g) { LS.set(this.k('solved_' + g), this.solved(g) + 1); },
+  level(g) { return clamp(LS.get(this.k('level_' + g), 0), 0, game(g).maxLevel); },
+  setLevel(g, v) { LS.set(this.k('level_' + g), clamp(v, 0, game(g).maxLevel)); },
+  bandLevel(g, b) { return clamp(LS.get(this.k(`level_${g}_${b}`), b * 3), b * 3, b * 3 + 2); },
+  setBandLevel(g, b, v) { LS.set(this.k(`level_${g}_${b}`), clamp(v, b * 3, b * 3 + 2)); },
+  hasBand(g, b) { return LS.get(this.k(`level_${g}_${b}`), null) != null; },
+  bestLevel(g) {
+    if (!game(g).difficulty) return this.level(g);
+    const played = [0, 1, 2].filter(b => this.hasBand(g, b));
+    return played.length ? Math.max(...played.map(b => this.bandLevel(g, b))) : 0;
+  },
+  isMorning() { return new Date().getHours() < 12; },
+  get limitMinutes() { return this.isMorning() ? this.morning : this.afternoon; },
+  sessionKey() { const d = new Date(); return this.k(`used_${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}_${this.isMorning() ? 'am' : 'pm'}`); },
+  usedSeconds() { return LS.get(this.sessionKey(), 0); },
+  addUsedSecond() { LS.set(this.sessionKey(), this.usedSeconds() + 1); },
+  remaining() { return Math.max(0, this.limitMinutes * 60 - this.usedSeconds()); },
+  resetSession() { LS.del(this.sessionKey()); },
+  cleanOldTime() {
+    const d = new Date(); const today = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    LS.keys().filter(k => k.includes('_used_') && !k.includes(today)).forEach(k => LS.del(k));
+  },
+};
+
+// ---------------------------------------------------------------- texts and data
+const DATA = {};
+function data() { const l = Store.lang; return DATA[l] || (DATA[l] = JSON.parse(API.webData(l))); }
+function L() { return Store.lang; }
+/** Text in the app language (only Hungarian, German, English in the web version). */
+function T(hu, de, en) { return [hu, de, en][L()]; }
+function TF(hu, de, en, ...a) { let s = T(hu, de, en); a.forEach((x, i) => { s = s.split(`{${i}}`).join(x); }); return s; }
+function game(id) { return data().games.find(g => g.id === id); }
+function levelLabel(n) { return data().levelLabel.replace('0', String(n)); }
+const praise = () => pick(data().texts.praise);
+const tryAgain = () => pick(data().texts.tryAgain);
+
+// ---------------------------------------------------------------- speech
+const Speech = {
+  voices: [],
+  init() {
+    if (!this.supported()) return;
+    const load = () => { this.voices = speechSynthesis.getVoices(); };
+    load();
+    speechSynthesis.onvoiceschanged = load;
+  },
+  tag(l) { return (data().langs[l] || data().langs[1]).tts; },
+  voice(l) {
+    const tag = this.tag(l).toLowerCase(); const base = tag.split('-')[0];
+    const vs = this.voices;
+    return vs.find(v => v.lang.toLowerCase().replace('_', '-') === tag && /premium|enhanced|siri/i.test(v.name))
+      || vs.find(v => v.lang.toLowerCase().replace('_', '-') === tag)
+      || vs.find(v => v.lang.toLowerCase().startsWith(base)) || null;
+  },
+  has(l) { return !!this.voice(l); },
+  supported() { try { return !!window.speechSynthesis && typeof window.SpeechSynthesisUtterance === 'function'; } catch (e) { return false; } },
+  sayParts(parts, opts = {}) {
+    if (!this.supported() || !parts.length) return;
+    // Safari can drop an utterance queued right after cancel(), so wait a moment when something was playing.
+    const busy = speechSynthesis.speaking || speechSynthesis.pending;
+    speechSynthesis.cancel();
+    const token = ++this.token;
+    if (busy) setTimeout(() => { if (token === this.token) this.speakNow(parts, opts); }, 80);
+    else this.speakNow(parts, opts);
+  },
+  token: 0,
+  speakNow(parts, opts) {
+    for (const [text, l] of parts) {
+      if (!text) continue;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = this.tag(l); const v = this.voice(l); if (v) u.voice = v;
+      u.rate = opts.rate || 0.9; u.pitch = opts.pitch || 1.1;
+      speechSynthesis.speak(u);
+    }
+  },
+  say(text, l = L()) { this.sayParts([[text, l]]); },
+  calm(text, l = L()) { this.sayParts([[text, l]], { rate: 0.7, pitch: 1.0 }); },
+  stop() { this.token++; if (this.supported()) try { speechSynthesis.cancel(); } catch (e) {} },
+};
+
+// ---------------------------------------------------------------- navigation
+let current = { name: null, scope: new Scope() };
+const app = () => document.getElementById('app');
+/** counts: does play time run on this screen? */
+function go(name, render, opts = {}) {
+  current.scope.end();
+  Speech.stop();
+  const scope = new Scope();
+  current = { name, scope, counts: !!opts.counts, exempt: !!opts.exempt };
+  const root = app(); root.innerHTML = '';
+  render(root, scope);
+}
+
+// ---------------------------------------------------------------- shared widgets
+function roundBtn(e, onclick, extra) { return h('button', { class: 'roundbtn' + (extra ? ' ' + extra : ''), onclick }, e); }
+function bigBtn(text, color, onclick, style) { return h('button', { class: 'bigbtn', style: Object.assign({ background: color }, style || {}), onclick }, text); }
+function starsRow(n, size) {
+  return h('div', { class: 'stars', style: size ? { fontSize: size + 'px' } : null },
+    [1, 2, 3, 4, 5].map(i => h('span', { class: i <= n ? '' : 'off' }, '⭐')));
+}
+function timeBar() {
+  const fill = h('div', { class: 'fill' });
+  const el = h('div', { class: 'timebar' }, h('span', null, '⏳'), h('div', { class: 'track' }, fill));
+  el.update = () => {
+    const total = Store.limitMinutes * 60; const f = total > 0 ? clamp(Store.remaining() / total, 0, 1) : 0;
+    fill.style.width = (f * 100) + '%';
+    fill.style.background = f > 0.5 ? '#43A047' : f > 0.2 ? '#FFB300' : '#E53935';
+  };
+  el.classList.add('live-time'); el.update();
+  return el;
+}
+function noTimeBadge(big) {
+  return h('div', { class: 'notime', style: big ? { fontSize: '17px', padding: '10px' } : null },
+    '⏳🚫 ' + T('Ebben a játékban nem fogy a játékidő.', 'In diesem Spiel läuft die Spielzeit nicht ab.', 'Play time does not run in this game.'));
+}
+function calmButton(onclick) {
+  return h('div', { class: 'calmbtn', onclick }, h('span', { style: { fontSize: '32px' } }, '🎈'), T('Nyugi-lufi', 'Ruhe-Ballon', 'Calm balloon'));
+}
+function dialog(root, title, body, buttons) {
+  const ov = h('div', { class: 'overlay' },
+    h('div', { class: 'dialog' }, h('div', { class: 'dt' }, title), body ? h('div', null, body) : null,
+      h('div', { class: 'db' }, buttons.map(([label, fn, color]) => h('button', {
+        class: 'textbtn', style: color ? { color } : null, onclick: () => { ov.remove(); fn && fn(); }
+      }, label)))));
+  root.append(ov);
+  return ov;
+}
+
+/** An item (card content) as DOM. */
+function itemEl(it) {
+  switch (it.t) {
+    case 'emoji': return h('div', { class: 'item' + (it.label ? ' lbl' : '') }, h('span', { class: 'em' }, it.e), it.label ? h('span', { class: 'lb' }, it.label) : null);
+    case 'num': return h('div', { class: 'item' }, h('span', { class: 'num' }, it.n));
+    case 'letter': return h('div', { class: 'item' }, h('span', { class: 'let' }, it.c));
+    case 'shape': { const d = h('div', { class: 'item' }); d.innerHTML = shapeSvg(it.kind, it.color); return d; }
+    case 'group': {
+      const rows = []; for (let i = 0; i < it.n; i += 3) rows.push(it.e.repeat(Math.min(3, it.n - i)));
+      return h('div', { class: 'item grp' }, rows.map(r => h('div', null, r)));
+    }
+    case 'shadow': return h('div', { class: 'item' }, h('span', { class: 'em shadow' }, it.e));
+    default: return h('div', { class: 'item' }, h('span', { class: 'q' }, '?'));
+  }
+}
+function shapeSvg(kind, color) {
+  const s = 100; let d;
+  if (kind === 'CIRCLE') return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="${color}"/></svg>`;
+  if (kind === 'SQUARE') return `<svg viewBox="0 0 100 100"><rect x="12" y="12" width="76" height="76" fill="${color}"/></svg>`;
+  if (kind === 'TRIANGLE') d = 'M50 8 L95 88 L5 88 Z';
+  if (kind === 'STAR') {
+    d = ''; for (let i = 0; i < 10; i++) { const r = i % 2 ? 48 * 0.45 : 48; const a = (-90 + 36 * i) * Math.PI / 180; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (53 + r * Math.sin(a)).toFixed(1); } d += 'Z';
+  }
+  if (kind === 'HEART') d = 'M50 90 C10 62 -2 30 25 16 C38 10 48 18 50 30 C52 18 62 10 75 16 C102 30 90 62 50 90 Z';
+  return `<svg viewBox="0 0 ${s} ${s}"><path d="${d}" fill="${color}"/></svg>`;
+}
+
+// ---------------------------------------------------------------- play-time clock
+function startClock() {
+  setInterval(() => {
+    if (document.hidden) return;
+    if (current.counts && Store.remaining() > 0) {
+      Store.addUsedSecond();
+      if (Store.remaining() === 60) Speech.say(data().texts.oneMinute);
+      if (Store.remaining() === 0) { showTimeUp(); return; }
+    }
+    document.querySelectorAll('.live-time').forEach(el => el.update());
+  }, 1000);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) Speech.stop(); });
+}
