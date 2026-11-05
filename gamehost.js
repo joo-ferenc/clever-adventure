@@ -51,7 +51,19 @@ function runGame(id, band, foreign) {
   let level = band != null ? Store.bandLevel(id, band) : Store.level(id);
   if (band != null) Store.setBandLevel(id, band, level);
   let stars = 0, roundNo = 0;
+  // Questions already asked in this set of 5 stars (cleared for every new set).
   const asked = new Set();
+  // Questions answered without a mistake in this difficulty (all its levels, kept for the player):
+  // they don't come again on the next levels. Questions with a mistake come again in the next set.
+  const bandKey = band ?? -1;
+  const answered = new Set(Store.answeredKeys(id, bandKey));
+  let missedThisSet = [];
+  const replayQueue = [];
+  const nextSet = () => {
+    const seen = new Set();
+    missedThisSet.forEach(r => { if (!seen.has(r.key)) { seen.add(r.key); replayQueue.push(r); } });
+    missedThisSet = [];
+  };
 
   go('game', (root, scope) => {
     const screen = h('div', { class: 'screen' });
@@ -64,10 +76,12 @@ function runGame(id, band, foreign) {
       roundScope = new Scope();
       scope.onEnd(() => roundScope.end());
       const rs = roundScope;
-      let r = null;
-      for (let t = 0; t < 50; t++) { r = JSON.parse(API.webRound(id, L(), level, roundNo, foreign ?? 3)); if (!asked.has(r.key)) break; }
+      let r = replayQueue.shift() || null;
+      if (r) r = JSON.parse(JSON.stringify(r));
+      else for (let t = 0; t < 60; t++) { r = JSON.parse(API.webRound(id, L(), level, roundNo, foreign ?? 3)); if (!asked.has(r.key) && !answered.has(r.key)) break; }
       asked.add(r.key);
-      let solved = false, idle = null;
+      const thisRound = r;
+      let solved = false, idle = null, hadMistake = false;
       const lang = L();
       const speakPrompt = () => Speech.sayParts(r.speech);
       const armIdle = () => {
@@ -82,10 +96,14 @@ function runGame(id, band, foreign) {
         touch() { armIdle(); },
         say(text, l = lang) { armIdle(); Speech.say(text, l); },
         repeatPrompt() { armIdle(); speakPrompt(); },
-        wrong(spoken, l = lang) { armIdle(); Speech.sayParts([...(spoken ? [[spoken, l]] : []), [tryAgain(), lang]]); },
+        wrong(spoken, l = lang) { armIdle(); if (!solved) hadMistake = true; Speech.sayParts([...(spoken ? [[spoken, l]] : []), [tryAgain(), lang]]); },
+        /** A mistake without the "try again" sentence (the game says its own). */
+        mistake() { if (!solved) hadMistake = true; },
         done(spoken, l = lang) {
           if (solved) return false;
           solved = true; stars++; Store.addSolved(id);
+          if (hadMistake) missedThisSet.push(thisRound);
+          else { answered.add(thisRound.key); Store.addAnswered(id, bandKey, thisRound.key); }
           if (idle) clearTimeout(idle);
           Speech.sayParts([...(spoken ? [[spoken, l]] : []), [praise(), lang]]);
           starsEl.replaceWith(starsEl = starsRow(stars));
@@ -98,9 +116,19 @@ function runGame(id, band, foreign) {
       const listen = h('div', { class: 'listen', onclick: () => ctx.repeatPrompt() }, '🔊👂');
       const area = h('div', { class: 'grow' });
       screen.innerHTML = '';
-      screen.append(
-        h('div', { class: 'row' }, roundBtn('🏠', showHome), h('div', { class: 'spacer center' }, starsEl), h('div', { class: 'level' }, levelLabel(level + 1))),
-        timeBar(), listen, h('div', { class: 'prompt' }, r.prompt), area);
+      if (innerWidth > innerHeight * 1.15) {
+        // Sideways: the task text on the left, the game gets the full height on the right.
+        const left = h('div', { class: 'col', style: { width: '27%', flex: 'none', gap: '10px', justifyContent: 'flex-start', paddingTop: '4px' } },
+          h('div', { class: 'row', style: { width: '100%' } }, roundBtn('🏠', showHome), h('div', { class: 'level', style: { flex: 1, textAlign: 'right' } }, levelLabel(level + 1))),
+          starsEl, timeBar(), listen, h('div', { class: 'prompt' }, r.prompt));
+        left.querySelector('.timebar').style.width = '100%';
+        screen.append(h('div', { style: { display: 'flex', gap: '12px', flex: 1, minHeight: 0 } }, left, area));
+        area.style.flex = '1'; area.style.minWidth = '0';
+      } else {
+        screen.append(
+          h('div', { class: 'row' }, roundBtn('🏠', showHome), h('div', { class: 'spacer center' }, starsEl), h('div', { class: 'level' }, levelLabel(level + 1))),
+          timeBar(), listen, h('div', { class: 'prompt' }, r.prompt), area);
+      }
       // Some games use the whole height: the starsEl reference must stay in the header.
       starsEl = screen.querySelector('.stars');
       if (r.autoSpeak) rs.later(300, speakPrompt);
@@ -114,13 +142,13 @@ function runGame(id, band, foreign) {
       const sticker = Store.awardSticker();
       const t = data().texts;
       Speech.say(t.reward + (sticker ? ' ' + t.newSticker : ''));
-      const again = () => { stars = 0; asked.clear(); roundNo++; nextRound(); };
+      const again = () => { nextSet(); stars = 0; asked.clear(); roundNo++; nextRound(); };
       screen.innerHTML = '';
       screen.append(h('div', { class: 'grow scroll center', style: { flexDirection: 'column', gap: '16px', padding: '10px 14px' } },
         h('div', { style: { fontSize: '46px' } }, ['🌟', '🎉', '🏆', '🎉', '🌟'].map((e, i) => h('span', { class: 'bounce', style: { animationDelay: (i % 2) * 0.45 + 's' } }, e))),
         h('div', { class: 'title' }, t.reward), starsRow(5, 36),
         sticker ? h('div', { style: { fontSize: '21px', fontWeight: 800 } }, t.newSticker) : null,
-        sticker ? h('div', { class: 'pop', style: { fontSize: '90px' } }, sticker) : null,
+        sticker ? h('div', { class: 'pop' }, stickerEl(sticker, 90)) : null,
         bigBtn('▶  ' + t.more, '#43A047', again, { width: '100%' }),
         level < topLevel ? bigBtn('⬆️  ' + t.harder, '#FF7043', () => {
           level = Math.min(level + 1, topLevel);

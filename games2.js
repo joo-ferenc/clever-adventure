@@ -115,6 +115,8 @@ GAME_UIS.waste = (r, ctx, area, scope) => {
     if (hit && moved > 20) choose(hit.bin, hit); else { item.style.transform = ''; if (moved < 10) ctx.say(r.item.name); }
   });
   area.style.display = 'flex'; area.style.flexDirection = 'column';
+  // Sideways the bins must not get taller than the screen.
+  if (area.clientWidth > area.clientHeight * 1.15) { binsRow.style.width = Math.min(area.clientWidth, area.clientHeight * 1.05) + 'px'; binsRow.style.margin = '0 auto'; }
   area.append(h('div', { class: 'center', style: { flex: 1, flexDirection: 'column', gap: '6px', minHeight: 0 } }, item, h('b', { style: { fontSize: '19px', textAlign: 'center' } }, r.item.name)), note, binsRow);
 };
 
@@ -203,7 +205,8 @@ GAME_UIS.robot = (r, ctx, area, scope) => {
   let pos = r.start.slice(); let trail = new Set([pos.join(',')]); let got = new Set(); let stepIdx = -1;
   const wide = area.clientWidth > area.clientHeight * 1.15;
   const controlsH = 58 + 8 + 56 + 14 + Math.ceil(r.maxSteps / 7) * 44 + 24;
-  const side = wide ? Math.min(area.clientHeight, area.clientWidth * 0.5) - 8 : Math.min(area.clientWidth, area.clientHeight - controlsH) - 4;
+  // Sideways the arrows and the program row (about 330 px) stay next to the board, never cut off.
+  const side = wide ? Math.min(area.clientHeight, area.clientWidth - 345, area.clientWidth * 0.55) - 8 : Math.min(area.clientWidth, area.clientHeight - controlsH) - 4;
   const cs = Math.floor(side / n);
   const board = h('div', { style: { position: 'relative', width: cs * n + 'px', height: cs * n + 'px', borderRadius: '14px', border: '4px solid #558B2F', boxSizing: 'content-box', overflow: 'hidden', boxShadow: '0 4px 10px #0002', flex: 'none' } });
   const cells = [];
@@ -252,6 +255,7 @@ GAME_UIS.robot = (r, ctx, area, scope) => {
       robot.style.transition = 'transform .14s'; robot.style.transform = `translate(${d[1] * cs * 0.25}px, ${d[2] * cs * 0.25}px)`;
       await scope.wait(160); robot.style.transform = ''; await scope.wait(220); robot.style.transition = 'left .38s, top .38s';
     }
+    ctx.mistake();
     ctx.say(T('Majdnem! Javítsunk a programon!', 'Fast! Verbessern wir das Programm!', "Almost! Let's fix the program!"));
     await scope.wait(1900);
     reset(); running = false; buttons.style.opacity = 1;
@@ -267,6 +271,11 @@ GAME_UIS.robot = (r, ctx, area, scope) => {
 };
 
 // ---------------------------------------------------------------- what came first?
+/** A story step: its own picture when it has one (the mixing bowl), otherwise the emoji (which may get its picture). */
+function stepPic(st) {
+  if (st.pic && PIC_FILES.has(st.pic)) return h('span', { class: 'nopic' }, picImg(st.pic));
+  return st.e;
+}
 GAME_UIS.story = (r, ctx, area, scope) => {
   const steps = r.steps, n = steps.length;
   const placed = []; let finished = false;
@@ -282,7 +291,7 @@ GAME_UIS.story = (r, ctx, area, scope) => {
     for (let s = 0; s < n; s++) {
       const st = placed[s];
       const el = st != null
-        ? box({ background: '#fff', boxShadow: '0 4px 10px #0002', border: '2px solid #8E24AA80', fontSize: card * 0.5 + 'px', cursor: 'pointer' }, steps[st].e, () => ctx.say(steps[st].text))
+        ? box({ background: '#fff', boxShadow: '0 4px 10px #0002', border: '2px solid #8E24AA80', fontSize: card * 0.5 + 'px', cursor: 'pointer' }, stepPic(steps[st]), () => ctx.say(steps[st].text))
         : box({ background: '#F3E5F5', border: '2px solid #8E24AA80', fontSize: card * 0.35 + 'px', fontWeight: 900, color: '#8E24AA73' }, String(s + 1));
       slots.push(el); slotsRow.append(el);
     }
@@ -291,7 +300,7 @@ GAME_UIS.story = (r, ctx, area, scope) => {
     poolRow.innerHTML = '';
     r.shuffled.forEach(i => {
       if (placed.includes(i)) { poolRow.append(box({}, '')); return; }
-      const el = box({ background: '#fff', boxShadow: '0 4px 10px #0002', border: '2px solid #E0E0E0', fontSize: card * 0.5 + 'px', cursor: 'pointer' }, steps[i].e, () => tap(i, el));
+      const el = box({ background: '#fff', boxShadow: '0 4px 10px #0002', border: '2px solid #E0E0E0', fontSize: card * 0.5 + 'px', cursor: 'pointer' }, stepPic(steps[i]), () => tap(i, el));
       poolRow.append(el);
     });
   };
@@ -303,6 +312,7 @@ GAME_UIS.story = (r, ctx, area, scope) => {
       if (placed.length === n) { finished = true; ctx.done(steps.map(s => s.text).join(' ')); light(); } else ctx.say(steps[i].text);
     } else {
       el.style.borderColor = '#E53935'; shakeEl(el); scope.later(400, () => { el.style.borderColor = '#E0E0E0'; });
+      ctx.mistake();
       ctx.say(T('Ez még nem az. Mi jön előbb?', 'Das kommt noch nicht. Was kommt vorher?', 'Not this one yet. What comes before?'));
     }
   };
@@ -406,12 +416,15 @@ GAME_UIS.ice = (r, ctx, area, scope) => {
       : T('Hmm, finom! De én pohárban kértem.', 'Hmm, lecker! Aber ich wollte einen Becher.', 'Hmm, yummy! But I asked for a cup.');
     else if (made.scoops.slice().sort().join() !== o.scoops.slice().sort().join()) msg = T('Hmm, finom! De én más gombócokat kértem. Nézd meg újra!', 'Hmm, lecker! Aber ich wollte andere Kugeln. Schau noch einmal!', 'Hmm, yummy! But I asked for other scoops. Look again!');
     else msg = T('Hmm, finom! De a tetejére mást kértem.', 'Hmm, lecker! Aber obendrauf wollte ich etwas anderes.', 'Hmm, yummy! But I wanted something else on top.');
+    ctx.mistake();
     ctx.say(msg);
     hide(3000);
   };
   const keyEl = (label, onclick, size = 54, bg = '#fff') => h('div', { class: 'center press', style: { width: size + 'px', height: size + 'px', borderRadius: '16px', background: bg, boxShadow: '0 2px 5px #0002', fontSize: size * 0.5 + 'px', cursor: 'pointer', border: '3px solid transparent', flex: 'none' }, onclick }, label);
-  const holderKeys = D.holders.map(x => { const k = keyEl(x.icon, () => { ctx.touch(); made.holder = x.id; ctx.say(x.word); mark(); drawBuild(); }, 56, '#FFF8E1'); k.id_ = x.id; return k; });
-  const toppingKeys = D.toppings.map(x => { const k = keyEl(x.icon, () => { ctx.touch(); made.topping = x.id; ctx.say(x.word); mark(); drawBuild(); }, 48); k.id_ = x.id; return k; });
+  // The app's own pictures for the cone, cup and toppings (the emoji otherwise).
+  const icon = x => (x.pic && PIC_FILES.has(x.pic) ? h('span', { class: 'nopic' }, picImg(x.pic)) : x.icon);
+  const holderKeys = D.holders.map(x => { const k = keyEl(icon(x), () => { ctx.touch(); made.holder = x.id; ctx.say(x.word); mark(); drawBuild(); }, 56, '#FFF8E1'); k.id_ = x.id; return k; });
+  const toppingKeys = D.toppings.map(x => { const k = keyEl(icon(x), () => { ctx.touch(); made.topping = x.id; ctx.say(x.word); mark(); drawBuild(); }, 48); k.id_ = x.id; return k; });
   const mark = () => {
     holderKeys.forEach(k => { k.style.borderColor = made.holder === k.id_ ? '#FF4081' : 'transparent'; });
     toppingKeys.forEach(k => { k.style.borderColor = made.topping === k.id_ ? '#FF4081' : 'transparent'; });
@@ -419,7 +432,7 @@ GAME_UIS.ice = (r, ctx, area, scope) => {
   const flavorKeys = D.flavors.map(f => h('div', {
     class: 'center press', style: { width: '46px', height: '46px', borderRadius: '50%', background: f.color, border: '3px solid #0003', fontSize: '17px', cursor: 'pointer', flex: 'none' },
     onclick: () => { ctx.touch(); if (made.scoops.length < 3) made.scoops.push(f.id); ctx.say(f.word); drawBuild(); }
-  }, f.icon));
+  }, icon(f)));
   const controls = h('div', { class: 'col', style: { gap: '8px' } },
     h('div', { class: 'row' }, ...holderKeys, keyEl('🗑️', () => { ctx.touch(); clear(); mark(); }, 56, '#ECEFF1')),
     h('div', { class: 'row', style: { gap: '6px' } }, ...flavorKeys),

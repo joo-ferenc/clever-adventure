@@ -63,35 +63,47 @@ function showHome() {
       welcomedFor = p.id;
       scope.later(300, () => Speech.say(p.name ? TF('Szia, {0}! Mit játsszunk?', 'Hallo {0}! Was spielen wir?', 'Hi {0}! What shall we play?', p.name) : data().texts.welcome));
     }
-    const perRow = Math.min(innerWidth, 900) >= 600 ? 3 : 2;
+    // Own icons: 3 per row on a phone, 4–5 on a tablet, sideways as many as fit (about 150 px each).
+    const w = Math.min(innerWidth, 900), wide = innerWidth > innerHeight * 1.15;
+    const perRow = wide ? clamp(Math.floor(w / 150), 5, 8) : w >= 840 ? 5 : w >= 600 ? 4 : 3;
+    const tile = g => g.pic && PIC_FILES.has(g.pic)
+      ? h('div', { class: 'tile pictile press', onclick: () => startGame(g.id) }, h('img', { class: 'gamepic', src: picSrc(g.pic), alt: g.title, draggable: 'false' }), h('div', { class: 't' }, g.title))
+      : h('div', { class: 'tile', style: { background: g.color }, onclick: () => startGame(g.id) }, h('div', { class: 'e' }, g.emoji), h('div', { class: 't' }, g.title));
+    const title = h('div', { class: 'title nopic', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' } },
+      PIC_FILES.has('kabala') ? h('img', { src: picSrc('kabala'), alt: '', style: { height: '44px' } }) : '🦉', 'Clever Adventure');
     root.append(h('div', { class: 'screen' },
       h('div', { class: 'row' },
         roundBtn(p.avatar, () => parentGate(showPlayers)),
         h('span', { style: { fontSize: '22px', fontWeight: 800 } }, '⭐ ' + Store.stars),
         roundBtn('📒', showAlbum),
-        h('div', { class: 'spacer' }),
+        wide ? h('div', { class: 'spacer center' }, title) : h('div', { class: 'spacer' }),
         h('span', { style: { fontSize: '22px', opacity: .5, padding: '8px', cursor: 'pointer' }, onclick: () => parentGate(showParent) }, '⚙️')),
-      h('div', { class: 'title' }, '🦉 Clever Adventure'),
-      timeBar(),
-      calmButton(showCalm),
+      wide ? null : title,
+      wide ? h('div', { class: 'row' }, h('div', { style: { flex: 1 } }, timeBar()), h('div', { style: { width: '280px' } }, calmButton(showCalm))) : timeBar(),
+      wide ? null : calmButton(showCalm),
       h('div', { class: 'grow scroll' },
-        h('div', { class: 'tilegrid', style: { gridTemplateColumns: `repeat(${perRow}, 1fr)` } },
-          data().games.map(g => h('div', { class: 'tile', style: { background: g.color }, onclick: () => startGame(g.id) },
-            h('div', { class: 'e' }, g.emoji), h('div', { class: 't' }, g.title)))))));
+        h('div', { class: 'tilegrid', style: { gridTemplateColumns: `repeat(${perRow}, 1fr)` } }, data().games.map(tile)))));
   }, { counts: true });
 }
 
 function showAlbum() {
   go('album', root => {
-    const owned = Store.stickers; const all = data().stickers;
+    const owned = Store.stickers; const normal = data().stickers; const big = data().bigStickers;
+    const all = [...normal, ...big];
+    const count = all.filter(e => owned.includes(e)).length;
+    const wide = innerWidth > innerHeight * 1.15;
+    const cell = e => h('div', { class: 'center', style: { aspectRatio: '1', borderRadius: '18px', background: owned.includes(e) ? '#fff' : '#ffffff73' } },
+      stickerEl(e, 40, !owned.includes(e)));
+    // The two big stickers at the bottom: the mascot (after 50 stickers) and the golden cup (the very last one).
+    const bigCell = e => h('div', { class: 'center', style: { aspectRatio: '1', borderRadius: '24px', background: owned.includes(e) ? '#FFF8E1' : '#ffffff73', border: '3px solid ' + (owned.includes(e) ? '#FFC107' : '#ffffff00') } },
+      stickerEl(e, 96, !owned.includes(e)));
     root.append(h('div', { class: 'screen' },
       h('div', { class: 'row' }, roundBtn('🏠', showHome),
         h('div', { class: 'h2', style: { flex: 1, textAlign: 'left' } }, Store.current.avatar + ' ' + data().texts.album),
-        h('b', { style: { fontSize: '19px' } }, `${owned.length}/${all.length}`)),
-      h('div', { class: 'grow scroll' }, h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', paddingBottom: '12px' } },
-        all.map(e => h('div', {
-          style: { aspectRatio: '1', borderRadius: '18px', background: owned.includes(e) ? '#fff' : '#ffffff73', fontSize: '44px' }, class: 'center'
-        }, h('span', { class: owned.includes(e) ? '' : 'shadow', style: owned.includes(e) ? null : { opacity: .2 } }, e)))))));
+        h('b', { style: { fontSize: '19px' } }, `${count}/${all.length}`)),
+      h('div', { class: 'grow scroll' },
+        h('div', { style: { display: 'grid', gridTemplateColumns: `repeat(${wide ? 8 : 4},1fr)`, gap: '10px', paddingBottom: '12px' } }, normal.map(cell)),
+        h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '14px', padding: '4px 0 16px', maxWidth: wide ? '50%' : 'none', margin: '0 auto' } }, big.map(bigCell)))));
   }, { counts: true });
 }
 
@@ -175,6 +187,7 @@ function showParent() {
         'In Safari: Teilen → „Zum Home-Bildschirm“, dann startet das Spiel mit eigenem Symbol im Vollbild. Mit „Geführter Zugriff“ am iPhone kann das Kind das Spiel nicht verlassen.',
         'In Safari: Share → “Add to Home Screen”, then the game starts full screen with its own icon. With the iPhone’s “Guided Access” your child can’t leave the game.'))),
       bigBtn(T('Vissza', 'Zurück', 'Back'), '#7E57C2', enterApp),
+      h('div', { class: 'version' }, 'Clever Adventure ' + APP_VERSION + ' · web'),
       h('div', { style: { height: '20px', flex: 'none' } })));
   }, { exempt: true });
 }
@@ -197,7 +210,7 @@ function showPlayers() {
           class: 'card center press', style: { height: '180px', flexDirection: 'column', position: 'relative', cursor: 'pointer', background: sel ? '#E1F5FE' : '#fff', border: sel ? '4px solid #7E57C2' : '4px solid transparent' },
           onclick: () => { Store.select(p.id); welcomedFor = -1; enterApp(); }
         }, h('div', { style: { fontSize: '62px' } }, p.avatar), p.name ? h('b', { style: { fontSize: '19px' } }, p.name) : null,
-          h('div', null, `⭐ ${Store.starsOf(p.id)}   📒 ${Store.stickersOf(p.id).length}`));
+          h('div', null, `⭐ ${Store.starsOf(p.id)}   📒 ${Store.stickersOf(p.id).filter(e => [...data().stickers, ...data().bigStickers].includes(e)).length}`));
         card.append(h('div', { class: 'center', style: { position: 'absolute', top: '8px', left: '8px', width: '32px', height: '32px', borderRadius: '50%', background: '#0002' }, onclick: e => { e.stopPropagation(); resetDialog(p); } }, '🔄'));
         if (Store.players.length > 1) card.append(h('div', { class: 'center', style: { position: 'absolute', top: '8px', right: '8px', width: '32px', height: '32px', borderRadius: '50%', background: '#0002' }, onclick: e => { e.stopPropagation(); deleteDialog(p); } }, '✕'));
         grid.append(card);

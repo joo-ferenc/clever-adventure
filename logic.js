@@ -46,17 +46,6 @@ if (typeof Array.prototype.fill === 'undefined') {
     Object.defineProperty(TypedArray.prototype, 'fill', {value: Array.prototype.fill});
   }
 });
-if (typeof Math.clz32 === 'undefined') {
-  Math.clz32 = function (log, LN2) {
-    return function (x) {
-      var asUint = x >>> 0;
-      if (asUint === 0) {
-        return 32;
-      }
-      return 31 - (log(asUint) / LN2 | 0) | 0; // the "| 0" acts like math.floor
-    };
-  }(Math.log, Math.LN2);
-}
 if (typeof Math.hypot === 'undefined') {
   Math.hypot = function () {
     var y = 0;
@@ -69,6 +58,17 @@ if (typeof Math.hypot === 'undefined') {
     }
     return Math.sqrt(y);
   };
+}
+if (typeof Math.clz32 === 'undefined') {
+  Math.clz32 = function (log, LN2) {
+    return function (x) {
+      var asUint = x >>> 0;
+      if (asUint === 0) {
+        return 32;
+      }
+      return 31 - (log(asUint) / LN2 | 0) | 0; // the "| 0" acts like math.floor
+    };
+  }(Math.log, Math.LN2);
 }
 if (typeof String.prototype.startsWith === 'undefined') {
   Object.defineProperty(String.prototype, 'startsWith', {value: function (searchString, position) {
@@ -521,7 +521,10 @@ var logic = function (_) {
   initMetadataForClass(KVariance, 'KVariance', VOID, Enum);
   initMetadataForClass(DelimitedRangesSequence$iterator$1, VOID, VOID, VOID, [Iterator]);
   initMetadataForClass(DelimitedRangesSequence, 'DelimitedRangesSequence', VOID, VOID, [Sequence]);
+  initMetadataForObject(State_0, 'State');
+  initMetadataForClass(LinesIterator, 'LinesIterator', VOID, VOID, [Iterator]);
   initMetadataForClass(iterator$1, VOID, VOID, CharIterator);
+  initMetadataForClass(lineSequence$$inlined$Sequence$1, VOID, VOID, VOID, [Sequence]);
   initMetadataForClass(Destructured, 'Destructured');
   initMetadataForInterface(Lazy, 'Lazy');
   initMetadataForClass(UnsafeLazyImpl, 'UnsafeLazyImpl', VOID, VOID, [Lazy, Serializable]);
@@ -614,6 +617,16 @@ var logic = function (_) {
   initMetadataForClass(G, 'G', VOID, Enum);
   initMetadataForClass(Noun, 'Noun');
   initMetadataForClass(Vocab, 'Vocab');
+  initMetadataForObject(MB, 'MB');
+  initMetadataForClass(MSeg, 'MSeg');
+  initMetadataForClass(MPieceDef, 'MPieceDef');
+  initMetadataForClass(MPiece, 'MPiece');
+  initMetadataForClass(MStatic, 'MStatic');
+  initMetadataForClass(MMarble, 'MMarble');
+  initMetadataForClass(MGoal, 'MGoal');
+  initMetadataForClass(MWorld, 'MWorld');
+  initMetadataForClass(MarblePuzzle, 'MarblePuzzle');
+  initMetadataForClass(MarbleRound, 'MarbleRound', VOID, VOID, [GameRound]);
   initMetadataForInterface(Item, 'Item');
   initMetadataForClass(Emoji, 'Emoji', VOID, VOID, [Item]);
   initMetadataForClass(Number_1, 'Number', VOID, VOID, [Item]);
@@ -644,7 +657,6 @@ var logic = function (_) {
   initMetadataForObject(RoundFactory, 'RoundFactory');
   initMetadataForCompanion(Companion_33);
   initMetadataForClass(Color, 'Color');
-  initMetadataForClass(J, 'J', J);
   //endregion
   function Annotation() {
   }
@@ -656,9 +668,9 @@ var logic = function (_) {
   }
   function ListIterator() {
   }
-  function MutableListIterator() {
-  }
   function MutableIterator() {
+  }
+  function MutableListIterator() {
   }
   function Number_0() {
   }
@@ -710,6 +722,16 @@ var logic = function (_) {
         return toMutableList(_this__u8e3s4);
     }
   }
+  function toSet(_this__u8e3s4) {
+    switch (_this__u8e3s4.length) {
+      case 0:
+        return emptySet();
+      case 1:
+        return setOf(_this__u8e3s4[0]);
+      default:
+        return toCollection(_this__u8e3s4, LinkedHashSet_init_$Create$_2(mapCapacity(_this__u8e3s4.length)));
+    }
+  }
   function joinToString(_this__u8e3s4, separator, prefix, postfix, limit, truncated, transform) {
     separator = separator === VOID ? ', ' : separator;
     prefix = prefix === VOID ? '' : prefix;
@@ -718,6 +740,15 @@ var logic = function (_) {
     truncated = truncated === VOID ? '...' : truncated;
     transform = transform === VOID ? null : transform;
     return joinTo(_this__u8e3s4, StringBuilder_init_$Create$_1(), separator, prefix, postfix, limit, truncated, transform).toString();
+  }
+  function joinToString_0(_this__u8e3s4, separator, prefix, postfix, limit, truncated, transform) {
+    separator = separator === VOID ? ', ' : separator;
+    prefix = prefix === VOID ? '' : prefix;
+    postfix = postfix === VOID ? '' : postfix;
+    limit = limit === VOID ? -1 : limit;
+    truncated = truncated === VOID ? '...' : truncated;
+    transform = transform === VOID ? null : transform;
+    return joinTo_0(_this__u8e3s4, StringBuilder_init_$Create$_1(), separator, prefix, postfix, limit, truncated, transform).toString();
   }
   function contains_1(_this__u8e3s4, element) {
     return indexOf(_this__u8e3s4, element) >= 0;
@@ -752,16 +783,6 @@ var logic = function (_) {
   function contains_2(_this__u8e3s4, element) {
     return indexOf_0(_this__u8e3s4, element) >= 0;
   }
-  function toSet(_this__u8e3s4) {
-    switch (_this__u8e3s4.length) {
-      case 0:
-        return emptySet();
-      case 1:
-        return setOf(_this__u8e3s4[0]);
-      default:
-        return toCollection(_this__u8e3s4, LinkedHashSet_init_$Create$_2(mapCapacity(_this__u8e3s4.length)));
-    }
-  }
   function get_lastIndex(_this__u8e3s4) {
     return _this__u8e3s4.length - 1 | 0;
   }
@@ -776,7 +797,49 @@ var logic = function (_) {
     }
     return list;
   }
+  function toCollection(_this__u8e3s4, destination) {
+    var inductionVariable = 0;
+    var last = _this__u8e3s4.length;
+    while (inductionVariable < last) {
+      var item = _this__u8e3s4[inductionVariable];
+      inductionVariable = inductionVariable + 1 | 0;
+      destination.add_utx5q5_k$(item);
+    }
+    return destination;
+  }
   function joinTo(_this__u8e3s4, buffer, separator, prefix, postfix, limit, truncated, transform) {
+    separator = separator === VOID ? ', ' : separator;
+    prefix = prefix === VOID ? '' : prefix;
+    postfix = postfix === VOID ? '' : postfix;
+    limit = limit === VOID ? -1 : limit;
+    truncated = truncated === VOID ? '...' : truncated;
+    transform = transform === VOID ? null : transform;
+    buffer.append_jgojdo_k$(prefix);
+    var count = 0;
+    var inductionVariable = 0;
+    var last = _this__u8e3s4.length;
+    $l$loop: while (inductionVariable < last) {
+      var element = _this__u8e3s4[inductionVariable];
+      inductionVariable = inductionVariable + 1 | 0;
+      count = count + 1 | 0;
+      if (count > 1) {
+        buffer.append_jgojdo_k$(separator);
+      }
+      if (limit < 0 || count <= limit) {
+        if (!(transform == null))
+          buffer.append_jgojdo_k$(transform(element));
+        else
+          buffer.append_jgojdo_k$(element.toString());
+      } else
+        break $l$loop;
+    }
+    if (limit >= 0 && count > limit) {
+      buffer.append_jgojdo_k$(truncated);
+    }
+    buffer.append_jgojdo_k$(postfix);
+    return buffer;
+  }
+  function joinTo_0(_this__u8e3s4, buffer, separator, prefix, postfix, limit, truncated, transform) {
     separator = separator === VOID ? ', ' : separator;
     prefix = prefix === VOID ? '' : prefix;
     postfix = postfix === VOID ? '' : postfix;
@@ -846,16 +909,6 @@ var logic = function (_) {
          while (inductionVariable_0 <= last_0);
     }
     return -1;
-  }
-  function toCollection(_this__u8e3s4, destination) {
-    var inductionVariable = 0;
-    var last = _this__u8e3s4.length;
-    while (inductionVariable < last) {
-      var item = _this__u8e3s4[inductionVariable];
-      inductionVariable = inductionVariable + 1 | 0;
-      destination.add_utx5q5_k$(item);
-    }
-    return destination;
   }
   function get_indices(_this__u8e3s4) {
     return new IntRange(0, get_lastIndex_0(_this__u8e3s4));
@@ -1041,16 +1094,16 @@ var logic = function (_) {
     }
     return true;
   }
-  function joinToString_0(_this__u8e3s4, separator, prefix, postfix, limit, truncated, transform) {
+  function joinToString_1(_this__u8e3s4, separator, prefix, postfix, limit, truncated, transform) {
     separator = separator === VOID ? ', ' : separator;
     prefix = prefix === VOID ? '' : prefix;
     postfix = postfix === VOID ? '' : postfix;
     limit = limit === VOID ? -1 : limit;
     truncated = truncated === VOID ? '...' : truncated;
     transform = transform === VOID ? null : transform;
-    return joinTo_0(_this__u8e3s4, StringBuilder_init_$Create$_1(), separator, prefix, postfix, limit, truncated, transform).toString();
+    return joinTo_1(_this__u8e3s4, StringBuilder_init_$Create$_1(), separator, prefix, postfix, limit, truncated, transform).toString();
   }
-  function joinTo_0(_this__u8e3s4, buffer, separator, prefix, postfix, limit, truncated, transform) {
+  function joinTo_1(_this__u8e3s4, buffer, separator, prefix, postfix, limit, truncated, transform) {
     separator = separator === VOID ? ', ' : separator;
     prefix = prefix === VOID ? '' : prefix;
     postfix = postfix === VOID ? '' : postfix;
@@ -1087,6 +1140,27 @@ var logic = function (_) {
     }
     return destination;
   }
+  function plus_0(_this__u8e3s4, elements) {
+    if (isInterface(elements, Collection)) {
+      var result = ArrayList_init_$Create$_0(_this__u8e3s4.get_size_woubt6_k$() + elements.get_size_woubt6_k$() | 0);
+      result.addAll_4lagoh_k$(_this__u8e3s4);
+      result.addAll_4lagoh_k$(elements);
+      return result;
+    } else {
+      var result_0 = ArrayList_init_$Create$_1(_this__u8e3s4);
+      addAll(result_0, elements);
+      return result_0;
+    }
+  }
+  function firstOrNull(_this__u8e3s4, predicate) {
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      if (predicate(element))
+        return element;
+    }
+    return null;
+  }
   function first(_this__u8e3s4, predicate) {
     var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
     while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
@@ -1095,6 +1169,41 @@ var logic = function (_) {
         return element;
     }
     throw NoSuchElementException_init_$Create$_0('Collection contains no element matching the predicate.');
+  }
+  function count(_this__u8e3s4, predicate) {
+    var tmp;
+    if (isInterface(_this__u8e3s4, Collection)) {
+      tmp = _this__u8e3s4.isEmpty_y1axqb_k$();
+    } else {
+      tmp = false;
+    }
+    if (tmp)
+      return 0;
+    var count = 0;
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      if (predicate(element)) {
+        count = count + 1 | 0;
+        checkCountOverflow(count);
+      }
+    }
+    return count;
+  }
+  function filter(_this__u8e3s4, predicate) {
+    // Inline function 'kotlin.collections.filterTo' call
+    var destination = ArrayList_init_$Create$();
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      if (predicate(element)) {
+        destination.add_utx5q5_k$(element);
+      }
+    }
+    return destination;
+  }
+  function random(_this__u8e3s4) {
+    return random_0(_this__u8e3s4, Default_getInstance());
   }
   function toList_0(_this__u8e3s4) {
     if (isInterface(_this__u8e3s4, Collection)) {
@@ -1138,9 +1247,6 @@ var logic = function (_) {
       throw NoSuchElementException_init_$Create$_0('List is empty.');
     return _this__u8e3s4.get_c1px32_k$(get_lastIndex_5(_this__u8e3s4));
   }
-  function random(_this__u8e3s4) {
-    return random_0(_this__u8e3s4, Default_getInstance());
-  }
   function forEachIndexed_1(_this__u8e3s4, action) {
     var index = 0;
     var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
@@ -1164,7 +1270,7 @@ var logic = function (_) {
     reverse(list);
     return list;
   }
-  function plus_0(_this__u8e3s4, element) {
+  function plus_1(_this__u8e3s4, element) {
     var result = ArrayList_init_$Create$_0(_this__u8e3s4.get_size_woubt6_k$() + 1 | 0);
     result.addAll_4lagoh_k$(_this__u8e3s4);
     result.add_utx5q5_k$(element);
@@ -1222,18 +1328,6 @@ var logic = function (_) {
     var tmp$ret$0 = new sam$kotlin_Comparator$0(tmp);
     return sortedWith(_this__u8e3s4, tmp$ret$0);
   }
-  function plus_1(_this__u8e3s4, elements) {
-    if (isInterface(elements, Collection)) {
-      var result = ArrayList_init_$Create$_0(_this__u8e3s4.get_size_woubt6_k$() + elements.get_size_woubt6_k$() | 0);
-      result.addAll_4lagoh_k$(_this__u8e3s4);
-      result.addAll_4lagoh_k$(elements);
-      return result;
-    } else {
-      var result_0 = ArrayList_init_$Create$_1(_this__u8e3s4);
-      addAll(result_0, elements);
-      return result_0;
-    }
-  }
   function take(_this__u8e3s4, n) {
     // Inline function 'kotlin.require' call
     if (!(n >= 0)) {
@@ -1266,6 +1360,26 @@ var logic = function (_) {
   function getOrElse(_this__u8e3s4, index, defaultValue) {
     return (0 <= index ? index < _this__u8e3s4.get_size_woubt6_k$() : false) ? _this__u8e3s4.get_c1px32_k$(index) : defaultValue(index);
   }
+  function forEach(_this__u8e3s4, action) {
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      action(element);
+    }
+  }
+  function mapIndexed(_this__u8e3s4, transform) {
+    // Inline function 'kotlin.collections.mapIndexedTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(_this__u8e3s4, 10));
+    var index = 0;
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      destination.add_utx5q5_k$(transform(checkIndexOverflow(_unary__edvuaz), item));
+    }
+    return destination;
+  }
   function sorted(_this__u8e3s4) {
     if (isInterface(_this__u8e3s4, Collection)) {
       if (_this__u8e3s4.get_size_woubt6_k$() <= 1)
@@ -1281,18 +1395,6 @@ var logic = function (_) {
     var this_1 = toMutableList_1(_this__u8e3s4);
     sort_0(this_1);
     return this_1;
-  }
-  function filter(_this__u8e3s4, predicate) {
-    // Inline function 'kotlin.collections.filterTo' call
-    var destination = ArrayList_init_$Create$();
-    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
-    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
-      var element = _iterator__ex2g4s.next_20eer_k$();
-      if (predicate(element)) {
-        destination.add_utx5q5_k$(element);
-      }
-    }
-    return destination;
   }
   function distinctBy(_this__u8e3s4, selector) {
     var set = HashSet_init_$Create$_0();
@@ -1400,13 +1502,6 @@ var logic = function (_) {
     }
     return destination;
   }
-  function forEach(_this__u8e3s4, action) {
-    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
-    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
-      var element = _iterator__ex2g4s.next_20eer_k$();
-      action(element);
-    }
-  }
   function toMutableList_0(_this__u8e3s4) {
     return ArrayList_init_$Create$_1(_this__u8e3s4);
   }
@@ -1418,15 +1513,25 @@ var logic = function (_) {
     }
     return destination;
   }
-  function toMutableList_1(_this__u8e3s4) {
-    if (isInterface(_this__u8e3s4, Collection))
-      return toMutableList_0(_this__u8e3s4);
-    return toCollection_0(_this__u8e3s4, ArrayList_init_$Create$());
+  function filterTo(_this__u8e3s4, destination, predicate) {
+    var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      if (predicate(element)) {
+        destination.add_utx5q5_k$(element);
+      }
+    }
+    return destination;
   }
   function random_0(_this__u8e3s4, random) {
     if (_this__u8e3s4.isEmpty_y1axqb_k$())
       throw NoSuchElementException_init_$Create$_0('Collection is empty.');
     return elementAt(_this__u8e3s4, random.nextInt_kn2qxo_k$(_this__u8e3s4.get_size_woubt6_k$()));
+  }
+  function toMutableList_1(_this__u8e3s4) {
+    if (isInterface(_this__u8e3s4, Collection))
+      return toMutableList_0(_this__u8e3s4);
+    return toCollection_0(_this__u8e3s4, ArrayList_init_$Create$());
   }
   function flatMapTo(_this__u8e3s4, destination, transform) {
     var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
@@ -1479,13 +1584,14 @@ var logic = function (_) {
       return iterator.next_20eer_k$();
     }
   }
-  function filterTo(_this__u8e3s4, destination, predicate) {
+  function mapIndexedTo(_this__u8e3s4, destination, transform) {
+    var index = 0;
     var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
     while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
-      var element = _iterator__ex2g4s.next_20eer_k$();
-      if (predicate(element)) {
-        destination.add_utx5q5_k$(element);
-      }
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      destination.add_utx5q5_k$(transform(checkIndexOverflow(_unary__edvuaz), item));
     }
     return destination;
   }
@@ -1586,14 +1692,13 @@ var logic = function (_) {
       return single;
     }
   }
-  function firstOrNull(_this__u8e3s4, predicate) {
+  function associateByTo(_this__u8e3s4, destination, keySelector, valueTransform) {
     var _iterator__ex2g4s = _this__u8e3s4.iterator_jk1svi_k$();
     while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
       var element = _iterator__ex2g4s.next_20eer_k$();
-      if (predicate(element))
-        return element;
+      destination.put_4fpzoq_k$(keySelector(element), valueTransform(element));
     }
-    return null;
+    return destination;
   }
   function asSequence(_this__u8e3s4) {
     // Inline function 'kotlin.sequences.Sequence' call
@@ -1821,6 +1926,20 @@ var logic = function (_) {
     // Inline function 'kotlin.collections.Iterable' call
     return new asIterable$$inlined$Iterable$1(_this__u8e3s4);
   }
+  function toList_1(_this__u8e3s4) {
+    var it = _this__u8e3s4.iterator_jk1svi_k$();
+    if (!it.hasNext_bitz1p_k$())
+      return emptyList();
+    var element = it.next_20eer_k$();
+    if (!it.hasNext_bitz1p_k$())
+      return listOf(element);
+    var dst = ArrayList_init_$Create$();
+    dst.add_utx5q5_k$(element);
+    while (it.hasNext_bitz1p_k$()) {
+      dst.add_utx5q5_k$(it.next_20eer_k$());
+    }
+    return dst;
+  }
   function take_0(_this__u8e3s4, n) {
     // Inline function 'kotlin.require' call
     if (!(n >= 0)) {
@@ -1862,52 +1981,48 @@ var logic = function (_) {
   function getOrElse_0(_this__u8e3s4, index, defaultValue) {
     return (0 <= index ? index <= (charSequenceLength(_this__u8e3s4) - 1 | 0) : false) ? charSequenceGet(_this__u8e3s4, index) : defaultValue(index).value_1;
   }
+  function take_1(_this__u8e3s4, n) {
+    // Inline function 'kotlin.require' call
+    if (!(n >= 0)) {
+      var message = 'Requested character count ' + n + ' is less than zero.';
+      throw IllegalArgumentException_init_$Create$_0(toString_1(message));
+    }
+    // Inline function 'kotlin.text.substring' call
+    var endIndex = coerceAtMost(n, _this__u8e3s4.length);
+    // Inline function 'kotlin.js.asDynamic' call
+    return _this__u8e3s4.substring(0, endIndex);
+  }
+  function map_2(_this__u8e3s4, transform) {
+    // Inline function 'kotlin.text.mapTo' call
+    var destination = ArrayList_init_$Create$_0(charSequenceLength(_this__u8e3s4));
+    var inductionVariable = 0;
+    while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
+      var item = charSequenceGet(_this__u8e3s4, inductionVariable);
+      inductionVariable = inductionVariable + 1 | 0;
+      destination.add_utx5q5_k$(transform(new Char(item)));
+    }
+    return destination;
+  }
+  function flatMapIndexed(_this__u8e3s4, transform) {
+    // Inline function 'kotlin.text.flatMapIndexedTo' call
+    var destination = ArrayList_init_$Create$();
+    var index = 0;
+    var inductionVariable = 0;
+    while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
+      var element = charSequenceGet(_this__u8e3s4, inductionVariable);
+      inductionVariable = inductionVariable + 1 | 0;
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      var list = transform(_unary__edvuaz, new Char(element));
+      addAll(destination, list);
+    }
+    return destination;
+  }
   function first_2(_this__u8e3s4) {
     // Inline function 'kotlin.text.isEmpty' call
     if (charSequenceLength(_this__u8e3s4) === 0)
       throw NoSuchElementException_init_$Create$_0('Char sequence is empty.');
     return charSequenceGet(_this__u8e3s4, 0);
-  }
-  function filter_0(_this__u8e3s4, predicate) {
-    // Inline function 'kotlin.text.filterTo' call
-    var destination = StringBuilder_init_$Create$_1();
-    var inductionVariable = 0;
-    var last = charSequenceLength(_this__u8e3s4);
-    if (inductionVariable < last)
-      do {
-        var index = inductionVariable;
-        inductionVariable = inductionVariable + 1 | 0;
-        var element = charSequenceGet(_this__u8e3s4, index);
-        if (predicate(new Char(element))) {
-          destination.append_am5a4z_k$(element);
-        }
-      }
-       while (inductionVariable < last);
-    return destination.toString();
-  }
-  function random_3(_this__u8e3s4) {
-    return random_4(_this__u8e3s4, Default_getInstance());
-  }
-  function filterTo_0(_this__u8e3s4, destination, predicate) {
-    var inductionVariable = 0;
-    var last = charSequenceLength(_this__u8e3s4);
-    if (inductionVariable < last)
-      do {
-        var index = inductionVariable;
-        inductionVariable = inductionVariable + 1 | 0;
-        var element = charSequenceGet(_this__u8e3s4, index);
-        if (predicate(new Char(element))) {
-          destination.append_am5a4z_k$(element);
-        }
-      }
-       while (inductionVariable < last);
-    return destination;
-  }
-  function random_4(_this__u8e3s4, random) {
-    // Inline function 'kotlin.text.isEmpty' call
-    if (charSequenceLength(_this__u8e3s4) === 0)
-      throw NoSuchElementException_init_$Create$_0('Char sequence is empty.');
-    return charSequenceGet(_this__u8e3s4, random.nextInt_kn2qxo_k$(charSequenceLength(_this__u8e3s4)));
   }
   function all_0(_this__u8e3s4, predicate) {
     var inductionVariable = 0;
@@ -1918,6 +2033,28 @@ var logic = function (_) {
         return false;
     }
     return true;
+  }
+  function mapTo_1(_this__u8e3s4, destination, transform) {
+    var inductionVariable = 0;
+    while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
+      var item = charSequenceGet(_this__u8e3s4, inductionVariable);
+      inductionVariable = inductionVariable + 1 | 0;
+      destination.add_utx5q5_k$(transform(new Char(item)));
+    }
+    return destination;
+  }
+  function flatMapIndexedTo(_this__u8e3s4, destination, transform) {
+    var index = 0;
+    var inductionVariable = 0;
+    while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
+      var element = charSequenceGet(_this__u8e3s4, inductionVariable);
+      inductionVariable = inductionVariable + 1 | 0;
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      var list = transform(_unary__edvuaz, new Char(element));
+      addAll(destination, list);
+    }
+    return destination;
   }
   function contentEquals(_this__u8e3s4, other) {
     var tmp;
@@ -2436,6 +2573,9 @@ var logic = function (_) {
   function toString_0(_this__u8e3s4) {
     var tmp1_elvis_lhs = _this__u8e3s4 == null ? null : toString_1(_this__u8e3s4);
     return tmp1_elvis_lhs == null ? 'null' : tmp1_elvis_lhs;
+  }
+  function doubleArrayOf(elements) {
+    return elements;
   }
   function charArrayOf(elements) {
     return elements;
@@ -3219,7 +3359,7 @@ var logic = function (_) {
     return tmp;
   }
   function arrayToString(array) {
-    return joinToString(array, ', ', '[', ']', VOID, VOID, arrayToString$lambda);
+    return joinToString_0(array, ', ', '[', ']', VOID, VOID, arrayToString$lambda);
   }
   function contentEqualsInternal(_this__u8e3s4, other) {
     // Inline function 'kotlin.js.asDynamic' call
@@ -5831,17 +5971,23 @@ var logic = function (_) {
     shuffle_0(this_0);
     return this_0;
   }
+  function setOf(element) {
+    return hashSetOf([element]);
+  }
   function toTypedArray(_this__u8e3s4) {
     return copyToArray(_this__u8e3s4);
+  }
+  function checkCountOverflow(count) {
+    if (count < 0) {
+      throwCountOverflow();
+    }
+    return count;
   }
   function checkIndexOverflow(index) {
     if (index < 0) {
       throwIndexOverflow();
     }
     return index;
-  }
-  function setOf(element) {
-    return hashSetOf([element]);
   }
   function mapCapacity(expectedSize) {
     return expectedSize;
@@ -9468,7 +9614,28 @@ var logic = function (_) {
   function hypot_0(x, y) {
     return hypot(x, y);
   }
-  function abs_0(n) {
+  function cos_0(x) {
+    return Math.cos(x);
+  }
+  function sin_0(x) {
+    return Math.sin(x);
+  }
+  function min(a, b) {
+    return Math.min(a, b);
+  }
+  function max(a, b) {
+    return Math.max(a, b);
+  }
+  function hypot_1(x, y) {
+    return hypot(x, y);
+  }
+  function abs_0(x) {
+    return Math.abs(x);
+  }
+  function sqrt(x) {
+    return Math.sqrt(x);
+  }
+  function abs_1(n) {
     return n < 0 ? -n | 0 | 0 : n;
   }
   function nextDown(_this__u8e3s4) {
@@ -9736,7 +9903,7 @@ var logic = function (_) {
     var tmp = this.classifier_1;
     var kClass = isInterface(tmp, KClass) ? tmp : null;
     var classifierName = kClass == null ? toString_1(this.classifier_1) : !(kClass.get_simpleName_r6f8py_k$() == null) ? kClass.get_simpleName_r6f8py_k$() : '(non-denotable type)';
-    var args = this.arguments_1.isEmpty_y1axqb_k$() ? '' : joinToString_0(this.arguments_1, ', ', '<', '>');
+    var args = this.arguments_1.isEmpty_y1axqb_k$() ? '' : joinToString_1(this.arguments_1, ', ', '<', '>');
     var nullable = this.isMarkedNullable_1 ? '?' : '';
     return plus_2(classifierName, args) + nullable;
   };
@@ -11179,7 +11346,7 @@ var logic = function (_) {
     return this.value_1;
   };
   function toFlags(_this__u8e3s4, prepend) {
-    return joinToString_0(_this__u8e3s4, '', prepend, VOID, VOID, VOID, toFlags$lambda);
+    return joinToString_1(_this__u8e3s4, '', prepend, VOID, VOID, VOID, toFlags$lambda);
   }
   function findNext(_this__u8e3s4, input, from, nextPattern) {
     _this__u8e3s4.lastIndex = from;
@@ -12393,7 +12560,7 @@ var logic = function (_) {
     return this.get_size_woubt6_k$() === 0;
   };
   protoOf(AbstractCollection).toString = function () {
-    return joinToString_0(this, ', ', '[', ']', VOID, VOID, AbstractCollection$toString$lambda(this));
+    return joinToString_1(this, ', ', '[', ']', VOID, VOID, AbstractCollection$toString$lambda(this));
   };
   protoOf(AbstractCollection).toArray = function () {
     return collectionToArray(this);
@@ -12836,7 +13003,7 @@ var logic = function (_) {
   };
   protoOf(AbstractMap).toString = function () {
     var tmp = this.get_entries_p20ztl_k$();
-    return joinToString_0(tmp, ', ', '{', '}', VOID, VOID, AbstractMap$toString$lambda(this));
+    return joinToString_1(tmp, ', ', '{', '}', VOID, VOID, AbstractMap$toString$lambda(this));
   };
   protoOf(AbstractMap).get_values_ksazhn_k$ = function () {
     if (this._values_1 == null) {
@@ -13979,14 +14146,17 @@ var logic = function (_) {
   function listOf_0(elements) {
     return elements.length > 0 ? asList(elements) : emptyList();
   }
+  function isNotEmpty(_this__u8e3s4) {
+    return !_this__u8e3s4.isEmpty_y1axqb_k$();
+  }
   function mutableListOf() {
     return ArrayList_init_$Create$();
   }
   function mutableListOf_0(elements) {
     return elements.length === 0 ? ArrayList_init_$Create$() : ArrayList_init_$Create$_1(new ArrayAsCollection(elements, true));
   }
-  function isNotEmpty(_this__u8e3s4) {
-    return !_this__u8e3s4.isEmpty_y1axqb_k$();
+  function ifEmpty(_this__u8e3s4, defaultValue) {
+    return _this__u8e3s4.isEmpty_y1axqb_k$() ? defaultValue() : _this__u8e3s4;
   }
   function get_indices_5(_this__u8e3s4) {
     return numberRangeToNumber(0, _this__u8e3s4.get_size_woubt6_k$() - 1 | 0);
@@ -14241,6 +14411,9 @@ var logic = function (_) {
   function arrayListOf(elements) {
     return elements.length === 0 ? ArrayList_init_$Create$() : ArrayList_init_$Create$_1(new ArrayAsCollection(elements, true));
   }
+  function throwCountOverflow() {
+    throw ArithmeticException_init_$Create$_0('Count overflow has happened.');
+  }
   function throwIndexOverflow() {
     throw ArithmeticException_init_$Create$_0('Index overflow has happened.');
   }
@@ -14295,6 +14468,24 @@ var logic = function (_) {
   function mapOf(pairs) {
     return pairs.length > 0 ? toMap(pairs, LinkedHashMap_init_$Create$_0(mapCapacity(pairs.length))) : emptyMap();
   }
+  function mapValues(_this__u8e3s4, transform) {
+    // Inline function 'kotlin.collections.mapValuesTo' call
+    var destination = LinkedHashMap_init_$Create$_0(mapCapacity(_this__u8e3s4.get_size_woubt6_k$()));
+    // Inline function 'kotlin.collections.associateByTo' call
+    var _iterator__ex2g4s = _this__u8e3s4.get_entries_p20ztl_k$().iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      var tmp$ret$0 = element.get_key_18j28a_k$();
+      destination.put_4fpzoq_k$(tmp$ret$0, transform(element));
+    }
+    return destination;
+  }
+  function component1_0(_this__u8e3s4) {
+    return _this__u8e3s4.get_key_18j28a_k$();
+  }
+  function component2_0(_this__u8e3s4) {
+    return _this__u8e3s4.get_value_j01efc_k$();
+  }
   function getValue(_this__u8e3s4, key) {
     return getOrImplicitDefault(_this__u8e3s4, key);
   }
@@ -14310,12 +14501,6 @@ var logic = function (_) {
   }
   function set(_this__u8e3s4, key, value) {
     _this__u8e3s4.put_4fpzoq_k$(key, value);
-  }
-  function component1_0(_this__u8e3s4) {
-    return _this__u8e3s4.get_key_18j28a_k$();
-  }
-  function component2_0(_this__u8e3s4) {
-    return _this__u8e3s4.get_value_j01efc_k$();
   }
   function getOrPut(_this__u8e3s4, key, defaultValue) {
     var value = _this__u8e3s4.get_wei43m_k$(key);
@@ -14337,6 +14522,16 @@ var logic = function (_) {
   function emptyMap() {
     var tmp = EmptyMap_getInstance();
     return isInterface(tmp, KtMap) ? tmp : THROW_CCE();
+  }
+  function mapValuesTo(_this__u8e3s4, destination, transform) {
+    // Inline function 'kotlin.collections.associateByTo' call
+    var _iterator__ex2g4s = _this__u8e3s4.get_entries_p20ztl_k$().iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      var tmp$ret$0 = element.get_key_18j28a_k$();
+      destination.put_4fpzoq_k$(tmp$ret$0, transform(element));
+    }
+    return destination;
   }
   function containsKey(_this__u8e3s4, key) {
     return (isInterface(_this__u8e3s4, KtMap) ? _this__u8e3s4 : THROW_CCE()).containsKey_aw81wo_k$(key);
@@ -14712,11 +14907,11 @@ var logic = function (_) {
   protoOf(sequence$$inlined$Sequence$1).iterator_jk1svi_k$ = function () {
     return iterator_1(this.$block_1);
   };
-  function generateSequence(seedFunction, nextFunction) {
-    return new GeneratorSequence(seedFunction, nextFunction);
-  }
   function Sequence_0(iterator) {
     return new Sequence$1(iterator);
+  }
+  function generateSequence(seedFunction, nextFunction) {
+    return new GeneratorSequence(seedFunction, nextFunction);
   }
   function calcNext($this) {
     $this.nextItem_1 = $this.nextState_1 === -2 ? $this.this$0__1.getInitialValue_1() : $this.this$0__1.getNextValue_1(ensureNotNull($this.nextItem_1));
@@ -17301,23 +17496,36 @@ var logic = function (_) {
     }
     return tmp;
   }
-  function ifEmpty(_this__u8e3s4, defaultValue) {
-    var tmp;
-    // Inline function 'kotlin.text.isEmpty' call
-    if (charSequenceLength(_this__u8e3s4) === 0) {
-      tmp = defaultValue();
-    } else {
-      tmp = _this__u8e3s4;
-    }
-    return tmp;
-  }
   function contains_9(_this__u8e3s4, char, ignoreCase) {
     ignoreCase = ignoreCase === VOID ? false : ignoreCase;
     return indexOf_5(_this__u8e3s4, char, VOID, ignoreCase) >= 0;
   }
+  function isNotBlank(_this__u8e3s4) {
+    return !isBlank(_this__u8e3s4);
+  }
+  function lines(_this__u8e3s4) {
+    return toList_1(lineSequence(_this__u8e3s4));
+  }
   function padStart(_this__u8e3s4, length, padChar) {
     padChar = padChar === VOID ? _Char___init__impl__6a9atx(32) : padChar;
     return toString_1(padStart_0(isCharSequence(_this__u8e3s4) ? _this__u8e3s4 : THROW_CCE(), length, padChar));
+  }
+  function isBlank(_this__u8e3s4) {
+    var tmp$ret$1;
+    $l$block: {
+      // Inline function 'kotlin.text.all' call
+      var inductionVariable = 0;
+      while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
+        var element = charSequenceGet(_this__u8e3s4, inductionVariable);
+        inductionVariable = inductionVariable + 1 | 0;
+        if (!isWhitespace(element)) {
+          tmp$ret$1 = false;
+          break $l$block;
+        }
+      }
+      tmp$ret$1 = true;
+    }
+    return tmp$ret$1;
   }
   function split_0(_this__u8e3s4, delimiter, ignoreCase, limit) {
     requireNonNegativeLimit(limit);
@@ -17430,6 +17638,10 @@ var logic = function (_) {
       tmp = _this__u8e3s4.indexOf(str, startIndex);
     }
     return tmp;
+  }
+  function lineSequence(_this__u8e3s4) {
+    // Inline function 'kotlin.sequences.Sequence' call
+    return new lineSequence$$inlined$Sequence$1(_this__u8e3s4);
   }
   function padStart_0(_this__u8e3s4, length, padChar) {
     padChar = padChar === VOID ? _Char___init__impl__6a9atx(32) : padChar;
@@ -17723,6 +17935,103 @@ var logic = function (_) {
        while (!(index === last));
     return -1;
   }
+  function _get_string__6oa3oa_0($this) {
+    return $this.string_1;
+  }
+  function State_0() {
+    State_instance_0 = this;
+    this.UNKNOWN_1 = 0;
+    this.HAS_NEXT_1 = 1;
+    this.EXHAUSTED_1 = 2;
+  }
+  protoOf(State_0).get_UNKNOWN_8ffoe9_k$ = function () {
+    return this.UNKNOWN_1;
+  };
+  protoOf(State_0).get_HAS_NEXT_g1n5b3_k$ = function () {
+    return this.HAS_NEXT_1;
+  };
+  protoOf(State_0).get_EXHAUSTED_8m0yo0_k$ = function () {
+    return this.EXHAUSTED_1;
+  };
+  var State_instance_0;
+  function State_getInstance_0() {
+    if (State_instance_0 == null)
+      new State_0();
+    return State_instance_0;
+  }
+  function _set_state__ks53v8_0($this, _set____db54di) {
+    $this.state_1 = _set____db54di;
+  }
+  function _get_state__b8zcm8_0($this) {
+    return $this.state_1;
+  }
+  function _set_tokenStartIndex__izrubg($this, _set____db54di) {
+    $this.tokenStartIndex_1 = _set____db54di;
+  }
+  function _get_tokenStartIndex__t3i1u0($this) {
+    return $this.tokenStartIndex_1;
+  }
+  function _set_delimiterStartIndex__5kvk0i($this, _set____db54di) {
+    $this.delimiterStartIndex_1 = _set____db54di;
+  }
+  function _get_delimiterStartIndex__7puovu($this) {
+    return $this.delimiterStartIndex_1;
+  }
+  function _set_delimiterLength__jafs60($this, _set____db54di) {
+    $this.delimiterLength_1 = _set____db54di;
+  }
+  function _get_delimiterLength__te5zok($this) {
+    return $this.delimiterLength_1;
+  }
+  function LinesIterator(string) {
+    State_getInstance_0();
+    this.string_1 = string;
+    this.state_1 = 0;
+    this.tokenStartIndex_1 = 0;
+    this.delimiterStartIndex_1 = 0;
+    this.delimiterLength_1 = 0;
+  }
+  protoOf(LinesIterator).hasNext_bitz1p_k$ = function () {
+    if (!(this.state_1 === 0)) {
+      return this.state_1 === 1;
+    }
+    if (this.delimiterLength_1 < 0) {
+      this.state_1 = 2;
+      return false;
+    }
+    var _delimiterLength = -1;
+    var _delimiterStartIndex = charSequenceLength(this.string_1);
+    var inductionVariable = this.tokenStartIndex_1;
+    var last = charSequenceLength(this.string_1);
+    if (inductionVariable < last)
+      $l$loop: do {
+        var idx = inductionVariable;
+        inductionVariable = inductionVariable + 1 | 0;
+        var c = charSequenceGet(this.string_1, idx);
+        if (c === _Char___init__impl__6a9atx(10) || c === _Char___init__impl__6a9atx(13)) {
+          _delimiterLength = c === _Char___init__impl__6a9atx(13) && (idx + 1 | 0) < charSequenceLength(this.string_1) && charSequenceGet(this.string_1, idx + 1 | 0) === _Char___init__impl__6a9atx(10) ? 2 : 1;
+          _delimiterStartIndex = idx;
+          break $l$loop;
+        }
+      }
+       while (inductionVariable < last);
+    this.state_1 = 1;
+    this.delimiterLength_1 = _delimiterLength;
+    this.delimiterStartIndex_1 = _delimiterStartIndex;
+    return true;
+  };
+  protoOf(LinesIterator).next_20eer_k$ = function () {
+    if (!this.hasNext_bitz1p_k$()) {
+      throw NoSuchElementException_init_$Create$();
+    }
+    this.state_1 = 0;
+    var lastIndex = this.delimiterStartIndex_1;
+    var firstIndex = this.tokenStartIndex_1;
+    this.tokenStartIndex_1 = this.delimiterStartIndex_1 + this.delimiterLength_1 | 0;
+    // Inline function 'kotlin.text.substring' call
+    var this_0 = this.string_1;
+    return toString_1(charSequenceSubSequence(this_0, firstIndex, lastIndex));
+  };
   function indexOf_7(_this__u8e3s4, other, startIndex, endIndex, ignoreCase, last) {
     last = last === VOID ? false : last;
     var indices = !last ? numberRangeToNumber(coerceAtLeast(startIndex, 0), coerceAtMost(endIndex, charSequenceLength(_this__u8e3s4))) : downTo(coerceAtMost(startIndex, get_lastIndex_6(_this__u8e3s4)), coerceAtLeast(endIndex, 0));
@@ -17795,23 +18104,6 @@ var logic = function (_) {
       }
        while (inductionVariable < length);
     return true;
-  }
-  function isBlank(_this__u8e3s4) {
-    var tmp$ret$1;
-    $l$block: {
-      // Inline function 'kotlin.text.all' call
-      var inductionVariable = 0;
-      while (inductionVariable < charSequenceLength(_this__u8e3s4)) {
-        var element = charSequenceGet(_this__u8e3s4, inductionVariable);
-        inductionVariable = inductionVariable + 1 | 0;
-        if (!isWhitespace(element)) {
-          tmp$ret$1 = false;
-          break $l$block;
-        }
-      }
-      tmp$ret$1 = true;
-    }
-    return tmp$ret$1;
   }
   function startsWith_0(_this__u8e3s4, char, ignoreCase) {
     ignoreCase = ignoreCase === VOID ? false : ignoreCase;
@@ -17964,6 +18256,12 @@ var logic = function (_) {
       return tmp;
     };
   }
+  function lineSequence$$inlined$Sequence$1($this_lineSequence) {
+    this.$this_lineSequence_1 = $this_lineSequence;
+  }
+  protoOf(lineSequence$$inlined$Sequence$1).iterator_jk1svi_k$ = function () {
+    return new LinesIterator(this.$this_lineSequence_1);
+  };
   function Destructured(match) {
     this.match_1 = match;
   }
@@ -21199,6 +21497,11 @@ var logic = function (_) {
     return countObjects;
   }
   var countObjects;
+  function get_HU_MULTI_LETTERS() {
+    _init_properties_Content_kt__pfrwlj();
+    return HU_MULTI_LETTERS;
+  }
+  var HU_MULTI_LETTERS;
   function get_wordsHu() {
     _init_properties_Content_kt__pfrwlj();
     return wordsHu;
@@ -21384,6 +21687,16 @@ var logic = function (_) {
     return puzzleColors;
   }
   var puzzleColors;
+  function get_normalStickers() {
+    _init_properties_Content_kt__pfrwlj();
+    return normalStickers;
+  }
+  var normalStickers;
+  function get_bigStickers() {
+    _init_properties_Content_kt__pfrwlj();
+    return bigStickers;
+  }
+  var bigStickers;
   function get_allStickers() {
     _init_properties_Content_kt__pfrwlj();
     return allStickers;
@@ -21536,9 +21849,10 @@ var logic = function (_) {
   var GameType_ROBOT_instance;
   var GameType_STORY_instance;
   var GameType_ICECREAM_instance;
+  var GameType_MARBLE_instance;
   var GameType_COLORING_instance;
   function values_7() {
-    return [GameType_COUNT_getInstance(), GameType_LETTERS_getInstance(), GameType_SHAPES_getInstance(), GameType_LOGIC_getInstance(), GameType_WORDS_getInstance(), GameType_WORLD_getInstance(), GameType_FEELINGS_getInstance(), GameType_MEMORY_getInstance(), GameType_MISSING_getInstance(), GameType_DIFF_getInstance(), GameType_ORDER_getInstance(), GameType_PUZZLE_getInstance(), GameType_BOARD_getInstance(), GameType_MAZE_getInstance(), GameType_WASTE_getInstance(), GameType_TRACE_getInstance(), GameType_ROBOT_getInstance(), GameType_STORY_getInstance(), GameType_ICECREAM_getInstance(), GameType_COLORING_getInstance()];
+    return [GameType_COUNT_getInstance(), GameType_LETTERS_getInstance(), GameType_SHAPES_getInstance(), GameType_LOGIC_getInstance(), GameType_WORDS_getInstance(), GameType_WORLD_getInstance(), GameType_FEELINGS_getInstance(), GameType_MEMORY_getInstance(), GameType_MISSING_getInstance(), GameType_DIFF_getInstance(), GameType_ORDER_getInstance(), GameType_PUZZLE_getInstance(), GameType_BOARD_getInstance(), GameType_MAZE_getInstance(), GameType_WASTE_getInstance(), GameType_TRACE_getInstance(), GameType_ROBOT_getInstance(), GameType_STORY_getInstance(), GameType_ICECREAM_getInstance(), GameType_MARBLE_getInstance(), GameType_COLORING_getInstance()];
   }
   function valueOf_7(value) {
     switch (value) {
@@ -21580,6 +21894,8 @@ var logic = function (_) {
         return GameType_STORY_getInstance();
       case 'ICECREAM':
         return GameType_ICECREAM_getInstance();
+      case 'MARBLE':
+        return GameType_MARBLE_getInstance();
       case 'COLORING':
         return GameType_COLORING_getInstance();
       default:
@@ -21617,7 +21933,8 @@ var logic = function (_) {
     GameType_ROBOT_instance = new GameType('ROBOT', 16, '\uD83E\uDD16', new Txt('Kis robot', 'Kleiner Roboter', 'Little robot'), new Color(new Long(-8875876, 0)));
     GameType_STORY_instance = new GameType('STORY', 17, '\uD83D\uDCD6', new Txt('Mi t\xF6rt\xE9nt el\u0151bb?', 'Was war zuerst?', 'What came first?'), new Color(new Long(-7461718, 0)));
     GameType_ICECREAM_instance = new GameType('ICECREAM', 18, '\uD83C\uDF66', new Txt('Fagyiz\xF3', 'Eisdiele', 'Ice cream shop'), new Color(new Long(-32597, 0)));
-    GameType_COLORING_instance = new GameType('COLORING', 19, '\uD83C\uDFA8', new Txt('Sz\xEDnez\u0151', 'Malen', 'Coloring'), new Color(new Long(-19712, 0)));
+    GameType_MARBLE_instance = new GameType('MARBLE', 19, '\uD83C\uDFA2', new Txt('Goly\xF3p\xE1lya', 'Kugelbahn', 'Marble run'), new Color(new Long(-19129, 0)));
+    GameType_COLORING_instance = new GameType('COLORING', 20, '\uD83C\uDFA8', new Txt('Sz\xEDnez\u0151', 'Malen', 'Coloring'), new Color(new Long(-19712, 0)));
   }
   var $ENTRIES_7;
   function GameType(name, ordinal, emoji, title, color) {
@@ -21701,9 +22018,19 @@ var logic = function (_) {
       return false;
     return true;
   };
-  function Word(emoji, text) {
+  function Word(emoji, text, letter) {
+    var tmp;
+    if (letter === VOID) {
+      // Inline function 'kotlin.text.uppercase' call
+      // Inline function 'kotlin.js.asDynamic' call
+      tmp = take_1(text, 1).toUpperCase();
+    } else {
+      tmp = letter;
+    }
+    letter = tmp;
     this.emoji_1 = emoji;
     this.text_1 = text;
+    this.letter_1 = letter;
   }
   protoOf(Word).get_emoji_iqwm59_k$ = function () {
     return this.emoji_1;
@@ -21711,8 +22038,8 @@ var logic = function (_) {
   protoOf(Word).get_text_wouvsm_k$ = function () {
     return this.text_1;
   };
-  protoOf(Word).get_letter_vbub4f_k$ = function () {
-    return uppercaseChar(first_2(this.text_1));
+  protoOf(Word).get_letter_g4712n_k$ = function () {
+    return this.letter_1;
   };
   protoOf(Word).component1_7eebsc_k$ = function () {
     return this.emoji_1;
@@ -21720,20 +22047,25 @@ var logic = function (_) {
   protoOf(Word).component2_7eebsb_k$ = function () {
     return this.text_1;
   };
-  protoOf(Word).copy_plwnsl_k$ = function (emoji, text) {
-    return new Word(emoji, text);
+  protoOf(Word).component3_7eebsa_k$ = function () {
+    return this.letter_1;
   };
-  protoOf(Word).copy$default_sksvse_k$ = function (emoji, text, $super) {
+  protoOf(Word).copy_nc7k0r_k$ = function (emoji, text, letter) {
+    return new Word(emoji, text, letter);
+  };
+  protoOf(Word).copy$default_tznzp3_k$ = function (emoji, text, letter, $super) {
     emoji = emoji === VOID ? this.emoji_1 : emoji;
     text = text === VOID ? this.text_1 : text;
-    return $super === VOID ? this.copy_plwnsl_k$(emoji, text) : $super.copy_plwnsl_k$.call(this, emoji, text);
+    letter = letter === VOID ? this.letter_1 : letter;
+    return $super === VOID ? this.copy_nc7k0r_k$(emoji, text, letter) : $super.copy_nc7k0r_k$.call(this, emoji, text, letter);
   };
   protoOf(Word).toString = function () {
-    return 'Word(emoji=' + this.emoji_1 + ', text=' + this.text_1 + ')';
+    return 'Word(emoji=' + this.emoji_1 + ', text=' + this.text_1 + ', letter=' + this.letter_1 + ')';
   };
   protoOf(Word).hashCode = function () {
     var result = getStringHashCode(this.emoji_1);
     result = imul(result, 31) + getStringHashCode(this.text_1) | 0;
+    result = imul(result, 31) + getStringHashCode(this.letter_1) | 0;
     return result;
   };
   protoOf(Word).equals = function (other) {
@@ -21746,8 +22078,40 @@ var logic = function (_) {
       return false;
     if (!(this.text_1 === tmp0_other_with_cast.text_1))
       return false;
+    if (!(this.letter_1 === tmp0_other_with_cast.letter_1))
+      return false;
     return true;
   };
+  function hw(emoji, text) {
+    _init_properties_Content_kt__pfrwlj();
+    var tmp0 = get_HU_MULTI_LETTERS();
+    var tmp$ret$3;
+    $l$block: {
+      // Inline function 'kotlin.collections.firstOrNull' call
+      var _iterator__ex2g4s = tmp0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+        var element = _iterator__ex2g4s.next_20eer_k$();
+        // Inline function 'kotlin.text.uppercase' call
+        // Inline function 'kotlin.js.asDynamic' call
+        var tmp$ret$1 = text.toUpperCase();
+        if (startsWith(tmp$ret$1, element)) {
+          tmp$ret$3 = element;
+          break $l$block;
+        }
+      }
+      tmp$ret$3 = null;
+    }
+    var tmp0_elvis_lhs = tmp$ret$3;
+    var tmp;
+    if (tmp0_elvis_lhs == null) {
+      // Inline function 'kotlin.text.uppercase' call
+      // Inline function 'kotlin.js.asDynamic' call
+      tmp = take_1(text, 1).toUpperCase();
+    } else {
+      tmp = tmp0_elvis_lhs;
+    }
+    return new Word(emoji, text, tmp);
+  }
   function wordsOf(l) {
     _init_properties_Content_kt__pfrwlj();
     var tmp;
@@ -22315,6 +22679,82 @@ var logic = function (_) {
       return false;
     return true;
   };
+  function get_STICKER_KABALA() {
+    return STICKER_KABALA;
+  }
+  var STICKER_KABALA;
+  function get_STICKER_TROPHY() {
+    return STICKER_TROPHY;
+  }
+  var STICKER_TROPHY;
+  function pickSticker(have) {
+    _init_properties_Content_kt__pfrwlj();
+    var tmp;
+    if (!have.contains_aljjnj_k$('kabala')) {
+      var tmp0 = get_normalStickers();
+      var tmp$ret$0;
+      $l$block: {
+        // Inline function 'kotlin.collections.count' call
+        var tmp_0;
+        if (isInterface(tmp0, Collection)) {
+          tmp_0 = tmp0.isEmpty_y1axqb_k$();
+        } else {
+          tmp_0 = false;
+        }
+        if (tmp_0) {
+          tmp$ret$0 = 0;
+          break $l$block;
+        }
+        var count = 0;
+        var _iterator__ex2g4s = tmp0.iterator_jk1svi_k$();
+        while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+          var element = _iterator__ex2g4s.next_20eer_k$();
+          if (have.contains_aljjnj_k$(element)) {
+            count = count + 1 | 0;
+            checkCountOverflow(count);
+          }
+        }
+        tmp$ret$0 = count;
+      }
+      tmp = tmp$ret$0 >= 50;
+    } else {
+      tmp = false;
+    }
+    if (tmp)
+      return 'kabala';
+    // Inline function 'kotlin.collections.filter' call
+    var tmp0_0 = get_normalStickers();
+    // Inline function 'kotlin.collections.filterTo' call
+    var destination = ArrayList_init_$Create$();
+    var _iterator__ex2g4s_0 = tmp0_0.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+      var element_0 = _iterator__ex2g4s_0.next_20eer_k$();
+      if (!have.contains_aljjnj_k$(element_0)) {
+        destination.add_utx5q5_k$(element_0);
+      }
+    }
+    var free = destination;
+    // Inline function 'kotlin.collections.isNotEmpty' call
+    if (!free.isEmpty_y1axqb_k$()) {
+      // Inline function 'kotlin.collections.random' call
+      return random_0(free, Default_getInstance());
+    }
+    var tmp6 = get_bigStickers();
+    var tmp$ret$8;
+    $l$block_0: {
+      // Inline function 'kotlin.collections.firstOrNull' call
+      var _iterator__ex2g4s_1 = tmp6.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_1.hasNext_bitz1p_k$()) {
+        var element_1 = _iterator__ex2g4s_1.next_20eer_k$();
+        if (!have.contains_aljjnj_k$(element_1)) {
+          tmp$ret$8 = element_1;
+          break $l$block_0;
+        }
+      }
+      tmp$ret$8 = null;
+    }
+    return tmp$ret$8;
+  }
   var Bin_PAPER_instance;
   var Bin_PACKAGING_instance;
   var Bin_BIO_instance;
@@ -22527,6 +22967,10 @@ var logic = function (_) {
     GameType_initEntries();
     return GameType_ICECREAM_instance;
   }
+  function GameType_MARBLE_getInstance() {
+    GameType_initEntries();
+    return GameType_MARBLE_instance;
+  }
   function GameType_COLORING_getInstance() {
     GameType_initEntries();
     return GameType_COLORING_instance;
@@ -22608,8 +23052,9 @@ var logic = function (_) {
     if (!properties_initialized_Content_kt_bhcozt) {
       properties_initialized_Content_kt_bhcozt = true;
       countObjects = listOf_0([new CountObj('\uD83C\uDF4E', 'alma', '\xC4pfel', 'apples'), new CountObj('\uD83D\uDC1F', 'hal', 'Fische', 'fish'), new CountObj('\u2B50', 'csillag', 'Sterne', 'stars'), new CountObj('\uD83D\uDC1E', 'katica', 'Marienk\xE4fer', 'ladybugs'), new CountObj('\uD83C\uDF88', 'lufi', 'Luftballons', 'balloons'), new CountObj('\uD83D\uDE97', 'aut\xF3', 'Autos', 'cars'), new CountObj('\uD83D\uDC25', 'csibe', 'K\xFCken', 'chicks'), new CountObj('\uD83C\uDF53', 'eper', 'Erdbeeren', 'strawberries'), new CountObj('\uD83C\uDF38', 'vir\xE1g', 'Blumen', 'flowers'), new CountObj('\uD83E\uDD86', 'kacsa', 'Enten', 'ducks')]);
-      wordsHu = listOf_0([new Word('\uD83C\uDF4E', 'alma'), new Word('\uD83D\uDE97', 'aut\xF3'), new Word('\uD83C\uDF4D', 'anan\xE1sz'), new Word('\uD83C\uDF4C', 'ban\xE1n'), new Word('\uD83E\uDD89', 'bagoly'), new Word('\uD83D\uDC38', 'b\xE9ka'), new Word('\uD83D\uDC31', 'cica'), new Word('\uD83C\uDF4B', 'citrom'), new Word('\uD83D\uDC2C', 'delfin'), new Word('\uD83E\uDD95', 'd\xEDn\xF3'), new Word('\uD83D\uDC2D', 'eg\xE9r'), new Word('\uD83C\uDF53', 'eper'), new Word('\uD83D\uDC18', 'elef\xE1nt'), new Word('\uD83C\uDF33', 'fa'), new Word('\uD83C\uDF66', 'fagyi'), new Word('\u2601\uFE0F', 'felh\u0151'), new Word('\uD83C\uDF44', 'gomba'), new Word('\uD83C\uDFB8', 'git\xE1r'), new Word('\uD83D\uDC1F', 'hal'), new Word('\uD83C\uDFE0', 'h\xE1z'), new Word('\uD83C\uDF19', 'hold'), new Word('\u26C4', 'h\xF3ember'), new Word('\uD83D\uDC36', 'kutya'), new Word('\uD83E\uDD86', 'kacsa'), new Word('\uD83C\uDF5E', 'keny\xE9r'), new Word('\uD83D\uDC0D', 'k\xEDgy\xF3'), new Word('\u26BD', 'labda'), new Word('\uD83D\uDC34', 'l\xF3'), new Word('\uD83C\uDF88', 'lufi'), new Word('\uD83D\uDC12', 'majom'), new Word('\uD83D\uDC3B', 'medve'), new Word('\uD83D\uDC1D', 'm\xE9hecske'), new Word('\uD83D\uDC37', 'malac'), new Word('\u2600\uFE0F', 'nap'), new Word('\uD83C\uDF4A', 'narancs'), new Word('\uD83E\uDD81', 'oroszl\xE1n'), new Word('\u2702\uFE0F', 'oll\xF3'), new Word('\uD83E\uDD8B', 'pillang\xF3'), new Word('\uD83D\uDC27', 'pingvin'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83E\uDD55', 'r\xE9pa'), new Word('\uD83D\uDE80', 'rak\xE9ta'), new Word('\uD83E\uDD8A', 'r\xF3ka'), new Word('\uD83E\uDD94', 's\xFCn'), new Word('\uD83E\uDDC0', 'sajt'), new Word('\uD83D\uDC22', 'tekn\u0151s'), new Word('\uD83D\uDC2F', 'tigris'), new Word('\uD83E\uDD5A', 'toj\xE1s'), new Word('\uD83D\uDE82', 'vonat'), new Word('\uD83C\uDF38', 'vir\xE1g'), new Word('\uD83E\uDD93', 'zebra')]);
-      wordsDe = listOf_0([new Word('\uD83C\uDF4E', 'Apfel'), new Word('\uD83D\uDE97', 'Auto'), new Word('\uD83D\uDC12', 'Affe'), new Word('\uD83C\uDF4D', 'Ananas'), new Word('\uD83C\uDF4C', 'Banane'), new Word('\u26BD', 'Ball'), new Word('\uD83D\uDC3B', 'B\xE4r'), new Word('\uD83D\uDC1D', 'Biene'), new Word('\uD83C\uDF33', 'Baum'), new Word('\uD83D\uDC2C', 'Delfin'), new Word('\uD83E\uDD95', 'Dino'), new Word('\uD83D\uDC18', 'Elefant'), new Word('\uD83E\uDD86', 'Ente'), new Word('\uD83C\uDF53', 'Erdbeere'), new Word('\uD83D\uDC1F', 'Fisch'), new Word('\uD83D\uDC38', 'Frosch'), new Word('\uD83E\uDD8A', 'Fuchs'), new Word('\uD83E\uDD92', 'Giraffe'), new Word('\uD83C\uDFB8', 'Gitarre'), new Word('\uD83D\uDC36', 'Hund'), new Word('\uD83C\uDFE0', 'Haus'), new Word('\uD83D\uDC30', 'Hase'), new Word('\uD83E\uDD94', 'Igel'), new Word('\uD83D\uDC31', 'Katze'), new Word('\uD83E\uDDC0', 'K\xE4se'), new Word('\uD83C\uDF70', 'Kuchen'), new Word('\uD83E\uDD55', 'Karotte'), new Word('\uD83E\uDD81', 'L\xF6we'), new Word('\uD83D\uDCA1', 'Lampe'), new Word('\uD83D\uDC2D', 'Maus'), new Word('\uD83C\uDF19', 'Mond'), new Word('\uD83E\uDD5B', 'Milch'), new Word('\uD83D\uDC43', 'Nase'), new Word('\uD83C\uDF44', 'Pilz'), new Word('\uD83D\uDC27', 'Pinguin'), new Word('\uD83C\uDF55', 'Pizza'), new Word('\uD83D\uDE80', 'Rakete'), new Word('\uD83C\uDF39', 'Rose'), new Word('\u2600\uFE0F', 'Sonne'), new Word('\uD83D\uDC2F', 'Tiger'), new Word('\uD83C\uDF45', 'Tomate'), new Word('\uD83E\uDD93', 'Zebra'), new Word('\uD83D\uDE82', 'Zug')]);
+      HU_MULTI_LETTERS = listOf_0(['DZS', 'CS', 'DZ', 'GY', 'LY', 'NY', 'SZ', 'TY', 'ZS']);
+      wordsHu = listOf_0([hw('\uD83C\uDF4E', 'alma'), hw('\uD83D\uDE97', 'aut\xF3'), hw('\uD83C\uDF4D', 'anan\xE1sz'), hw('\uD83C\uDF4C', 'ban\xE1n'), hw('\uD83E\uDD89', 'bagoly'), hw('\uD83D\uDC38', 'b\xE9ka'), hw('\uD83D\uDC31', 'cica'), hw('\uD83C\uDF4B', 'citrom'), hw('\uD83D\uDC2C', 'delfin'), hw('\uD83E\uDD95', 'd\xEDn\xF3'), hw('\uD83D\uDC2D', 'eg\xE9r'), hw('\uD83C\uDF53', 'eper'), hw('\uD83D\uDC18', 'elef\xE1nt'), hw('\uD83C\uDF33', 'fa'), hw('\uD83C\uDF66', 'fagyi'), hw('\u2601\uFE0F', 'felh\u0151'), hw('\uD83C\uDF44', 'gomba'), hw('\uD83C\uDFB8', 'git\xE1r'), hw('\uD83D\uDC1F', 'hal'), hw('\uD83C\uDFE0', 'h\xE1z'), hw('\uD83C\uDF19', 'hold'), hw('\u26C4', 'h\xF3ember'), hw('\uD83D\uDC36', 'kutya'), hw('\uD83E\uDD86', 'kacsa'), hw('\uD83C\uDF5E', 'keny\xE9r'), hw('\uD83D\uDC0D', 'k\xEDgy\xF3'), hw('\u26BD', 'labda'), hw('\uD83D\uDC34', 'l\xF3'), hw('\uD83C\uDF88', 'lufi'), hw('\uD83D\uDC12', 'majom'), hw('\uD83D\uDC3B', 'medve'), hw('\uD83D\uDC1D', 'm\xE9hecske'), hw('\uD83D\uDC37', 'malac'), hw('\u2600\uFE0F', 'nap'), hw('\uD83C\uDF4A', 'narancs'), hw('\uD83E\uDD81', 'oroszl\xE1n'), hw('\u2702\uFE0F', 'oll\xF3'), hw('\uD83E\uDD8B', 'pillang\xF3'), hw('\uD83D\uDC27', 'pingvin'), hw('\uD83C\uDF55', 'pizza'), hw('\uD83E\uDD55', 'r\xE9pa'), hw('\uD83D\uDE80', 'rak\xE9ta'), hw('\uD83E\uDD8A', 'r\xF3ka'), hw('\uD83E\uDD94', 's\xFCn'), hw('\uD83E\uDDC0', 'sajt'), hw('\uD83D\uDC22', 'tekn\u0151s'), hw('\uD83D\uDC2F', 'tigris'), hw('\uD83E\uDD5A', 'toj\xE1s'), hw('\uD83D\uDE82', 'vonat'), hw('\uD83C\uDF38', 'vir\xE1g'), hw('\uD83E\uDD93', 'zebra'), hw('\uD83D\uDC0C', 'csiga'), hw('\u2B50', 'csillag'), hw('\uD83C\uDF52', 'cseresznye'), hw('\uD83D\uDE99', 'dzsip'), hw('\uD83D\uDD6F\uFE0F', 'gyertya'), hw('\uD83E\uDD8E', 'gy\xEDk'), hw('\uD83E\uDDD2', 'gyerek'), hw('\uD83D\uDC30', 'nyuszi'), hw('\uD83D\uDC54', 'nyakkend\u0151'), hw('\u2764\uFE0F', 'sz\xEDv'), hw('\uD83C\uDF47', 'sz\u0151l\u0151'), hw('\uD83C\uDF08', 'sziv\xE1rv\xE1ny'), hw('\uD83D\uDC14', 'ty\xFAk'), hw('\uD83E\uDD92', 'zsir\xE1f'), hw('\uD83D\uDD26', 'zsebl\xE1mpa'), hw('\uD83D\uDECF\uFE0F', '\xE1gy'), hw('\uD83E\uDED0', '\xE1fonya'), hw('\u23F0', '\xE9breszt\u0151\xF3ra'), hw('\uD83E\uDE99', '\xE9rme'), hw('\uD83C\uDFEB', 'iskola'), hw('\uD83D\uDC55', 'ing'), hw('\uD83C\uDFF9', '\xEDj'), hw('\uD83E\uDE80', 'joj\xF3'), hw('\uD83E\uDDCA', 'j\xE9gkocka'), hw('\uD83D\uDD73\uFE0F', 'lyuk'), hw('\uD83D\uDD70\uFE0F', '\xF3ra'), hw('\uD83C\uDFA1', '\xF3ri\xE1sker\xE9k'), hw('\uD83D\uDC02', '\xF6k\xF6r'), hw('\uD83E\uDD8C', '\u0151z'), hw('\uD83C\uDF51', '\u0151szibarack'), hw('\uD83E\uDD52', 'uborka'), hw('\uD83E\uDD84', 'unikornis'), hw('\uD83D\uDEDF', '\xFAsz\xF3gumi'), hw('\uD83D\uDCF0', '\xFAjs\xE1g'), hw('\uD83C\uDF7E', '\xFCveg'), hw('\u2604\uFE0F', '\xFCst\xF6k\xF6s'), hw('\uD83E\uDDD1\u200D\uD83D\uDE80', '\u0171rhaj\xF3s'), hw('\uD83D\uDEBD', 'WC')]);
+      wordsDe = listOf_0([new Word('\uD83C\uDF4E', 'Apfel'), new Word('\uD83D\uDE97', 'Auto'), new Word('\uD83D\uDC12', 'Affe'), new Word('\uD83C\uDF4D', 'Ananas'), new Word('\uD83C\uDF4C', 'Banane'), new Word('\u26BD', 'Ball'), new Word('\uD83D\uDC3B', 'B\xE4r'), new Word('\uD83D\uDC1D', 'Biene'), new Word('\uD83C\uDF33', 'Baum'), new Word('\uD83D\uDC2C', 'Delfin'), new Word('\uD83E\uDD95', 'Dino'), new Word('\uD83D\uDC18', 'Elefant'), new Word('\uD83E\uDD86', 'Ente'), new Word('\uD83C\uDF53', 'Erdbeere'), new Word('\uD83D\uDC1F', 'Fisch'), new Word('\uD83D\uDC38', 'Frosch'), new Word('\uD83E\uDD8A', 'Fuchs'), new Word('\uD83E\uDD92', 'Giraffe'), new Word('\uD83C\uDFB8', 'Gitarre'), new Word('\uD83D\uDC36', 'Hund'), new Word('\uD83C\uDFE0', 'Haus'), new Word('\uD83D\uDC30', 'Hase'), new Word('\uD83E\uDD94', 'Igel'), new Word('\uD83D\uDC31', 'Katze'), new Word('\uD83E\uDDC0', 'K\xE4se'), new Word('\uD83C\uDF70', 'Kuchen'), new Word('\uD83E\uDD55', 'Karotte'), new Word('\uD83E\uDD81', 'L\xF6we'), new Word('\uD83D\uDCA1', 'Lampe'), new Word('\uD83D\uDC2D', 'Maus'), new Word('\uD83C\uDF19', 'Mond'), new Word('\uD83E\uDD5B', 'Milch'), new Word('\uD83D\uDC43', 'Nase'), new Word('\uD83C\uDF44', 'Pilz'), new Word('\uD83D\uDC27', 'Pinguin'), new Word('\uD83C\uDF55', 'Pizza'), new Word('\uD83D\uDE80', 'Rakete'), new Word('\uD83C\uDF39', 'Rose'), new Word('\u2600\uFE0F', 'Sonne'), new Word('\uD83D\uDC2F', 'Tiger'), new Word('\uD83C\uDF45', 'Tomate'), new Word('\uD83E\uDD93', 'Zebra'), new Word('\uD83D\uDE82', 'Zug'), new Word('\uD83C\uDF3E', '\xC4hre'), new Word('\uD83E\uDD21', 'Clown'), new Word('\uD83D\uDCBB', 'Computer'), new Word('\uD83E\uDDE5', 'Jacke'), new Word('\uD83E\uDE80', 'Jo-Jo'), new Word('\uD83D\uDC42', 'Ohr'), new Word('\uD83C\uDF4A', 'Orange'), new Word('\uD83E\uDEBC', 'Qualle'), new Word('\u23F0', 'Uhr'), new Word('\uD83D\uDEF8', 'Ufo'), new Word('\uD83D\uDC26', 'Vogel'), new Word('\uD83D\uDC33', 'Wal'), new Word('\u2601\uFE0F', 'Wolke'), new Word('\uD83D\uDEE2\uFE0F', '\xD6l'), new Word('\uD83C\uDF89', '\xDCberraschung'), new Word('\uD83E\uDDD8', 'Yoga')]);
       wordsEn = listOf_0([new Word('\uD83C\uDF4E', 'apple'), new Word('\uD83D\uDC1C', 'ant'), new Word('\u2708\uFE0F', 'airplane'), new Word('\uD83C\uDF4C', 'banana'), new Word('\u26BD', 'ball'), new Word('\uD83D\uDC3B', 'bear'), new Word('\uD83D\uDC1D', 'bee'), new Word('\uD83D\uDE8C', 'bus'), new Word('\uD83D\uDC31', 'cat'), new Word('\uD83D\uDE97', 'car'), new Word('\uD83C\uDF70', 'cake'), new Word('\uD83D\uDC36', 'dog'), new Word('\uD83E\uDD86', 'duck'), new Word('\uD83D\uDC2C', 'dolphin'), new Word('\uD83D\uDC18', 'elephant'), new Word('\uD83E\uDD5A', 'egg'), new Word('\uD83D\uDC1F', 'fish'), new Word('\uD83D\uDC38', 'frog'), new Word('\uD83E\uDD8A', 'fox'), new Word('\uD83D\uDC10', 'goat'), new Word('\uD83C\uDFB8', 'guitar'), new Word('\uD83C\uDFE0', 'house'), new Word('\uD83D\uDC34', 'horse'), new Word('\uD83C\uDFA9', 'hat'), new Word('\uD83E\uDD98', 'kangaroo'), new Word('\uD83D\uDD11', 'key'), new Word('\uD83E\uDD81', 'lion'), new Word('\uD83C\uDF4B', 'lemon'), new Word('\uD83D\uDC12', 'monkey'), new Word('\uD83C\uDF19', 'moon'), new Word('\uD83D\uDC2D', 'mouse'), new Word('\uD83D\uDC43', 'nose'), new Word('\uD83D\uDC19', 'octopus'), new Word('\uD83C\uDF4A', 'orange'), new Word('\uD83D\uDC37', 'pig'), new Word('\uD83D\uDC27', 'penguin'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC30', 'rabbit'), new Word('\uD83D\uDE80', 'rocket'), new Word('\uD83C\uDF08', 'rainbow'), new Word('\u2600\uFE0F', 'sun'), new Word('\uD83D\uDC0D', 'snake'), new Word('\u2B50', 'star'), new Word('\uD83D\uDC2F', 'tiger'), new Word('\uD83C\uDF33', 'tree'), new Word('\uD83C\uDF45', 'tomato'), new Word('\u2602\uFE0F', 'umbrella'), new Word('\uD83C\uDF49', 'watermelon'), new Word('\uD83E\uDD93', 'zebra')]);
       colors = listOf_0([new ColorDef(new Color(new Long(-1754827, 0)), 'piros', 'rot', 'rote', 'red'), new ColorDef(new Color(new Long(-14776091, 0)), 'k\xE9k', 'blau', 'blaue', 'blue'), new ColorDef(new Color(new Long(-141259, 0)), 's\xE1rga', 'gelb', 'gelbe', 'yellow'), new ColorDef(new Color(new Long(-12345273, 0)), 'z\xF6ld', 'gr\xFCn', 'gr\xFCne', 'green'), new ColorDef(new Color(new Long(-291840, 0)), 'narancss\xE1rga', 'orange', 'orange', 'orange'), new ColorDef(new Color(new Long(-7461718, 0)), 'lila', 'lila', 'lila', 'purple')]);
       categories = listOf_0([listOf_0(['\uD83D\uDC36', '\uD83D\uDC31', '\uD83D\uDC2D', '\uD83D\uDC30', '\uD83E\uDD8A', '\uD83D\uDC3B', '\uD83D\uDC3C', '\uD83D\uDC2F', '\uD83E\uDD81', '\uD83D\uDC2E', '\uD83D\uDC37', '\uD83D\uDC35']), listOf_0(['\uD83C\uDF4E', '\uD83C\uDF4C', '\uD83C\uDF53', '\uD83C\uDF47', '\uD83C\uDF49', '\uD83C\uDF50', '\uD83C\uDF52', '\uD83C\uDF4A', '\uD83C\uDF4D', '\uD83E\uDD5D', '\uD83C\uDF51', '\uD83C\uDF4B']), listOf_0(['\uD83D\uDE97', '\uD83D\uDE8C', '\uD83D\uDE82', '\u2708\uFE0F', '\uD83D\uDE80', '\uD83D\uDEB2', '\uD83D\uDE9C', '\u26F5', '\uD83D\uDE92', '\uD83D\uDE81', '\uD83D\uDE91', '\uD83D\uDEF5']), listOf_0(['\uD83D\uDC55', '\uD83D\uDC56', '\uD83E\uDDE6', '\uD83E\uDDE2', '\uD83D\uDC5F', '\uD83E\uDDE4', '\uD83D\uDC57', '\uD83E\uDDE5', '\uD83E\uDDE3', '\uD83D\uDC52', '\uD83E\uDD7E'])]);
@@ -22645,7 +23090,9 @@ var logic = function (_) {
       puzzleEmojis = listOf_0(['\uD83E\uDD81', '\uD83D\uDC36', '\uD83D\uDC31', '\uD83D\uDC38', '\uD83E\uDD8A', '\uD83D\uDC3C', '\uD83D\uDC2F', '\uD83D\uDC35', '\uD83D\uDE97', '\uD83D\uDE80', '\uD83C\uDFE0', '\uD83C\uDF3B', '\uD83E\uDD89']);
       animalEmojis = setOf_0(['\uD83D\uDC36', '\uD83D\uDC31', '\uD83D\uDC2D', '\uD83D\uDC30', '\uD83E\uDD8A', '\uD83D\uDC3B', '\uD83D\uDC3C', '\uD83D\uDC2F', '\uD83E\uDD81', '\uD83D\uDC2E', '\uD83D\uDC37', '\uD83D\uDC35', '\uD83D\uDC12', '\uD83D\uDC38', '\uD83D\uDC1F', '\uD83D\uDC18', '\uD83E\uDD92', '\uD83E\uDD93', '\uD83D\uDC27', '\uD83D\uDC2C', '\uD83D\uDC22', '\uD83D\uDC0D', '\uD83E\uDD86', '\uD83D\uDC34', '\uD83D\uDC1D', '\uD83E\uDD8B', '\uD83D\uDC33', '\uD83E\uDD9B', '\uD83D\uDC3A', '\uD83D\uDC28', '\uD83D\uDC11', '\uD83D\uDC14', '\uD83D\uDC13', '\uD83E\uDD89', '\uD83D\uDC0A', '\uD83E\uDD98', '\uD83D\uDC19', '\uD83D\uDC1E']);
       puzzleColors = listOf_0([new Color(new Long(-5908825, 0)), new Color(new Long(-8062, 0)), new Color(new Long(-476208, 0)), new Color(new Long(-3238952, 0))]);
-      allStickers = listOf_0(['\uD83E\uDD84', '\uD83D\uDC32', '\uD83E\uDD96', '\uD83E\uDD95', '\uD83D\uDC19', '\uD83E\uDD80', '\uD83D\uDC33', '\uD83D\uDC2C', '\uD83E\uDD92', '\uD83E\uDD93', '\uD83E\uDD98', '\uD83E\uDD9C', '\uD83D\uDC1E', '\uD83E\uDD8B', '\uD83D\uDC1D', '\uD83C\uDF08', '\uD83D\uDE80', '\uD83D\uDEF8', '\uD83D\uDE81', '\uD83D\uDE82', '\uD83D\uDE92', '\uD83C\uDFCE\uFE0F', '\uD83D\uDE9C', '\u26BD', '\uD83C\uDFC0', '\uD83C\uDF88', '\uD83C\uDF81', '\uD83C\uDF66', '\uD83C\uDF69', '\uD83C\uDF6D', '\uD83C\uDFB8', '\uD83E\uDD41', '\uD83C\uDFF0', '\u26C4', '\uD83C\uDF3B', '\uD83C\uDF44', '\uD83D\uDC22', '\uD83D\uDC20', '\uD83D\uDC3C', '\uD83D\uDC28', '\uD83E\uDDA9', '\uD83D\uDC3F\uFE0F', '\uD83E\uDD94', '\uD83E\uDD89', '\uD83E\uDD81', '\uD83C\uDF35', '\uD83C\uDF53', '\uD83C\uDFA1', '\uD83E\uDDC1', '\u26F5']);
+      normalStickers = listOf_0(['\uD83E\uDD84', '\uD83D\uDC32', '\uD83E\uDD96', '\uD83E\uDD95', '\uD83D\uDC19', '\uD83E\uDD80', '\uD83D\uDC33', '\uD83D\uDC2C', '\uD83E\uDD92', '\uD83E\uDD93', '\uD83E\uDD98', '\uD83E\uDD9C', '\uD83D\uDC1E', '\uD83E\uDD8B', '\uD83D\uDC1D', '\uD83C\uDF08', '\uD83D\uDE80', '\uD83D\uDEF8', '\uD83D\uDE81', '\uD83D\uDE82', '\uD83D\uDE92', '\uD83C\uDFCE\uFE0F', '\uD83D\uDE9C', '\u26BD', '\uD83C\uDFC0', '\uD83C\uDF88', '\uD83C\uDF81', '\uD83C\uDF66', '\uD83C\uDF69', '\uD83C\uDF6D', '\uD83C\uDFB8', '\uD83E\uDD41', '\uD83C\uDFF0', '\u26C4', '\uD83C\uDF3B', '\uD83C\uDF44', '\uD83D\uDC22', '\uD83D\uDC20', '\uD83D\uDC3C', '\uD83D\uDC28', '\uD83E\uDDA9', '\uD83D\uDC3F\uFE0F', '\uD83E\uDD94', '\uD83E\uDD89', '\uD83E\uDD81', '\uD83C\uDF35', '\uD83C\uDF53', '\uD83C\uDFA1', '\uD83E\uDDC1', '\u26F5', '\uD83D\uDC36', '\uD83D\uDC31', '\uD83D\uDC30', '\uD83E\uDD8A', '\uD83D\uDC3B', '\uD83D\uDC2F', '\uD83D\uDC38', '\uD83D\uDC35', '\uD83D\uDC27', '\uD83D\uDC18', '\uD83D\uDC34', '\uD83D\uDC37', '\uD83D\uDC2E', '\uD83D\uDC11', '\uD83D\uDC13', '\uD83D\uDC25', '\uD83E\uDD86', '\uD83D\uDC0A', '\uD83D\uDC0D', '\uD83E\uDD85', '\uD83D\uDC2A', '\uD83E\uDD9B', '\uD83D\uDC3A', '\uD83D\uDC1B', '\uD83C\uDF4E', '\uD83C\uDF4C', '\uD83C\uDF49', '\uD83C\uDF52', '\uD83C\uDF4D', '\uD83C\uDF55', '\uD83C\uDF82', '\uD83C\uDF6A', '\uD83C\uDF6B', '\uD83D\uDE97', '\uD83D\uDE8C', '\uD83D\uDE91', '\uD83D\uDE95', '\uD83D\uDEF5', '\uD83D\uDEB2', '\u2708\uFE0F', '\uD83C\uDF1E', '\uD83C\uDF19', '\uD83C\uDF38', '\uD83C\uDF37', '\uD83C\uDFD6\uFE0F', '\uD83E\uDDF8', '\uD83C\uDFA4', '\uD83E\uDD16', '\uD83C\uDFB2', '\uD83D\uDC8E']);
+      bigStickers = listOf_0(['kabala', '\uD83C\uDFC6']);
+      allStickers = plus_0(get_normalStickers(), get_bigStickers());
       wasteItems = listOf_0([new WasteItem('\uD83D\uDCF0', new Txt('\xFAjs\xE1g', 'Zeitung', 'newspaper'), Bin_PAPER_getInstance()), new WasteItem('\uD83D\uDCE6', new Txt('kartondoboz', 'Karton', 'cardboard box'), Bin_PAPER_getInstance()), new WasteItem('\uD83D\uDCD2', new Txt('f\xFCzet', 'Heft', 'notebook'), Bin_PAPER_getInstance()), new WasteItem('\u2709\uFE0F', new Txt('bor\xEDt\xE9k', 'Briefumschlag', 'envelope'), Bin_PAPER_getInstance()), new WasteItem('\uD83E\uDD6B', new Txt('konzervdoboz', 'Konservendose', 'tin can'), Bin_PACKAGING_getInstance()), new WasteItem('\uD83E\uDDF4', new Txt('samponos flakon', 'Shampooflasche', 'shampoo bottle'), Bin_PACKAGING_getInstance()), new WasteItem('\uD83E\uDDC3', new Txt('gy\xFCm\xF6lcsleves doboz', 'Saftkarton', 'juice carton'), Bin_PACKAGING_getInstance()), new WasteItem('\uD83C\uDF4C', new Txt('ban\xE1nh\xE9j', 'Bananenschale', 'banana peel'), Bin_BIO_getInstance()), new WasteItem('\uD83C\uDF4E', new Txt('almacsutka', 'Apfelgriebs', 'apple core'), Bin_BIO_getInstance()), new WasteItem('\uD83E\uDD5A', new Txt('toj\xE1sh\xE9j', 'Eierschale', 'eggshell'), Bin_BIO_getInstance()), new WasteItem('\uD83C\uDF42', new Txt('falevelek', 'Herbstlaub', 'autumn leaves'), Bin_BIO_getInstance()), new WasteItem('\uD83E\uDD54', new Txt('krumplih\xE9j', 'Kartoffelschale', 'potato peel'), Bin_BIO_getInstance()), new WasteItem('\uD83C\uDF49', new Txt('dinnyeh\xE9j', 'Melonenschale', 'melon rind'), Bin_BIO_getInstance()), new WasteItem('\uD83E\uDEA5', new Txt('r\xE9gi fogkefe', 'alte Zahnb\xFCrste', 'old toothbrush'), Bin_REST_getInstance()), new WasteItem('\uD83E\uDE79', new Txt('haszn\xE1lt sebtapasz', 'benutztes Pflaster', 'used plaster'), Bin_REST_getInstance()), new WasteItem('\uD83E\uDDFD', new Txt('r\xE9gi szivacs', 'alter Schwamm', 'old sponge'), Bin_REST_getInstance()), new WasteItem('\uD83D\uDD8A\uFE0F', new Txt('kifogyott toll', 'leerer Kugelschreiber', 'empty pen'), Bin_REST_getInstance()), new WasteItem('\uD83C\uDF6F', new Txt('\xFCres m\xE9zes \xFCveg', 'leeres Honigglas', 'empty honey jar'), Bin_GLASS_getInstance()), new WasteItem('\uD83C\uDF7E', new Txt('\xFCres \xFCvegpalack', 'leere Glasflasche', 'empty glass bottle'), Bin_GLASS_getInstance())]);
     }
   }
@@ -22666,9 +23113,22 @@ var logic = function (_) {
   var ACCENTED;
   function get_TRACE_ALPHABET() {
     _init_properties_Extra_kt__rlw1we();
-    return TRACE_ALPHABET;
+    var tmp0 = TRACE_ALPHABET$delegate;
+    // Inline function 'kotlin.getValue' call
+    TRACE_ALPHABET$factory();
+    return tmp0.get_value_j01efc_k$();
   }
-  var TRACE_ALPHABET;
+  var TRACE_ALPHABET$delegate;
+  function get_HU_ABC() {
+    _init_properties_Extra_kt__rlw1we();
+    return HU_ABC;
+  }
+  var HU_ABC;
+  function get_TRACE_ALPHABET_TEXT() {
+    _init_properties_Extra_kt__rlw1we();
+    return TRACE_ALPHABET_TEXT;
+  }
+  var TRACE_ALPHABET_TEXT;
   function get_DIGIT_STROKES() {
     _init_properties_Extra_kt__rlw1we();
     return DIGIT_STROKES;
@@ -22752,7 +23212,7 @@ var logic = function (_) {
   function L11(s) {
     this.texts_1 = split(s, ['|']);
     // Inline function 'kotlin.require' call
-    if (!(this.texts_1.get_size_woubt6_k$() === get_entries_17().get_size_woubt6_k$())) {
+    if (!(this.texts_1.get_size_woubt6_k$() >= get_entries_17().get_size_woubt6_k$())) {
       var message = 'L11 needs ' + get_entries_17().get_size_woubt6_k$() + ' parts: ' + s;
       throw IllegalArgumentException_init_$Create$_0(toString_1(message));
     }
@@ -23234,16 +23694,60 @@ var logic = function (_) {
     return SIMPLE_LETTERS;
   }
   var SIMPLE_LETTERS;
+  function glyphStrokes(g) {
+    _init_properties_Extra_kt__rlw1we();
+    // Inline function 'kotlin.text.flatMapIndexed' call
+    // Inline function 'kotlin.text.flatMapIndexedTo' call
+    var destination = ArrayList_init_$Create$();
+    var index = 0;
+    var inductionVariable = 0;
+    while (inductionVariable < charSequenceLength(g)) {
+      var element = charSequenceGet(g, inductionVariable);
+      inductionVariable = inductionVariable + 1 | 0;
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      var tmp0_elvis_lhs = letterStrokes(element);
+      var tmp;
+      if (tmp0_elvis_lhs == null) {
+        var message = 'no strokes for ' + toString(element);
+        throw IllegalStateException_init_$Create$_0(toString_1(message));
+      } else {
+        tmp = tmp0_elvis_lhs;
+      }
+      // Inline function 'kotlin.collections.map' call
+      var this_0 = parseStrokes(tmp);
+      // Inline function 'kotlin.collections.mapTo' call
+      var destination_0 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+      var _iterator__ex2g4s = this_0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+        var item = _iterator__ex2g4s.next_20eer_k$();
+        // Inline function 'kotlin.collections.map' call
+        // Inline function 'kotlin.collections.mapTo' call
+        var destination_1 = ArrayList_init_$Create$_0(collectionSizeOrDefault(item, 10));
+        var _iterator__ex2g4s_0 = item.iterator_jk1svi_k$();
+        while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+          var item_0 = _iterator__ex2g4s_0.next_20eer_k$();
+          var tmp$ret$0 = new P(item_0.x_1 + _unary__edvuaz * 12.0, item_0.y_1);
+          destination_1.add_utx5q5_k$(tmp$ret$0);
+        }
+        var tmp$ret$3 = resample(destination_1);
+        destination_0.add_utx5q5_k$(tmp$ret$3);
+      }
+      var list = destination_0;
+      addAll(destination, list);
+    }
+    return destination;
+  }
   function wave(len, amp, bumps) {
     _init_properties_Extra_kt__rlw1we();
     var tmp = numberRangeToNumber(0, imul(bumps, 8));
-    return joinToString_0(tmp, ' ', VOID, VOID, VOID, VOID, wave$lambda(len, bumps, amp));
+    return joinToString_1(tmp, ' ', VOID, VOID, VOID, VOID, wave$lambda(len, bumps, amp));
   }
   function spiral(turns) {
     _init_properties_Extra_kt__rlw1we();
     var n = numberToInt(turns * 24);
     var tmp = numberRangeToNumber(0, n);
-    return joinToString_0(tmp, ' ', VOID, VOID, VOID, VOID, spiral$lambda(n));
+    return joinToString_1(tmp, ' ', VOID, VOID, VOID, VOID, spiral$lambda(n));
   }
   function makeTrace(lang, level) {
     _init_properties_Extra_kt__rlw1we();
@@ -23304,79 +23808,74 @@ var logic = function (_) {
       var tmp_3;
       switch (l) {
         case 6:
-          // Inline function 'kotlin.text.filter' call
+          // Inline function 'kotlin.collections.filter' call
 
-          // Inline function 'kotlin.text.filterTo' call
+          // Inline function 'kotlin.collections.filterTo' call
 
-          var destination = StringBuilder_init_$Create$_1();
-          var inductionVariable = 0;
-          var last = charSequenceLength(alphabet);
-          if (inductionVariable < last)
-            do {
-              var index = inductionVariable;
-              inductionVariable = inductionVariable + 1 | 0;
-              var element = charSequenceGet(alphabet, index);
-              if (contains_9('CIJLOSUVZ\u0413\u041B\u041F\u0421\u041E\u0417', element)) {
-                destination.append_am5a4z_k$(element);
-              }
+          var destination = ArrayList_init_$Create$();
+          var _iterator__ex2g4s = alphabet.iterator_jk1svi_k$();
+          while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+            var element = _iterator__ex2g4s.next_20eer_k$();
+            if (element.length === 1 && contains_9('CIJLOSUVZ\u0413\u041B\u041F\u0421\u041E\u0417', charSequenceGet(element, 0))) {
+              destination.add_utx5q5_k$(element);
             }
-             while (inductionVariable < last);
-          // Inline function 'kotlin.text.ifEmpty' call
+          }
 
-          var this_6 = destination.toString();
+          // Inline function 'kotlin.collections.ifEmpty' call
+
           var tmp_4;
-          // Inline function 'kotlin.text.isEmpty' call
-
-          if (charSequenceLength(this_6) === 0) {
+          if (destination.isEmpty_y1axqb_k$()) {
             tmp_4 = alphabet;
           } else {
-            tmp_4 = this_6;
+            tmp_4 = destination;
           }
 
           tmp_3 = tmp_4;
           break;
         case 7:
-          // Inline function 'kotlin.text.filter' call
+          // Inline function 'kotlin.collections.filter' call
 
-          // Inline function 'kotlin.text.filterTo' call
+          // Inline function 'kotlin.collections.filterTo' call
 
-          var destination_0 = StringBuilder_init_$Create$_1();
-          var inductionVariable_0 = 0;
-          var last_0 = charSequenceLength(alphabet);
-          if (inductionVariable_0 < last_0)
-            do {
-              var index_0 = inductionVariable_0;
-              inductionVariable_0 = inductionVariable_0 + 1 | 0;
-              var element_0 = charSequenceGet(alphabet, index_0);
-              var tmp_5;
+          var destination_0 = ArrayList_init_$Create$();
+          var _iterator__ex2g4s_0 = alphabet.iterator_jk1svi_k$();
+          while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+            var element_0 = _iterator__ex2g4s_0.next_20eer_k$();
+            var tmp_5;
+            if (element_0.length === 1) {
+              var tmp_6;
               var tmp0 = get_LATIN();
               // Inline function 'kotlin.collections.contains' call
               // Inline function 'kotlin.collections.containsKey' call
-              var key = new Char(element_0);
+              var key = new Char(charSequenceGet(element_0, 0));
               if ((isInterface(tmp0, KtMap) ? tmp0 : THROW_CCE()).containsKey_aw81wo_k$(key)) {
-                tmp_5 = true;
+                tmp_6 = true;
               } else {
                 var tmp2 = get_CYRILLIC();
                 // Inline function 'kotlin.collections.contains' call
                 // Inline function 'kotlin.collections.containsKey' call
-                var key_0 = new Char(element_0);
-                tmp_5 = (isInterface(tmp2, KtMap) ? tmp2 : THROW_CCE()).containsKey_aw81wo_k$(key_0);
+                var key_0 = new Char(charSequenceGet(element_0, 0));
+                tmp_6 = (isInterface(tmp2, KtMap) ? tmp2 : THROW_CCE()).containsKey_aw81wo_k$(key_0);
               }
-              if (tmp_5) {
-                destination_0.append_am5a4z_k$(element_0);
-              }
+              tmp_5 = tmp_6;
+            } else {
+              tmp_5 = false;
             }
-             while (inductionVariable_0 < last_0);
-          tmp_3 = destination_0.toString();
+            if (tmp_5) {
+              destination_0.add_utx5q5_k$(element_0);
+            }
+          }
+
+          tmp_3 = destination_0;
           break;
         default:
           tmp_3 = alphabet;
           break;
       }
       var pool_0 = tmp_3;
-      // Inline function 'kotlin.text.random' call
-      var c = random_4(pool_0, Default_getInstance());
-      tmp = new TraceRound(lang, drawPrompt, TraceKind_LETTER_getInstance(), makeTrace$strokes(ensureNotNull(letterStrokes(c))), toString(c), toString(c), VOID, VOID, tol, 'letter' + toString(c));
+      // Inline function 'kotlin.collections.random' call
+      var c = random_0(pool_0, Default_getInstance());
+      tmp = new TraceRound(lang, drawPrompt, TraceKind_LETTER_getInstance(), glyphStrokes(c), c, c, VOID, VOID, tol, 'letter' + c);
     }
     return tmp;
   }
@@ -23728,7 +24227,7 @@ var logic = function (_) {
       var total = 0;
       var from = start;
       var ok = true;
-      var _iterator__ex2g4s_0 = plus_0(o, gem).iterator_jk1svi_k$();
+      var _iterator__ex2g4s_0 = plus_1(o, gem).iterator_jk1svi_k$();
       $l$loop: while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
         var target = _iterator__ex2g4s_0.next_20eer_k$();
         var d = bfs(size, blocks, from).get_wei43m_k$(target);
@@ -23841,9 +24340,11 @@ var logic = function (_) {
     var message = 'no robot level for ' + l;
     throw IllegalStateException_init_$Create$_0(toString_1(message));
   }
-  function StoryStep(emoji, text) {
+  function StoryStep(emoji, text, pic) {
+    pic = pic === VOID ? null : pic;
     this.emoji_1 = emoji;
     this.text_1 = text;
+    this.pic_1 = pic;
   }
   protoOf(StoryStep).get_emoji_iqwm59_k$ = function () {
     return this.emoji_1;
@@ -23851,26 +24352,34 @@ var logic = function (_) {
   protoOf(StoryStep).get_text_wouvsm_k$ = function () {
     return this.text_1;
   };
+  protoOf(StoryStep).get_pic_18iyfz_k$ = function () {
+    return this.pic_1;
+  };
   protoOf(StoryStep).component1_7eebsc_k$ = function () {
     return this.emoji_1;
   };
   protoOf(StoryStep).component2_7eebsb_k$ = function () {
     return this.text_1;
   };
-  protoOf(StoryStep).copy_cbw3ym_k$ = function (emoji, text) {
-    return new StoryStep(emoji, text);
+  protoOf(StoryStep).component3_7eebsa_k$ = function () {
+    return this.pic_1;
   };
-  protoOf(StoryStep).copy$default_rq7pbo_k$ = function (emoji, text, $super) {
+  protoOf(StoryStep).copy_sba0s9_k$ = function (emoji, text, pic) {
+    return new StoryStep(emoji, text, pic);
+  };
+  protoOf(StoryStep).copy$default_z9mzyk_k$ = function (emoji, text, pic, $super) {
     emoji = emoji === VOID ? this.emoji_1 : emoji;
     text = text === VOID ? this.text_1 : text;
-    return $super === VOID ? this.copy_cbw3ym_k$(emoji, text) : $super.copy_cbw3ym_k$.call(this, emoji, text);
+    pic = pic === VOID ? this.pic_1 : pic;
+    return $super === VOID ? this.copy_sba0s9_k$(emoji, text, pic) : $super.copy_sba0s9_k$.call(this, emoji, text, pic);
   };
   protoOf(StoryStep).toString = function () {
-    return 'StoryStep(emoji=' + this.emoji_1 + ', text=' + toString_1(this.text_1) + ')';
+    return 'StoryStep(emoji=' + this.emoji_1 + ', text=' + toString_1(this.text_1) + ', pic=' + this.pic_1 + ')';
   };
   protoOf(StoryStep).hashCode = function () {
     var result = getStringHashCode(this.emoji_1);
     result = imul(result, 31) + hashCode(this.text_1) | 0;
+    result = imul(result, 31) + (this.pic_1 == null ? 0 : getStringHashCode(this.pic_1)) | 0;
     return result;
   };
   protoOf(StoryStep).equals = function (other) {
@@ -23882,6 +24391,8 @@ var logic = function (_) {
     if (!(this.emoji_1 === tmp0_other_with_cast.emoji_1))
       return false;
     if (!equals(this.text_1, tmp0_other_with_cast.text_1))
+      return false;
+    if (!(this.pic_1 == tmp0_other_with_cast.pic_1))
       return false;
     return true;
   };
@@ -24008,9 +24519,10 @@ var logic = function (_) {
       return false;
     return true;
   };
-  function s(emoji, text) {
+  function s(emoji, text, pic) {
+    pic = pic === VOID ? null : pic;
     _init_properties_Extra_kt__rlw1we();
-    return new StoryStep(emoji, new L11(text));
+    return new StoryStep(emoji, new L11(text), pic);
   }
   function makeStory(lang, level) {
     _init_properties_Extra_kt__rlw1we();
@@ -24052,7 +24564,7 @@ var logic = function (_) {
       return Unit_getInstance();
     Holder_entriesInitialized = true;
     Holder_CONE_instance = new Holder('CONE', 0, '\uD83C\uDF66', new L11('t\xF6lcs\xE9r|Waffel|cone|wafelek|cucurucho|cono|cornet|cornet|korn\xFAtok|\u0440\u0456\u0436\u043E\u043A|\u0440\u043E\u0436\u043E\u043A'));
-    Holder_CUP_instance = new Holder('CUP', 1, '\uD83E\uDD63', new L11('poh\xE1r|Becher|cup|kubeczek|tarrina|coppetta|pot|pahar|poh\xE1rik|\u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A|\u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A'));
+    Holder_CUP_instance = new Holder('CUP', 1, '\uD83E\uDD63', new L11('kehely|Becher|cup|kubeczek|tarrina|coppetta|pot|pahar|poh\xE1rik|\u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A|\u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A'));
   }
   var $ENTRIES_14;
   function Holder(name, ordinal, icon, word) {
@@ -24279,10 +24791,10 @@ var logic = function (_) {
       var tmp$ret$0 = item.word_1.of_tiej2t_k$(l);
       destination.add_utx5q5_k$(tmp$ret$0);
     }
-    var tmp_0 = plus_1(tmp, destination);
+    var tmp_0 = plus_0(tmp, destination);
     var tmp2_safe_receiver = this.topping_1;
     var tmp3_safe_receiver = tmp2_safe_receiver == null ? null : tmp2_safe_receiver.word_1;
-    return joinToString_0(plus_1(tmp_0, listOfNotNull(tmp3_safe_receiver == null ? null : tmp3_safe_receiver.of_tiej2t_k$(l))), ', ');
+    return joinToString_1(plus_0(tmp_0, listOfNotNull(tmp3_safe_receiver == null ? null : tmp3_safe_receiver.of_tiej2t_k$(l))), ', ');
   };
   protoOf(IceCream).component1_7eebsc_k$ = function () {
     return this.holder_1;
@@ -24325,6 +24837,44 @@ var logic = function (_) {
       return false;
     return true;
   };
+  function get_pic(_this__u8e3s4) {
+    _init_properties_Extra_kt__rlw1we();
+    var tmp;
+    switch (_this__u8e3s4.ordinal_1) {
+      case 0:
+        tmp = 'tolcser';
+        break;
+      case 1:
+        tmp = 'fagyikehely';
+        break;
+      default:
+        noWhenBranchMatchedException();
+        break;
+    }
+    return tmp;
+  }
+  function get_pic_0(_this__u8e3s4) {
+    _init_properties_Extra_kt__rlw1we();
+    switch (_this__u8e3s4.ordinal_1) {
+      case 2:
+        return 'vanilia';
+      case 3:
+        return 'pisztacia';
+      default:
+        return null;
+    }
+  }
+  function get_pic_1(_this__u8e3s4) {
+    _init_properties_Extra_kt__rlw1we();
+    switch (_this__u8e3s4.ordinal_1) {
+      case 2:
+        return 'cukorszoras';
+      case 1:
+        return 'csokidarabok';
+      default:
+        return null;
+    }
+  }
   function get_MAX_SCOOPS() {
     return MAX_SCOOPS;
   }
@@ -24447,10 +24997,37 @@ var logic = function (_) {
     var order = new IceCream(tmp, tmp_0, tmp_1);
     var prompt = t(lang, 'K\xE9sz\xEDtsd el a fagyit, amit k\xE9r! Azt\xE1n nyomd meg: Tess\xE9k!', 'Mach das Eis, das bestellt wird! Dann dr\xFCck auf Bitte sch\xF6n!', 'Make the ice cream that is ordered! Then press Here you are!');
     var ask = t(lang, 'K\xE9rek sz\xE9pen egy fagyit:', 'Ich h\xE4tte gern ein Eis:', 'I would like an ice cream, please:');
+    var tmp0_safe_receiver = order.holder_1;
+    var tmp1_safe_receiver = tmp0_safe_receiver == null ? null : tmp0_safe_receiver.word_1;
+    var tmp_2 = listOfNotNull(tmp1_safe_receiver == null ? null : tmp1_safe_receiver.of_tiej2t_k$(lang));
+    // Inline function 'kotlin.collections.map' call
+    var this_2 = order.scoops_1;
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_2, 10));
+    var _iterator__ex2g4s = this_2.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var tmp$ret$2 = item.word_1.of_tiej2t_k$(lang);
+      destination.add_utx5q5_k$(tmp$ret$2);
+    }
+    var tmp_3 = plus_0(tmp_2, destination);
+    var tmp2_safe_receiver = order.topping_1;
+    var tmp3_safe_receiver = tmp2_safe_receiver == null ? null : tmp2_safe_receiver.word_1;
+    var words = plus_0(tmp_3, listOfNotNull(tmp3_safe_receiver == null ? null : tmp3_safe_receiver.of_tiej2t_k$(lang)));
     // Inline function 'kotlin.collections.random' call
-    var this_2 = get_ICE_CUSTOMERS();
-    var tmp$ret$2 = random_0(this_2, Default_getInstance());
-    return new IceRound(lang, prompt, tmp$ret$2, order, hide, listOf_0([to(prompt, lang), to(ask + ' ' + order.words_r9be2r_k$(lang) + '.', lang)]));
+    var this_3 = get_ICE_CUSTOMERS();
+    var tmp_4 = random_0(this_3, Default_getInstance());
+    var tmp_5 = listOf_0([to(prompt, lang), to(ask, lang)]);
+    // Inline function 'kotlin.collections.map' call
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination_0 = ArrayList_init_$Create$_0(collectionSizeOrDefault(words, 10));
+    var _iterator__ex2g4s_0 = words.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+      var item_0 = _iterator__ex2g4s_0.next_20eer_k$();
+      var tmp$ret$6 = to(item_0, lang);
+      destination_0.add_utx5q5_k$(tmp$ret$6);
+    }
+    return new IceRound(lang, prompt, tmp_4, order, hide, plus_0(tmp_5, destination_0));
   }
   function makeTrace$strokes(s) {
     // Inline function 'kotlin.collections.map' call
@@ -24462,6 +25039,42 @@ var logic = function (_) {
       var item = _iterator__ex2g4s.next_20eer_k$();
       var tmp$ret$0 = resample(item);
       destination.add_utx5q5_k$(tmp$ret$0);
+    }
+    return destination;
+  }
+  function TRACE_ALPHABET$delegate$lambda() {
+    _init_properties_Extra_kt__rlw1we();
+    // Inline function 'kotlin.collections.mapValues' call
+    var this_0 = get_TRACE_ALPHABET_TEXT();
+    // Inline function 'kotlin.collections.mapValuesTo' call
+    var destination = LinkedHashMap_init_$Create$_0(mapCapacity(this_0.get_size_woubt6_k$()));
+    // Inline function 'kotlin.collections.associateByTo' call
+    var _iterator__ex2g4s = this_0.get_entries_p20ztl_k$().iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      var tmp = element.get_key_18j28a_k$();
+      // Inline function 'kotlin.collections.component1' call
+      var l = element.get_key_18j28a_k$();
+      // Inline function 'kotlin.collections.component2' call
+      var s = element.get_value_j01efc_k$();
+      var tmp_0;
+      if (l.equals(Lang_HU_getInstance())) {
+        tmp_0 = get_HU_ABC();
+      } else {
+        // Inline function 'kotlin.text.map' call
+        // Inline function 'kotlin.text.mapTo' call
+        var destination_0 = ArrayList_init_$Create$_0(charSequenceLength(s));
+        var inductionVariable = 0;
+        while (inductionVariable < charSequenceLength(s)) {
+          var item = charSequenceGet(s, inductionVariable);
+          inductionVariable = inductionVariable + 1 | 0;
+          var tmp$ret$3 = toString(item);
+          destination_0.add_utx5q5_k$(tmp$ret$3);
+        }
+        tmp_0 = destination_0;
+      }
+      var tmp$ret$6 = tmp_0;
+      destination.put_4fpzoq_k$(tmp, tmp$ret$6);
     }
     return destination;
   }
@@ -24605,6 +25218,11 @@ var logic = function (_) {
     Topping_initEntries();
     return Topping_BANANA_instance;
   }
+  function TRACE_ALPHABET$factory() {
+    return getPropertyCallableRef('TRACE_ALPHABET', 0, KProperty0, function () {
+      return get_TRACE_ALPHABET();
+    }, null);
+  }
   var properties_initialized_Extra_kt_84utz4;
   function _init_properties_Extra_kt__rlw1we() {
     if (!properties_initialized_Extra_kt_84utz4) {
@@ -24612,7 +25230,9 @@ var logic = function (_) {
       LATIN = mapOf([to(new Char(_Char___init__impl__6a9atx(65)), '0,10 5,0 10,10|2.5,5 7.5,5'), to(new Char(_Char___init__impl__6a9atx(66)), '1,10 1,0|1,0 5,0 (5,2.5,3,2.5,-90,90) 1,5|1,5 5.5,5 (5.5,7.5,3.5,2.5,-90,90) 1,10'), to(new Char(_Char___init__impl__6a9atx(67)), '(5.5,5,4.5,5,-45,-315)'), to(new Char(_Char___init__impl__6a9atx(68)), '1,10 1,0|1,0 4,0 (4,5,5,5,-90,90) 1,10'), to(new Char(_Char___init__impl__6a9atx(69)), '9,0 1,0 1,10 9,10|1,5 7,5'), to(new Char(_Char___init__impl__6a9atx(70)), '9,0 1,0 1,10|1,5 7,5'), to(new Char(_Char___init__impl__6a9atx(71)), '(5.5,5,4.5,5,-45,-360) 6,5'), to(new Char(_Char___init__impl__6a9atx(72)), '1,0 1,10|9,0 9,10|1,5 9,5'), to(new Char(_Char___init__impl__6a9atx(73)), '5,0 5,10'), to(new Char(_Char___init__impl__6a9atx(74)), '8,0 8,7 (5,7,3,3,0,180)'), to(new Char(_Char___init__impl__6a9atx(75)), '1,0 1,10|9,0 1,6|3.5,4.5 9,10'), to(new Char(_Char___init__impl__6a9atx(76)), '1,0 1,10 8,10'), to(new Char(_Char___init__impl__6a9atx(77)), '0,10 1,0 5,7 9,0 10,10'), to(new Char(_Char___init__impl__6a9atx(78)), '1,10 1,0 9,10 9,0'), to(new Char(_Char___init__impl__6a9atx(79)), '(5,5,4.5,5,-90,-450)'), to(new Char(_Char___init__impl__6a9atx(80)), '1,10 1,0|1,0 5,0 (5,2.75,3.5,2.75,-90,90) 1,5.5'), to(new Char(_Char___init__impl__6a9atx(81)), '(5,5,4.5,5,-90,-450)|6,7 10,10'), to(new Char(_Char___init__impl__6a9atx(82)), '1,10 1,0|1,0 5,0 (5,2.75,3.5,2.75,-90,90) 1,5.5|4.5,5.5 9,10'), to(new Char(_Char___init__impl__6a9atx(83)), '(5,2.5,4,2.5,-20,-270) (5,7.5,4.5,2.5,-90,160)'), to(new Char(_Char___init__impl__6a9atx(84)), '0,0 10,0|5,0 5,10'), to(new Char(_Char___init__impl__6a9atx(85)), '1,0 1,6 (5,6,4,4,180,0) 9,0'), to(new Char(_Char___init__impl__6a9atx(86)), '0,0 5,10 10,0'), to(new Char(_Char___init__impl__6a9atx(87)), '0,0 2.5,10 5,3 7.5,10 10,0'), to(new Char(_Char___init__impl__6a9atx(88)), '1,0 9,10|9,0 1,10'), to(new Char(_Char___init__impl__6a9atx(89)), '0,0 5,5|10,0 5,5 5,10'), to(new Char(_Char___init__impl__6a9atx(90)), '1,0 9,0 1,10 9,10')]);
       CYRILLIC = mapOf([to(new Char(_Char___init__impl__6a9atx(1040)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(65))))), to(new Char(_Char___init__impl__6a9atx(1042)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(66))))), to(new Char(_Char___init__impl__6a9atx(1045)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(69))))), to(new Char(_Char___init__impl__6a9atx(1050)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(75))))), to(new Char(_Char___init__impl__6a9atx(1052)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(77))))), to(new Char(_Char___init__impl__6a9atx(1053)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(72))))), to(new Char(_Char___init__impl__6a9atx(1054)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(79))))), to(new Char(_Char___init__impl__6a9atx(1056)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(80))))), to(new Char(_Char___init__impl__6a9atx(1057)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(67))))), to(new Char(_Char___init__impl__6a9atx(1058)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(84))))), to(new Char(_Char___init__impl__6a9atx(1061)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(88))))), to(new Char(_Char___init__impl__6a9atx(1030)), ensureNotNull(get_LATIN().get_wei43m_k$(new Char(_Char___init__impl__6a9atx(73))))), to(new Char(_Char___init__impl__6a9atx(1041)), '9,0 1,0 1,10|1,5 5,5 (5,7.5,3.5,2.5,-90,90) 1,10'), to(new Char(_Char___init__impl__6a9atx(1043)), '9,0 1,0 1,10'), to(new Char(_Char___init__impl__6a9atx(1044)), '0,10 0,8 10,8 10,10|2,8 3,0 8,0 8,8'), to(new Char(_Char___init__impl__6a9atx(1046)), '5,0 5,10|0,0 5,5 0,10|10,0 5,5 10,10'), to(new Char(_Char___init__impl__6a9atx(1047)), '(5,2.5,3.5,2.5,-160,90) (5,7.5,4,2.5,-90,160)'), to(new Char(_Char___init__impl__6a9atx(1048)), '1,0 1,10 9,0 9,10'), to(new Char(_Char___init__impl__6a9atx(1051)), '0,10 3,0 9,0 9,10'), to(new Char(_Char___init__impl__6a9atx(1055)), '1,10 1,0 9,0 9,10'), to(new Char(_Char___init__impl__6a9atx(1059)), '0,0 5,6|10,0 3,10'), to(new Char(_Char___init__impl__6a9atx(1060)), '5,0 5,10|(5,4,4.5,3,180,-180)'), to(new Char(_Char___init__impl__6a9atx(1062)), '1,0 1,8 9,8|8,0 8,8 10,8 10,10'), to(new Char(_Char___init__impl__6a9atx(1063)), '1,0 1,3 (4,3,3,3,180,90) 9,6|9,0 9,10'), to(new Char(_Char___init__impl__6a9atx(1064)), '0,0 0,10 10,10 10,0|5,0 5,10'), to(new Char(_Char___init__impl__6a9atx(1065)), '0,0 0,8 10,8|5,0 5,8|9,0 9,8 10,8 10,10'), to(new Char(_Char___init__impl__6a9atx(1066)), '0,0 2,0 2,10|2,5 5.5,5 (5.5,7.5,3.5,2.5,-90,90) 2,10'), to(new Char(_Char___init__impl__6a9atx(1067)), '1,0 1,10|1,5 3.5,5 (3.5,7.5,2.5,2.5,-90,90) 1,10|9,0 9,10'), to(new Char(_Char___init__impl__6a9atx(1068)), '1,0 1,10|1,5 5,5 (5,7.5,3.5,2.5,-90,90) 1,10'), to(new Char(_Char___init__impl__6a9atx(1069)), '(4.5,5,4.5,5,-135,135)|3,5 9,5'), to(new Char(_Char___init__impl__6a9atx(1028)), '(5.5,5,4.5,5,-45,-315)|1,5 7,5'), to(new Char(_Char___init__impl__6a9atx(1070)), '1,0 1,10|1,5 4,5|(7,5,3,5,-90,-450)'), to(new Char(_Char___init__impl__6a9atx(1071)), '9,10 9,0|9,0 5,0 (5,2.75,4,2.75,-90,-270) 9,5.5|5,5.5 1,10')]);
       ACCENTED = mapOf([to(new Char(_Char___init__impl__6a9atx(193)), to(new Char(_Char___init__impl__6a9atx(65)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(201)), to(new Char(_Char___init__impl__6a9atx(69)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(205)), to(new Char(_Char___init__impl__6a9atx(73)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(211)), to(new Char(_Char___init__impl__6a9atx(79)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(218)), to(new Char(_Char___init__impl__6a9atx(85)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(221)), to(new Char(_Char___init__impl__6a9atx(89)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(262)), to(new Char(_Char___init__impl__6a9atx(67)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(323)), to(new Char(_Char___init__impl__6a9atx(78)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(346)), to(new Char(_Char___init__impl__6a9atx(83)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(377)), to(new Char(_Char___init__impl__6a9atx(90)), Accent_ACUTE_getInstance())), to(new Char(_Char___init__impl__6a9atx(200)), to(new Char(_Char___init__impl__6a9atx(69)), Accent_GRAVE_getInstance())), to(new Char(_Char___init__impl__6a9atx(336)), to(new Char(_Char___init__impl__6a9atx(79)), Accent_DOUBLE_getInstance())), to(new Char(_Char___init__impl__6a9atx(368)), to(new Char(_Char___init__impl__6a9atx(85)), Accent_DOUBLE_getInstance())), to(new Char(_Char___init__impl__6a9atx(196)), to(new Char(_Char___init__impl__6a9atx(65)), Accent_UMLAUT_getInstance())), to(new Char(_Char___init__impl__6a9atx(214)), to(new Char(_Char___init__impl__6a9atx(79)), Accent_UMLAUT_getInstance())), to(new Char(_Char___init__impl__6a9atx(220)), to(new Char(_Char___init__impl__6a9atx(85)), Accent_UMLAUT_getInstance())), to(new Char(_Char___init__impl__6a9atx(268)), to(new Char(_Char___init__impl__6a9atx(67)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(270)), to(new Char(_Char___init__impl__6a9atx(68)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(327)), to(new Char(_Char___init__impl__6a9atx(78)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(352)), to(new Char(_Char___init__impl__6a9atx(83)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(356)), to(new Char(_Char___init__impl__6a9atx(84)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(381)), to(new Char(_Char___init__impl__6a9atx(90)), Accent_CARON_getInstance())), to(new Char(_Char___init__impl__6a9atx(194)), to(new Char(_Char___init__impl__6a9atx(65)), Accent_CIRCUM_getInstance())), to(new Char(_Char___init__impl__6a9atx(206)), to(new Char(_Char___init__impl__6a9atx(73)), Accent_CIRCUM_getInstance())), to(new Char(_Char___init__impl__6a9atx(212)), to(new Char(_Char___init__impl__6a9atx(79)), Accent_CIRCUM_getInstance())), to(new Char(_Char___init__impl__6a9atx(258)), to(new Char(_Char___init__impl__6a9atx(65)), Accent_BREVE_getInstance())), to(new Char(_Char___init__impl__6a9atx(209)), to(new Char(_Char___init__impl__6a9atx(78)), Accent_TILDE_getInstance())), to(new Char(_Char___init__impl__6a9atx(379)), to(new Char(_Char___init__impl__6a9atx(90)), Accent_DOT_getInstance())), to(new Char(_Char___init__impl__6a9atx(1025)), to(new Char(_Char___init__impl__6a9atx(1045)), Accent_UMLAUT_getInstance())), to(new Char(_Char___init__impl__6a9atx(1031)), to(new Char(_Char___init__impl__6a9atx(1030)), Accent_UMLAUT_getInstance())), to(new Char(_Char___init__impl__6a9atx(1049)), to(new Char(_Char___init__impl__6a9atx(1048)), Accent_BREVE_getInstance()))]);
-      TRACE_ALPHABET = mapOf([to(Lang_HU_getInstance(), 'A\xC1BCDE\xC9FGHI\xCDJKLMNO\xD3\xD6\u0150PRSTU\xDA\xDC\u0170VZ'), to(Lang_DE_getInstance(), 'A\xC4BCDEFGHIJKLMNO\xD6PQRSTU\xDCVWXYZ'), to(Lang_EN_getInstance(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), to(Lang_PL_getInstance(), 'ABC\u0106DEFGHIJKLMN\u0143O\xD3PRS\u015ATUWYZ\u0179\u017B'), to(Lang_ES_getInstance(), 'ABCDEFGHIJKLMN\xD1OPQRSTUVWXYZ'), to(Lang_IT_getInstance(), 'ABCDEFGHILMNOPQRSTUVZ'), to(Lang_FR_getInstance(), 'ABCDE\xC9\xC8FGHIJKLMNOPQRSTUVWXYZ'), to(Lang_RO_getInstance(), 'A\u0102\xC2BCDEFGHI\xCEJKLMNOPRSTUVXZ'), to(Lang_SK_getInstance(), 'A\xC1\xC4BC\u010CD\u010EE\xC9FGHI\xCDJKLMN\u0147O\xD3\xD4PRS\u0160T\u0164U\xDAVY\xDDZ\u017D'), to(Lang_UK_getInstance(), '\u0410\u0411\u0412\u0413\u0414\u0415\u0404\u0416\u0417\u0418\u0406\u0407\u0419\u041A\u041B\u041C\u041D\u041E\u041F\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042C\u042E\u042F'), to(Lang_RU_getInstance(), '\u0410\u0411\u0412\u0413\u0414\u0415\u0401\u0416\u0417\u0418\u0419\u041A\u041B\u041C\u041D\u041E\u041F\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042A\u042B\u042C\u042D\u042E\u042F')]);
+      TRACE_ALPHABET$delegate = lazy(TRACE_ALPHABET$delegate$lambda);
+      HU_ABC = listOf_0(['A', '\xC1', 'B', 'C', 'CS', 'D', 'DZ', 'DZS', 'E', '\xC9', 'F', 'G', 'GY', 'H', 'I', '\xCD', 'J', 'K', 'L', 'LY', 'M', 'N', 'NY', 'O', '\xD3', '\xD6', '\u0150', 'P', 'Q', 'R', 'S', 'SZ', 'T', 'TY', 'U', '\xDA', '\xDC', '\u0170', 'V', 'W', 'X', 'Y', 'Z', 'ZS']);
+      TRACE_ALPHABET_TEXT = mapOf([to(Lang_HU_getInstance(), ''), to(Lang_DE_getInstance(), 'A\xC4BCDEFGHIJKLMNO\xD6PQRSTU\xDCVWXYZ'), to(Lang_EN_getInstance(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), to(Lang_PL_getInstance(), 'ABC\u0106DEFGHIJKLMN\u0143O\xD3PRS\u015ATUWYZ\u0179\u017B'), to(Lang_ES_getInstance(), 'ABCDEFGHIJKLMN\xD1OPQRSTUVWXYZ'), to(Lang_IT_getInstance(), 'ABCDEFGHILMNOPQRSTUVZ'), to(Lang_FR_getInstance(), 'ABCDE\xC9\xC8FGHIJKLMNOPQRSTUVWXYZ'), to(Lang_RO_getInstance(), 'A\u0102\xC2BCDEFGHI\xCEJKLMNOPRSTUVXZ')]);
       DIGIT_STROKES = listOf_0(['(5,5,4,5,-90,-450)', '2,3 6,0 6,10', '(5,3,3.5,3,-160,10) 1,10 9,10', '(5,2.5,3.5,2.5,-160,90) (5,7.5,4,2.5,-90,160)', '7,10 7,0 1,7 10,7', '8.5,0 2,0 1.5,4.5 (5,7,4,3,-130,150)', '7.5,0 1.3,5.9 (5,7,4,3,-165,195)', '1,0 9,0 4,10', '(5,2.5,3.5,2.5,90,-270) (5,7.5,4,2.5,-90,270)', '(5,3,4,3,0,-360) 9,6 6,10']);
       SHAPE_STROKES = mapOf([to(ShapeKind_CIRCLE_getInstance(), '(5,5,5,5,-90,270)'), to(ShapeKind_SQUARE_getInstance(), '0,0 10,0 10,10 0,10 0,0'), to(ShapeKind_TRIANGLE_getInstance(), '5,0 10,9 0,9 5,0'), to(ShapeKind_STAR_getInstance(), '5,0 6.2,3.6 10,3.6 6.9,5.9 8.1,9.6 5,7.3 1.9,9.6 3.1,5.9 0,3.6 3.8,3.6 5,0'), to(ShapeKind_HEART_getInstance(), '(2.5,3,2.5,2.5,0,-180) 5,10 10,3 (7.5,3,2.5,2.5,0,-180)')]);
       SHAPE_EMOJI = mapOf([to(ShapeKind_CIRCLE_getInstance(), '\u26AA'), to(ShapeKind_SQUARE_getInstance(), '\uD83D\uDFE5'), to(ShapeKind_TRIANGLE_getInstance(), '\uD83D\uDD3A'), to(ShapeKind_STAR_getInstance(), '\u2B50'), to(ShapeKind_HEART_getInstance(), '\u2764\uFE0F')]);
@@ -24625,12 +25245,17 @@ var logic = function (_) {
       BLOSSOM = s('\uD83C\uDF38', "Vir\xE1gzik a fa.|Der Baum bl\xFCht.|The tree blossoms.|Drzewo kwitnie.|El \xE1rbol florece.|L'albero fiorisce.|L'arbre fleurit.|Pomul \xEEnflore\u0219te.|Strom kvitne.|\u0414\u0435\u0440\u0435\u0432\u043E \u0446\u0432\u0456\u0442\u0435.|\u0414\u0435\u0440\u0435\u0432\u043E \u0446\u0432\u0435\u0442\u0451\u0442.");
       RIPE = s('\uD83C\uDF4E', 'Meg\xE9rik a piros alma.|Der rote Apfel ist reif.|The red apple is ripe.|Czerwone jab\u0142ko dojrzewa.|La manzana roja madura.|La mela rossa matura.|La pomme rouge est m\xFBre.|M\u0103rul ro\u0219u se coace.|\u010Cerven\xE9 jablko dozrie.|\u0427\u0435\u0440\u0432\u043E\u043D\u0435 \u044F\u0431\u043B\u0443\u043A\u043E \u0434\u043E\u0441\u0442\u0438\u0433\u0430\u0454.|\u041A\u0440\u0430\u0441\u043D\u043E\u0435 \u044F\u0431\u043B\u043E\u043A\u043E \u0441\u043E\u0437\u0440\u0435\u0432\u0430\u0435\u0442.');
       EGG = s('\uD83E\uDD5A', "Felt\xF6rj\xFCk a toj\xE1st.|Wir schlagen das Ei auf.|We crack the egg.|Wbijamy jajko.|Rompemos el huevo.|Rompiamo l'uovo.|Nous cassons l'\u0153uf.|Spargem oul.|Rozbijeme vaj\xED\u010Dko.|\u041C\u0438 \u0440\u043E\u0437\u0431\u0438\u0432\u0430\u0454\u043C\u043E \u044F\u0439\u0446\u0435.|\u041C\u044B \u0440\u0430\u0437\u0431\u0438\u0432\u0430\u0435\u043C \u044F\u0439\u0446\u043E.");
-      MIX = s('\uD83E\uDD63', "\xD6sszekeverj\xFCk a t\xE9szt\xE1t.|Wir r\xFChren den Teig.|We mix the batter.|Mieszamy ciasto.|Mezclamos la masa.|Mescoliamo l'impasto.|Nous m\xE9langeons la p\xE2te.|Amestec\u0103m aluatul.|Zamie\u0161ame cesto.|\u041C\u0438 \u0437\u0430\u043C\u0456\u0448\u0443\u0454\u043C\u043E \u0442\u0456\u0441\u0442\u043E.|\u041C\u044B \u0437\u0430\u043C\u0435\u0448\u0438\u0432\u0430\u0435\u043C \u0442\u0435\u0441\u0442\u043E.");
+      MIX = s('\uD83E\uDD63', "\xD6sszekeverj\xFCk a t\xE9szt\xE1t.|Wir r\xFChren den Teig.|We mix the batter.|Mieszamy ciasto.|Mezclamos la masa.|Mescoliamo l'impasto.|Nous m\xE9langeons la p\xE2te.|Amestec\u0103m aluatul.|Zamie\u0161ame cesto.|\u041C\u0438 \u0437\u0430\u043C\u0456\u0448\u0443\u0454\u043C\u043E \u0442\u0456\u0441\u0442\u043E.|\u041C\u044B \u0437\u0430\u043C\u0435\u0448\u0438\u0432\u0430\u0435\u043C \u0442\u0435\u0441\u0442\u043E.", 'tal_kanallal');
       BRUSH = s('\uD83E\uDEA5', 'Fogat mosunk.|Wir putzen die Z\xE4hne.|We brush our teeth.|Myjemy z\u0119by.|Nos lavamos los dientes.|Ci laviamo i denti.|Nous nous brossons les dents.|Ne sp\u0103l\u0103m pe din\u021Bi.|Umyjeme si zuby.|\u041C\u0438 \u0447\u0438\u0441\u0442\u0438\u043C\u043E \u0437\u0443\u0431\u0438.|\u041C\u044B \u0447\u0438\u0441\u0442\u0438\u043C \u0437\u0443\u0431\u044B.');
       STORIES = listOf_0([listOf_0([new Story('sunflower', listOf_0([get_SEED(), get_SPROUT(), s('\uD83C\uDF3B', 'Kiny\xEDlik a napraforg\xF3.|Die Sonnenblume bl\xFCht.|The sunflower blooms.|S\u0142onecznik zakwita.|El girasol florece.|Il girasole fiorisce.|Le tournesol fleurit.|Floarea-soarelui \xEEnflore\u0219te.|Slne\u010Dnica rozkvitne.|\u0421\u043E\u043D\u044F\u0448\u043D\u0438\u043A \u0440\u043E\u0437\u043A\u0432\u0456\u0442\u0430\u0454.|\u041F\u043E\u0434\u0441\u043E\u043B\u043D\u0443\u0445 \u0440\u0430\u0441\u0446\u0432\u0435\u0442\u0430\u0435\u0442.')])), new Story('chick', listOf_0([s('\uD83E\uDD5A', 'Itt van egy toj\xE1s.|Hier ist ein Ei.|Here is an egg.|Oto jajko.|Aqu\xED hay un huevo.|Ecco un uovo.|Voici un \u0153uf.|Iat\u0103 un ou.|Tu je vaj\xED\u010Dko.|\u041E\u0441\u044C \u044F\u0439\u0446\u0435.|\u0412\u043E\u0442 \u044F\u0439\u0446\u043E.'), s('\uD83D\uDC23', "Kikel a kiscsibe.|Das K\xFCken schl\xFCpft.|The chick hatches.|Wykluwa si\u0119 kurcz\u0105tko.|El pollito sale del huevo.|Il pulcino esce dall'uovo.|Le poussin sort de l'\u0153uf.|Puiul iese din ou.|Vyliahne sa kuriatko.|\u0412\u0438\u043B\u0443\u043F\u043B\u044E\u0454\u0442\u044C\u0441\u044F \u043A\u0443\u0440\u0447\u0430\u0442\u043A\u043E.|\u0412\u044B\u043B\u0443\u043F\u043B\u044F\u0435\u0442\u0441\u044F \u0446\u044B\u043F\u043B\u0451\u043D\u043E\u043A."), s('\uD83D\uDC25', 'A kiscsibe s\xE9t\xE1lni indul.|Das K\xFCken geht spazieren.|The chick goes for a walk.|Kurcz\u0105tko idzie na spacer.|El pollito sale a pasear.|Il pulcino va a fare una passeggiata.|Le poussin part se promener.|Puiul pleac\u0103 la plimbare.|Kuriatko sa ide prech\xE1dza\u0165.|\u041A\u0443\u0440\u0447\u0430\u0442\u043A\u043E \u0439\u0434\u0435 \u0433\u0443\u043B\u044F\u0442\u0438.|\u0426\u044B\u043F\u043B\u0451\u043D\u043E\u043A \u0438\u0434\u0451\u0442 \u0433\u0443\u043B\u044F\u0442\u044C.')])), new Story('rainbow', listOf_0([s('\u2601\uFE0F', 'Felh\u0151k j\xF6nnek.|Wolken ziehen auf.|Clouds are coming.|Nadchodz\u0105 chmury.|Llegan las nubes.|Arrivano le nuvole.|Les nuages arrivent.|Vin norii.|Prich\xE1dzaj\xFA mraky.|\u041D\u0430\u0431\u0456\u0433\u0430\u044E\u0442\u044C \u0445\u043C\u0430\u0440\u0438.|\u041D\u0430\u0431\u0435\u0433\u0430\u044E\u0442 \u0442\u0443\u0447\u0438.'), s('\uD83C\uDF27\uFE0F', 'Esik az es\u0151.|Es regnet.|It is raining.|Pada deszcz.|Llueve.|Piove.|Il pleut.|Plou\u0103.|Pr\u0161\xED.|\u0406\u0434\u0435 \u0434\u043E\u0449.|\u0418\u0434\u0451\u0442 \u0434\u043E\u0436\u0434\u044C.'), s('\uD83C\uDF08', "Kis\xFCt a nap, \xE9s sziv\xE1rv\xE1ny lesz.|Die Sonne kommt heraus, und ein Regenbogen erscheint.|The sun comes out, and there is a rainbow.|Wychodzi s\u0142o\u0144ce i pojawia si\u0119 t\u0119cza.|Sale el sol y aparece un arco\xEDris.|Esce il sole e spunta l'arcobaleno.|Le soleil revient et un arc-en-ciel appara\xEEt.|Iese soarele \u0219i apare curcubeul.|Vyjde slnko a objav\xED sa d\xFAha.|\u0412\u0438\u0445\u043E\u0434\u0438\u0442\u044C \u0441\u043E\u043D\u0446\u0435, \u0456 \u0437'\u044F\u0432\u043B\u044F\u0454\u0442\u044C\u0441\u044F \u0432\u0435\u0441\u0435\u043B\u043A\u0430.|\u0412\u044B\u0445\u043E\u0434\u0438\u0442 \u0441\u043E\u043B\u043D\u0446\u0435, \u0438 \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0440\u0430\u0434\u0443\u0433\u0430.")])), new Story('apple', listOf_0([get_BLOSSOM(), s('\uD83C\uDF4F', 'Kis z\xF6ld alma n\u0151.|Ein kleiner gr\xFCner Apfel w\xE4chst.|A small green apple grows.|Ro\u015Bnie ma\u0142e zielone jab\u0142ko.|Crece una manzana verde y peque\xF1a.|Cresce una piccola mela verde.|Une petite pomme verte pousse.|Cre\u0219te un m\u0103r mic \u0219i verde.|Rastie mal\xE9 zelen\xE9 jablko.|\u0420\u043E\u0441\u0442\u0435 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0435 \u0437\u0435\u043B\u0435\u043D\u0435 \u044F\u0431\u043B\u0443\u043A\u043E.|\u0420\u0430\u0441\u0442\u0451\u0442 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u043E\u0435 \u0437\u0435\u043B\u0451\u043D\u043E\u0435 \u044F\u0431\u043B\u043E\u043A\u043E.'), get_RIPE()])), new Story('day', listOf_0([s('\uD83C\uDF05', 'Reggel felkel a nap.|Am Morgen geht die Sonne auf.|In the morning the sun rises.|Rano wschodzi s\u0142o\u0144ce.|Por la ma\xF1ana sale el sol.|Al mattino sorge il sole.|Le matin, le soleil se l\xE8ve.|Diminea\u021Ba r\u0103sare soarele.|R\xE1no vych\xE1dza slnko.|\u0423\u0440\u0430\u043D\u0446\u0456 \u0441\u0445\u043E\u0434\u0438\u0442\u044C \u0441\u043E\u043D\u0446\u0435.|\u0423\u0442\u0440\u043E\u043C \u0432\u0441\u0442\u0430\u0451\u0442 \u0441\u043E\u043B\u043D\u0446\u0435.'), s('\u2600\uFE0F', 'D\xE9lben magasan s\xFCt a nap.|Am Mittag steht die Sonne hoch am Himmel.|At noon the sun is high in the sky.|W po\u0142udnie s\u0142o\u0144ce jest wysoko na niebie.|Al mediod\xEDa el sol est\xE1 alto en el cielo.|A mezzogiorno il sole \xE8 alto nel cielo.|\xC0 midi, le soleil est haut dans le ciel.|La pr\xE2nz soarele este sus pe cer.|Na obed je slnko vysoko na oblohe.|\u041E\u043F\u0456\u0432\u0434\u043D\u0456 \u0441\u043E\u043D\u0446\u0435 \u0432\u0438\u0441\u043E\u043A\u043E \u0432 \u043D\u0435\u0431\u0456.|\u0412 \u043F\u043E\u043B\u0434\u0435\u043D\u044C \u0441\u043E\u043B\u043D\u0446\u0435 \u0432\u044B\u0441\u043E\u043A\u043E \u0432 \u043D\u0435\u0431\u0435.'), s('\uD83C\uDF19', "Este felj\xF6n a hold.|Am Abend kommt der Mond.|In the evening the moon comes out.|Wieczorem pojawia si\u0119 ksi\u0119\u017Cyc.|Por la noche sale la luna.|La sera spunta la luna.|Le soir, la lune appara\xEEt.|Seara apare luna.|Ve\u010Der vyjde mesiac.|\u0423\u0432\u0435\u0447\u0435\u0440\u0456 \u0437'\u044F\u0432\u043B\u044F\u0454\u0442\u044C\u0441\u044F \u043C\u0456\u0441\u044F\u0446\u044C.|\u0412\u0435\u0447\u0435\u0440\u043E\u043C \u043F\u043E\u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u043B\u0443\u043D\u0430.")])), new Story('melt', listOf_0([get_SNOW(), s('\u26C4', 'H\xF3embert \xE9p\xEDt\xFCnk.|Wir bauen einen Schneemann.|We build a snowman.|Lepimy ba\u0142wana.|Hacemos un mu\xF1eco de nieve.|Facciamo un pupazzo di neve.|Nous faisons un bonhomme de neige.|Facem un om de z\u0103pad\u0103.|Postav\xEDme snehuliaka.|\u041C\u0438 \u043B\u0456\u043F\u0438\u043C\u043E \u0441\u043D\u0456\u0433\u043E\u0432\u0438\u043A\u0430.|\u041C\u044B \u043B\u0435\u043F\u0438\u043C \u0441\u043D\u0435\u0433\u043E\u0432\u0438\u043A\u0430.'), s('\uD83D\uDCA7', 'Kis\xFCt a nap, \xE9s a h\xF3ember elolvad.|Die Sonne scheint, und der Schneemann schmilzt.|The sun shines, and the snowman melts.|\u015Awieci s\u0142o\u0144ce i ba\u0142wan si\u0119 topi.|Sale el sol y el mu\xF1eco de nieve se derrite.|Splende il sole e il pupazzo di neve si scioglie.|Le soleil brille et le bonhomme de neige fond.|Soarele str\u0103luce\u0219te \u0219i omul de z\u0103pad\u0103 se tope\u0219te.|Svieti slnko a snehuliak sa roztop\xED.|\u0421\u0432\u0456\u0442\u0438\u0442\u044C \u0441\u043E\u043D\u0446\u0435, \u0456 \u0441\u043D\u0456\u0433\u043E\u0432\u0438\u043A \u0442\u0430\u043D\u0435.|\u0421\u0432\u0435\u0442\u0438\u0442 \u0441\u043E\u043B\u043D\u0446\u0435, \u0438 \u0441\u043D\u0435\u0433\u043E\u0432\u0438\u043A \u0442\u0430\u0435\u0442.')])), new Story('grow', listOf_0([s('\uD83D\uDC76', 'Kisbaba vagyok.|Ich bin ein Baby.|I am a baby.|Jestem bobasem.|Soy un beb\xE9.|Sono un beb\xE8.|Je suis un b\xE9b\xE9.|Sunt un bebelu\u0219.|Som b\xE1b\xE4tko.|\u042F \u043D\u0435\u043C\u043E\u0432\u043B\u044F.|\u042F \u043C\u0430\u043B\u044B\u0448.'), s('\uD83E\uDDD2', 'Nagyobb leszek, \xE9s sokat j\xE1tszom.|Ich werde gr\xF6\xDFer und spiele viel.|I grow bigger and play a lot.|Rosn\u0119 i du\u017Co si\u0119 bawi\u0119.|Crezco y juego mucho.|Cresco e gioco tanto.|Je grandis et je joue beaucoup.|Cresc \u0219i m\u0103 joc mult.|Rastiem a ve\u013Ea sa hr\xE1m.|\u042F \u0440\u043E\u0441\u0442\u0443 \u0439 \u0431\u0430\u0433\u0430\u0442\u043E \u0433\u0440\u0430\u044E\u0441\u044F.|\u042F \u0440\u0430\u0441\u0442\u0443 \u0438 \u043C\u043D\u043E\u0433\u043E \u0438\u0433\u0440\u0430\u044E.'), s('\uD83E\uDDD1', 'Feln\u0151tt leszek.|Ich werde erwachsen.|I become a grown-up.|Staj\u0119 si\u0119 osob\u0105 doros\u0142\u0105.|Me hago mayor.|Divento grande.|Je deviens une grande personne.|Devin om mare.|Stanem sa dospel\xFDm \u010Dlovekom.|\u042F \u0441\u0442\u0430\u044E \u0434\u043E\u0440\u043E\u0441\u043B\u043E\u044E \u043B\u044E\u0434\u0438\u043D\u043E\u044E.|\u042F \u0441\u0442\u0430\u043D\u043E\u0432\u043B\u044E\u0441\u044C \u0432\u0437\u0440\u043E\u0441\u043B\u044B\u043C \u0447\u0435\u043B\u043E\u0432\u0435\u043A\u043E\u043C.')]))]), listOf_0([new Story('snowman', listOf_0([get_SNOW(), s('\u26AA', 'Nagy h\xF3goly\xF3t gur\xEDtunk.|Wir rollen eine gro\xDFe Schneekugel.|We roll a big snowball.|Toczymy du\u017C\u0105 kul\u0119 \u015Bniegu.|Hacemos rodar una gran bola de nieve.|Facciamo rotolare una grande palla di neve.|Nous roulons une grosse boule de neige.|Rostogolim un bulg\u0103re mare de z\u0103pad\u0103.|G\xFA\u013Eame ve\u013Ek\xFA snehov\xFA gu\u013Eu.|\u041C\u0438 \u043A\u0430\u0447\u0430\u0454\u043C\u043E \u0432\u0435\u043B\u0438\u043A\u0443 \u0441\u043D\u0456\u0433\u043E\u0432\u0443 \u043A\u0443\u043B\u044E.|\u041C\u044B \u043A\u0430\u0442\u0430\u0435\u043C \u0431\u043E\u043B\u044C\u0448\u043E\u0439 \u0441\u043D\u0435\u0436\u043D\u044B\u0439 \u043A\u043E\u043C.'), s('\uD83E\uDD55', 'R\xE9p\xE1t tesz\xFCnk az orr\xE1nak.|Wir stecken eine Karotte als Nase hinein.|We put on a carrot for the nose.|Wk\u0142adamy marchewk\u0119 jako nos.|Le ponemos una zanahoria de nariz.|Mettiamo una carota come naso.|Nous mettons une carotte pour le nez.|\xCEi punem un morcov drept nas.|D\xE1me mu mrkvu namiesto nosa.|\u041C\u0438 \u0432\u0441\u0442\u0430\u0432\u043B\u044F\u0454\u043C\u043E \u043C\u043E\u0440\u043A\u0432\u0443 \u0437\u0430\u043C\u0456\u0441\u0442\u044C \u043D\u043E\u0441\u0430.|\u041C\u044B \u0432\u0441\u0442\u0430\u0432\u043B\u044F\u0435\u043C \u043C\u043E\u0440\u043A\u043E\u0432\u043A\u0443 \u0432\u043C\u0435\u0441\u0442\u043E \u043D\u043E\u0441\u0430.'), s('\u26C4', 'K\xE9sz a h\xF3ember!|Der Schneemann ist fertig!|The snowman is ready!|Ba\u0142wan jest gotowy!|\xA1El mu\xF1eco de nieve est\xE1 listo!|Il pupazzo di neve \xE8 pronto!|Le bonhomme de neige est pr\xEAt !|Omul de z\u0103pad\u0103 e gata!|Snehuliak je hotov\xFD!|\u0421\u043D\u0456\u0433\u043E\u0432\u0438\u043A \u0433\u043E\u0442\u043E\u0432\u0438\u0439!|\u0421\u043D\u0435\u0433\u043E\u0432\u0438\u043A \u0433\u043E\u0442\u043E\u0432!')])), new Story('pancake', listOf_0([get_EGG(), get_MIX(), s('\uD83C\uDF73', 'Kis\xFCtj\xFCk a palacsint\xE1t.|Wir backen die Pfannkuchen in der Pfanne.|We cook the pancakes in the pan.|Sma\u017Cymy nale\u015Bniki.|Hacemos las tortitas en la sart\xE9n.|Cuociamo le cr\xEApe in padella.|Nous faisons cuire les cr\xEApes \xE0 la po\xEAle.|Pr\u0103jim cl\u0103titele \xEEn tigaie.|Upe\u010Dieme palacinky na panvici.|\u041C\u0438 \u0441\u043C\u0430\u0436\u0438\u043C\u043E \u043C\u043B\u0438\u043D\u0446\u0456 \u043D\u0430 \u0441\u043A\u043E\u0432\u043E\u0440\u0456\u0434\u0446\u0456.|\u041C\u044B \u0436\u0430\u0440\u0438\u043C \u0431\u043B\u0438\u043D\u044B \u043D\u0430 \u0441\u043A\u043E\u0432\u043E\u0440\u043E\u0434\u0435.'), s('\uD83E\uDD5E', 'Megessz\xFCk a palacsint\xE1t.|Wir essen die Pfannkuchen.|We eat the pancakes.|Jemy nale\u015Bniki.|Nos comemos las tortitas.|Mangiamo le cr\xEApe.|Nous mangeons les cr\xEApes.|M\xE2nc\u0103m cl\u0103titele.|Zjeme palacinky.|\u041C\u0438 \u0457\u043C\u043E \u043C\u043B\u0438\u043D\u0446\u0456.|\u041C\u044B \u0435\u0434\u0438\u043C \u0431\u043B\u0438\u043D\u044B.')])), new Story('bath', listOf_0([s('\uD83D\uDEC1', "Vizet enged\xFCnk a k\xE1dba.|Wir lassen Wasser in die Wanne.|We fill the bathtub with water.|Napuszczamy wod\u0119 do wanny.|Llenamos la ba\xF1era de agua.|Riempiamo la vasca d'acqua.|Nous remplissons la baignoire.|Umplem cada cu ap\u0103.|Napust\xEDme vodu do vane.|\u041C\u0438 \u043D\u0430\u0431\u0438\u0440\u0430\u0454\u043C\u043E \u0432\u043E\u0434\u0443 \u0443 \u0432\u0430\u043D\u043D\u0443.|\u041C\u044B \u043D\u0430\u0431\u0438\u0440\u0430\u0435\u043C \u0432\u043E\u0434\u0443 \u0432 \u0432\u0430\u043D\u043D\u0443."), s('\uD83E\uDDFC', 'Megmosakszunk szappannal.|Wir waschen uns mit Seife.|We wash with soap.|Myjemy si\u0119 myd\u0142em.|Nos lavamos con jab\xF3n.|Ci laviamo con il sapone.|Nous nous lavons avec du savon.|Ne sp\u0103l\u0103m cu s\u0103pun.|Umyjeme sa mydlom.|\u041C\u0438 \u043C\u0438\u0454\u043C\u043E\u0441\u044F \u0437 \u043C\u0438\u043B\u043E\u043C.|\u041C\u044B \u043C\u043E\u0435\u043C\u0441\u044F \u0441 \u043C\u044B\u043B\u043E\u043C.'), s('\uD83D\uDEBF', 'Le\xF6bl\xEDtj\xFCk a habot.|Wir sp\xFClen den Schaum ab.|We rinse off the bubbles.|Sp\u0142ukujemy pian\u0119.|Nos quitamos la espuma.|Sciacquiamo via la schiuma.|Nous rin\xE7ons la mousse.|Cl\u0103tim spuma.|Opl\xE1chneme penu.|\u041C\u0438 \u0437\u043C\u0438\u0432\u0430\u0454\u043C\u043E \u043F\u0456\u043D\u0443.|\u041C\u044B \u0441\u043C\u044B\u0432\u0430\u0435\u043C \u043F\u0435\u043D\u0443.'), s('\uD83E\uDDD6', "Megt\xF6r\xF6lk\xF6z\xFCnk.|Wir trocknen uns ab.|We dry off with a towel.|Wycieramy si\u0119 r\u0119cznikiem.|Nos secamos con la toalla.|Ci asciughiamo con l'asciugamano.|Nous nous s\xE9chons avec une serviette.|Ne \u0219tergem cu prosopul.|Utrieme sa uter\xE1kom.|\u041C\u0438 \u0432\u0438\u0442\u0438\u0440\u0430\u0454\u043C\u043E\u0441\u044F \u0440\u0443\u0448\u043D\u0438\u043A\u043E\u043C.|\u041C\u044B \u0432\u044B\u0442\u0438\u0440\u0430\u0435\u043C\u0441\u044F \u043F\u043E\u043B\u043E\u0442\u0435\u043D\u0446\u0435\u043C.")])), new Story('tulip', listOf_0([get_SEED(), s('\uD83D\uDCA7', 'Meglocsoljuk a f\xF6ldet.|Wir gie\xDFen die Erde.|We water the soil.|Podlewamy ziemi\u0119.|Regamos la tierra.|Annaffiamo la terra.|Nous arrosons la terre.|Ud\u0103m p\u0103m\xE2ntul.|Polejeme zem.|\u041C\u0438 \u043F\u043E\u043B\u0438\u0432\u0430\u0454\u043C\u043E \u0437\u0435\u043C\u043B\u044E.|\u041C\u044B \u043F\u043E\u043B\u0438\u0432\u0430\u0435\u043C \u0437\u0435\u043C\u043B\u044E.'), get_SPROUT(), s('\uD83C\uDF37', 'Kiny\xEDlik a tulip\xE1n.|Die Tulpe bl\xFCht.|The tulip blooms.|Tulipan zakwita.|El tulip\xE1n florece.|Il tulipano fiorisce.|La tulipe fleurit.|Laleaua \xEEnflore\u0219te.|Tulip\xE1n rozkvitne.|\u0422\u044E\u043B\u044C\u043F\u0430\u043D \u0440\u043E\u0437\u043A\u0432\u0456\u0442\u0430\u0454.|\u0422\u044E\u043B\u044C\u043F\u0430\u043D \u0440\u0430\u0441\u0446\u0432\u0435\u0442\u0430\u0435\u0442.')])), new Story('birthday', listOf_0([s('\uD83C\uDF82', 'Megs\xFCtj\xFCk a tort\xE1t.|Wir backen eine Torte.|We bake a cake.|Pieczemy tort.|Hacemos una tarta.|Prepariamo una torta.|Nous pr\xE9parons un g\xE2teau.|Coacem un tort.|Upe\u010Dieme tortu.|\u041C\u0438 \u043F\u0435\u0447\u0435\u043C\u043E \u0442\u043E\u0440\u0442.|\u041C\u044B \u043F\u0435\u0447\u0451\u043C \u0442\u043E\u0440\u0442.'), s('\uD83D\uDD6F\uFE0F', 'Gyerty\xE1kat tesz\xFCnk r\xE1.|Wir stecken Kerzen darauf.|We put candles on it.|Wk\u0142adamy \u015Bwieczki.|Le ponemos velas.|Mettiamo le candeline.|Nous mettons des bougies dessus.|Punem lum\xE2n\u0103ri pe el.|D\xE1me na \u0148u svie\u010Dky.|\u041C\u0438 \u0441\u0442\u0430\u0432\u0438\u043C\u043E \u043D\u0430 \u043D\u044C\u043E\u0433\u043E \u0441\u0432\u0456\u0447\u043A\u0438.|\u041C\u044B \u0441\u0442\u0430\u0432\u0438\u043C \u043D\u0430 \u043D\u0435\u0433\u043E \u0441\u0432\u0435\u0447\u0438.'), s('\uD83C\uDFB6', 'El\xE9nekelj\xFCk a sz\xFClet\xE9snapi dalt.|Wir singen ein Geburtstagslied.|We sing a birthday song.|\u015Apiewamy piosenk\u0119 urodzinow\u0105.|Cantamos el cumplea\xF1os feliz.|Cantiamo tanti auguri.|Nous chantons joyeux anniversaire.|C\xE2nt\u0103m un c\xE2ntec de ziua de na\u0219tere.|Spievame narodeninov\xFA piese\u0148.|\u041C\u0438 \u0441\u043F\u0456\u0432\u0430\u0454\u043C\u043E \u043F\u0456\u0441\u043D\u044E \u043D\u0430 \u0434\u0435\u043D\u044C \u043D\u0430\u0440\u043E\u0434\u0436\u0435\u043D\u043D\u044F.|\u041C\u044B \u043F\u043E\u0451\u043C \u043F\u0435\u0441\u043D\u044E \u043D\u0430 \u0434\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F.'), s('\uD83D\uDCA8', 'Elf\xFAjjuk a gyerty\xE1kat.|Wir pusten die Kerzen aus.|We blow out the candles.|Zdmuchujemy \u015Bwieczki.|Soplamos las velas.|Soffiamo sulle candeline.|Nous soufflons les bougies.|Sufl\u0103m \xEEn lum\xE2n\u0103ri.|Sf\xFAkneme svie\u010Dky.|\u041C\u0438 \u0437\u0430\u0434\u0443\u0432\u0430\u0454\u043C\u043E \u0441\u0432\u0456\u0447\u043A\u0438.|\u041C\u044B \u0437\u0430\u0434\u0443\u0432\u0430\u0435\u043C \u0441\u0432\u0435\u0447\u0438.')])), new Story('bedtime', listOf_0([get_BRUSH(), s('\uD83D\uDECF\uFE0F', 'Beb\xFAjunk az \xE1gyba.|Wir kuscheln uns ins Bett.|We get into bed.|Wchodzimy do \u0142\xF3\u017Cka.|Nos metemos en la cama.|Ci infiliamo nel letto.|Nous nous glissons dans le lit.|Ne b\u0103g\u0103m \xEEn pat.|Vlezieme do postele.|\u041C\u0438 \u043B\u044F\u0433\u0430\u0454\u043C\u043E \u0432 \u043B\u0456\u0436\u043A\u043E.|\u041C\u044B \u043B\u043E\u0436\u0438\u043C\u0441\u044F \u0432 \u043A\u0440\u043E\u0432\u0430\u0442\u044C.'), s('\uD83D\uDCD6', 'Mes\xE9t olvasunk.|Wir lesen eine Geschichte.|We read a story.|Czytamy bajk\u0119.|Leemos un cuento.|Leggiamo una fiaba.|Nous lisons une histoire.|Citim o poveste.|\u010C\xEDtame rozpr\xE1vku.|\u041C\u0438 \u0447\u0438\u0442\u0430\u0454\u043C\u043E \u043A\u0430\u0437\u043A\u0443.|\u041C\u044B \u0447\u0438\u0442\u0430\u0435\u043C \u0441\u043A\u0430\u0437\u043A\u0443.'), s('\uD83D\uDE34', 'Elalszunk.|Wir schlafen ein.|We fall asleep.|Zasypiamy.|Nos dormimos.|Ci addormentiamo.|Nous nous endormons.|Adormim.|Zasp\xEDme.|\u041C\u0438 \u0437\u0430\u0441\u0438\u043D\u0430\u0454\u043C\u043E.|\u041C\u044B \u0437\u0430\u0441\u044B\u043F\u0430\u0435\u043C.')]))]), listOf_0([new Story('morning', listOf_0([s('\u23F0', 'Megsz\xF3lal az \xE9breszt\u0151\xF3ra.|Der Wecker klingelt.|The alarm clock rings.|Dzwoni budzik.|Suena el despertador.|Suona la sveglia.|Le r\xE9veil sonne.|Sun\u0103 ceasul de\u0219tept\u0103tor.|Zazvon\xED bud\xEDk.|\u0414\u0437\u0432\u043E\u043D\u0438\u0442\u044C \u0431\u0443\u0434\u0438\u043B\u044C\u043D\u0438\u043A.|\u0417\u0432\u0435\u043D\u0438\u0442 \u0431\u0443\u0434\u0438\u043B\u044C\u043D\u0438\u043A.'), get_BRUSH(), s('\uD83D\uDC55', 'Fel\xF6lt\xF6z\xFCnk.|Wir ziehen uns an.|We get dressed.|Ubieramy si\u0119.|Nos vestimos.|Ci vestiamo.|Nous nous habillons.|Ne \xEEmbr\u0103c\u0103m.|Oble\u010Dieme sa.|\u041C\u0438 \u043E\u0434\u044F\u0433\u0430\u0454\u043C\u043E\u0441\u044F.|\u041C\u044B \u043E\u0434\u0435\u0432\u0430\u0435\u043C\u0441\u044F.'), s('\uD83E\uDD63', 'Megreggeliz\xFCnk.|Wir fr\xFChst\xFCcken.|We have breakfast.|Jemy \u015Bniadanie.|Desayunamos.|Facciamo colazione.|Nous prenons le petit-d\xE9jeuner.|Lu\u0103m micul dejun.|Nara\u0148ajkujeme sa.|\u041C\u0438 \u0441\u043D\u0456\u0434\u0430\u0454\u043C\u043E.|\u041C\u044B \u0437\u0430\u0432\u0442\u0440\u0430\u043A\u0430\u0435\u043C.'), s('\uD83C\uDF92', 'Elindulunk otthonr\xF3l.|Wir gehen aus dem Haus.|We leave the house.|Wychodzimy z domu.|Salimos de casa.|Usciamo di casa.|Nous partons de la maison.|Plec\u0103m de acas\u0103.|Odch\xE1dzame z domu.|\u041C\u0438 \u0432\u0438\u0445\u043E\u0434\u0438\u043C\u043E \u0437 \u0434\u043E\u043C\u0443.|\u041C\u044B \u0432\u044B\u0445\u043E\u0434\u0438\u043C \u0438\u0437 \u0434\u043E\u043C\u0430.')])), new Story('shopping', listOf_0([s('\uD83D\uDCDD', 'Meg\xEDrjuk a bev\xE1s\xE1rl\xF3list\xE1t.|Wir schreiben einen Einkaufszettel.|We write a shopping list.|Piszemy list\u0119 zakup\xF3w.|Escribimos la lista de la compra.|Scriviamo la lista della spesa.|Nous \xE9crivons la liste de courses.|Scriem lista de cump\u0103r\u0103turi.|Nap\xED\u0161eme n\xE1kupn\xFD zoznam.|\u041C\u0438 \u043F\u0438\u0448\u0435\u043C\u043E \u0441\u043F\u0438\u0441\u043E\u043A \u043F\u043E\u043A\u0443\u043F\u043E\u043A.|\u041C\u044B \u043F\u0438\u0448\u0435\u043C \u0441\u043F\u0438\u0441\u043E\u043A \u043F\u043E\u043A\u0443\u043F\u043E\u043A.'), s('\uD83D\uDED2', 'Elmegy\xFCnk a boltba.|Wir gehen in den Laden.|We go to the shop.|Idziemy do sklepu.|Vamos a la tienda.|Andiamo al negozio.|Nous allons au magasin.|Mergem la magazin.|Ideme do obchodu.|\u041C\u0438 \u0439\u0434\u0435\u043C\u043E \u0434\u043E \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0443.|\u041C\u044B \u0438\u0434\u0451\u043C \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D.'), s('\uD83C\uDF4E', 'Gy\xFCm\xF6lcs\xF6t tesz\xFCnk a kos\xE1rba.|Wir legen Obst in den Wagen.|We put fruit in the trolley.|Wk\u0142adamy owoce do w\xF3zka.|Ponemos fruta en el carro.|Mettiamo la frutta nel carrello.|Nous mettons des fruits dans le chariot.|Punem fructe \xEEn co\u0219.|D\xE1me ovocie do voz\xEDka.|\u041C\u0438 \u043A\u043B\u0430\u0434\u0435\u043C\u043E \u0444\u0440\u0443\u043A\u0442\u0438 \u0443 \u0432\u0456\u0437\u043E\u043A.|\u041C\u044B \u043A\u043B\u0430\u0434\u0451\u043C \u0444\u0440\u0443\u043A\u0442\u044B \u0432 \u0442\u0435\u043B\u0435\u0436\u043A\u0443.'), s('\uD83D\uDCB3', 'Fizet\xFCnk a p\xE9nzt\xE1rn\xE1l.|Wir bezahlen an der Kasse.|We pay at the checkout.|P\u0142acimy przy kasie.|Pagamos en la caja.|Paghiamo alla cassa.|Nous payons \xE0 la caisse.|Pl\u0103tim la cas\u0103.|Zaplat\xEDme pri pokladni.|\u041C\u0438 \u043F\u043B\u0430\u0442\u0438\u043C\u043E \u043D\u0430 \u043A\u0430\u0441\u0456.|\u041C\u044B \u043F\u043B\u0430\u0442\u0438\u043C \u043D\u0430 \u043A\u0430\u0441\u0441\u0435.'), s('\uD83D\uDECD\uFE0F', 'Hazavissz\xFCk a szatyrot.|Wir tragen die Tasche nach Hause.|We carry the bag home.|Niesiemy torb\u0119 do domu.|Llevamos la bolsa a casa.|Portiamo la borsa a casa.|Nous rapportons le sac \xE0 la maison.|Ducem punga acas\u0103.|Nesieme ta\u0161ku domov.|\u041C\u0438 \u043D\u0435\u0441\u0435\u043C\u043E \u0441\u0443\u043C\u043A\u0443 \u0434\u043E\u0434\u043E\u043C\u0443.|\u041C\u044B \u043D\u0435\u0441\u0451\u043C \u0441\u0443\u043C\u043A\u0443 \u0434\u043E\u043C\u043E\u0439.')])), new Story('baking', listOf_0([get_EGG(), get_MIX(), s('\u23F2\uFE0F', 'Betessz\xFCk a s\xFCtit a s\xFCt\u0151be.|Wir schieben den Kuchen in den Ofen.|We put the cake in the oven.|Wk\u0142adamy ciasto do piekarnika.|Metemos el pastel en el horno.|Mettiamo la torta in forno.|Nous mettons le g\xE2teau au four.|Punem pr\u0103jitura \xEEn cuptor.|D\xE1me kol\xE1\u010D do r\xFAry.|\u041C\u0438 \u0441\u0442\u0430\u0432\u0438\u043C\u043E \u043F\u0438\u0440\u0456\u0433 \u0443 \u0434\u0443\u0445\u043E\u0432\u043A\u0443.|\u041C\u044B \u0441\u0442\u0430\u0432\u0438\u043C \u043F\u0438\u0440\u043E\u0433 \u0432 \u0434\u0443\u0445\u043E\u0432\u043A\u0443.'), s('\uD83C\uDF70', 'Feld\xEDsz\xEDtj\xFCk a s\xFCtit.|Wir verzieren den Kuchen.|We decorate the cake.|Dekorujemy ciasto.|Decoramos el pastel.|Decoriamo la torta.|Nous d\xE9corons le g\xE2teau.|Decor\u0103m pr\u0103jitura.|Ozdob\xEDme kol\xE1\u010D.|\u041C\u0438 \u043F\u0440\u0438\u043A\u0440\u0430\u0448\u0430\u0454\u043C\u043E \u043F\u0438\u0440\u0456\u0433.|\u041C\u044B \u0443\u043A\u0440\u0430\u0448\u0430\u0435\u043C \u043F\u0438\u0440\u043E\u0433.'), s('\uD83D\uDE0B', "Megk\xF3stoljuk. Nagyon finom!|Wir probieren. Sehr lecker!|We taste it. Yummy!|Pr\xF3bujemy. Pyszne!|Lo probamos. \xA1Qu\xE9 rico!|La assaggiamo. Buonissima!|Nous go\xFBtons. C'est d\xE9licieux !|Gust\u0103m. E foarte bun\u0103!|Ochutn\xE1me. M\u0148am!|\u041C\u0438 \u043A\u0443\u0448\u0442\u0443\u0454\u043C\u043E. \u0414\u0443\u0436\u0435 \u0441\u043C\u0430\u0447\u043D\u043E!|\u041C\u044B \u043F\u0440\u043E\u0431\u0443\u0435\u043C. \u041E\u0447\u0435\u043D\u044C \u0432\u043A\u0443\u0441\u043D\u043E!")])), new Story('tree', listOf_0([s('\uD83C\uDF31', 'Kis fa b\xFAjik ki a f\xF6ldb\u0151l.|Ein kleiner Baum w\xE4chst aus der Erde.|A little tree grows out of the ground.|Z ziemi wyrasta ma\u0142e drzewko.|Un arbolito sale de la tierra.|Un alberello spunta dalla terra.|Un petit arbre sort de terre.|Un cop\u0103cel r\u0103sare din p\u0103m\xE2nt.|Zo zeme vyrastie mal\xFD strom\u010Dek.|\u0406\u0437 \u0437\u0435\u043C\u043B\u0456 \u043F\u0440\u043E\u0440\u043E\u0441\u0442\u0430\u0454 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0435 \u0434\u0435\u0440\u0435\u0432\u0446\u0435.|\u0418\u0437 \u0437\u0435\u043C\u043B\u0438 \u0440\u0430\u0441\u0442\u0451\u0442 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u043E\u0435 \u0434\u0435\u0440\u0435\u0432\u0446\u0435.'), s('\uD83C\uDF33', 'Nagy fa lesz bel\u0151le.|Er wird ein gro\xDFer Baum.|It becomes a big tree.|Wyrasta na du\u017Ce drzewo.|Se hace un \xE1rbol grande.|Diventa un albero grande.|Il devient un grand arbre.|Devine un copac mare.|Vyrastie z neho ve\u013Ek\xFD strom.|\u0412\u043E\u043D\u043E \u0441\u0442\u0430\u0454 \u0432\u0435\u043B\u0438\u043A\u0438\u043C \u0434\u0435\u0440\u0435\u0432\u043E\u043C.|\u041E\u043D\u043E \u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u0441\u044F \u0431\u043E\u043B\u044C\u0448\u0438\u043C \u0434\u0435\u0440\u0435\u0432\u043E\u043C.'), get_BLOSSOM(), get_RIPE(), s('\uD83E\uDDFA', 'Leszedj\xFCk az alm\xE1t a kos\xE1rba.|Wir pfl\xFCcken die \xC4pfel in den Korb.|We pick the apples into the basket.|Zrywamy jab\u0142ka do koszyka.|Recogemos las manzanas en la cesta.|Raccogliamo le mele nel cesto.|Nous cueillons les pommes dans le panier.|Culegem merele \xEEn co\u0219.|Oberieme jablk\xE1 do ko\u0161\xEDka.|\u041C\u0438 \u0437\u0431\u0438\u0440\u0430\u0454\u043C\u043E \u044F\u0431\u043B\u0443\u043A\u0430 \u0432 \u043A\u043E\u0448\u0438\u043A.|\u041C\u044B \u0441\u043E\u0431\u0438\u0440\u0430\u0435\u043C \u044F\u0431\u043B\u043E\u043A\u0438 \u0432 \u043A\u043E\u0440\u0437\u0438\u043D\u0443.')])), new Story('teeth', listOf_0([s('\uD83E\uDEA5', 'El\u0151vessz\xFCk a fogkef\xE9t.|Wir nehmen die Zahnb\xFCrste.|We take the toothbrush.|Bierzemy szczoteczk\u0119.|Cogemos el cepillo de dientes.|Prendiamo lo spazzolino.|Nous prenons la brosse \xE0 dents.|Lu\u0103m periu\u021Ba de din\u021Bi.|Vezmeme si zubn\xFA kefku.|\u041C\u0438 \u0431\u0435\u0440\u0435\u043C\u043E \u0437\u0443\u0431\u043D\u0443 \u0449\u0456\u0442\u043A\u0443.|\u041C\u044B \u0431\u0435\u0440\u0451\u043C \u0437\u0443\u0431\u043D\u0443\u044E \u0449\u0451\u0442\u043A\u0443.'), s('\uD83E\uDDF4', 'Fogkr\xE9met nyomunk r\xE1.|Wir dr\xFCcken Zahnpasta darauf.|We squeeze toothpaste on it.|Wyciskamy na ni\u0105 past\u0119.|Ponemos pasta de dientes.|Mettiamo il dentifricio.|Nous mettons du dentifrice.|Punem past\u0103 de din\u021Bi.|Natla\u010D\xEDme na \u0148u zubn\xFA pastu.|\u0412\u0438\u0434\u0430\u0432\u043B\u044E\u0454\u043C\u043E \u043D\u0430 \u043D\u0435\u0457 \u0437\u0443\u0431\u043D\u0443 \u043F\u0430\u0441\u0442\u0443.|\u0412\u044B\u0434\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u043C \u043D\u0430 \u043D\u0435\u0451 \u0437\u0443\u0431\u043D\u0443\u044E \u043F\u0430\u0441\u0442\u0443.'), s('\uD83D\uDE2C', 'Alaposan megmossuk a fogunkat.|Wir putzen gr\xFCndlich die Z\xE4hne.|We brush our teeth well.|Dok\u0142adnie myjemy z\u0119by.|Nos cepillamos bien los dientes.|Ci laviamo bene i denti.|Nous brossons bien nos dents.|Ne sp\u0103l\u0103m bine pe din\u021Bi.|Poriadne si umyjeme zuby.|\u041C\u0438 \u0440\u0435\u0442\u0435\u043B\u044C\u043D\u043E \u0447\u0438\u0441\u0442\u0438\u043C\u043E \u0437\u0443\u0431\u0438.|\u041C\u044B \u0442\u0449\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u0447\u0438\u0441\u0442\u0438\u043C \u0437\u0443\u0431\u044B.'), s('\uD83D\uDCA7', 'Ki\xF6bl\xEDtj\xFCk a sz\xE1nkat.|Wir sp\xFClen den Mund aus.|We rinse our mouth.|P\u0142uczemy buzi\u0119.|Nos enjuagamos la boca.|Ci sciacquiamo la bocca.|Nous rin\xE7ons notre bouche.|Ne cl\u0103tim gura.|Vypl\xE1chneme si \xFAsta.|\u041C\u0438 \u043F\u043E\u043B\u043E\u0449\u0435\u043C\u043E \u0440\u043E\u0442.|\u041C\u044B \u043F\u043E\u043B\u043E\u0449\u0435\u043C \u0440\u043E\u0442.'), s('\uD83D\uDE01', 'Ragyog a fogunk!|Unsere Z\xE4hne gl\xE4nzen!|Our teeth are shiny!|Nasze z\u0119by l\u015Bni\u0105!|\xA1Nuestros dientes brillan!|I nostri denti brillano!|Nos dents brillent !|Din\u021Bii no\u0219tri str\u0103lucesc!|Na\u0161e zuby \u017Eiaria!|\u041D\u0430\u0448\u0456 \u0437\u0443\u0431\u0438 \u0441\u044F\u044E\u0442\u044C!|\u041D\u0430\u0448\u0438 \u0437\u0443\u0431\u044B \u0441\u0438\u044F\u044E\u0442!')])), new Story('holiday', listOf_0([s('\uD83E\uDDF3', 'Becsomagolunk a b\u0151r\xF6ndbe.|Wir packen den Koffer.|We pack the suitcase.|Pakujemy walizk\u0119.|Hacemos la maleta.|Facciamo la valigia.|Nous faisons la valise.|Facem bagajul.|Zbal\xEDme si kufor.|\u041C\u0438 \u043F\u0430\u043A\u0443\u0454\u043C\u043E \u0432\u0430\u043B\u0456\u0437\u0443.|\u041C\u044B \u0441\u043E\u0431\u0438\u0440\u0430\u0435\u043C \u0447\u0435\u043C\u043E\u0434\u0430\u043D.'), s('\uD83D\uDE95', "Taxival megy\xFCnk a rep\xFCl\u0151t\xE9rre.|Wir fahren mit dem Taxi zum Flughafen.|We take a taxi to the airport.|Jedziemy taks\xF3wk\u0105 na lotnisko.|Vamos en taxi al aeropuerto.|Andiamo in taxi all'aeroporto.|Nous allons \xE0 l'a\xE9roport en taxi.|Mergem cu taxiul la aeroport.|Ideme tax\xEDkom na letisko.|\u041C\u0438 \u0457\u0434\u0435\u043C\u043E \u0442\u0430\u043A\u0441\u0456 \u0432 \u0430\u0435\u0440\u043E\u043F\u043E\u0440\u0442.|\u041C\u044B \u0435\u0434\u0435\u043C \u043D\u0430 \u0442\u0430\u043A\u0441\u0438 \u0432 \u0430\u044D\u0440\u043E\u043F\u043E\u0440\u0442."), s('\u2708\uFE0F', "Felsz\xE1ll a rep\xFCl\u0151.|Das Flugzeug hebt ab.|The plane takes off.|Samolot startuje.|El avi\xF3n despega.|L'aereo decolla.|L'avion d\xE9colle.|Avionul decoleaz\u0103.|Lietadlo vzlietne.|\u041B\u0456\u0442\u0430\u043A \u0437\u043B\u0456\u0442\u0430\u0454.|\u0421\u0430\u043C\u043E\u043B\u0451\u0442 \u0432\u0437\u043B\u0435\u0442\u0430\u0435\u0442."), s('\uD83C\uDFD6\uFE0F', 'Meg\xE9rkez\xFCnk a tengerpartra.|Wir kommen am Strand an.|We arrive at the beach.|Docieramy na pla\u017C\u0119.|Llegamos a la playa.|Arriviamo in spiaggia.|Nous arrivons \xE0 la plage.|Ajungem la plaj\u0103.|Pr\xEDdeme na pl\xE1\u017E.|\u041C\u0438 \u043F\u0440\u0438\u0457\u0436\u0434\u0436\u0430\u0454\u043C\u043E \u043D\u0430 \u043F\u043B\u044F\u0436.|\u041C\u044B \u043F\u0440\u0438\u0435\u0437\u0436\u0430\u0435\u043C \u043D\u0430 \u043F\u043B\u044F\u0436.'), s('\uD83C\uDFCA', 'F\xFCrd\xFCnk a tengerben.|Wir baden im Meer.|We swim in the sea.|K\u0105piemy si\u0119 w morzu.|Nos ba\xF1amos en el mar.|Facciamo il bagno al mare.|Nous nous baignons dans la mer.|Facem baie \xEEn mare.|K\xFApeme sa v mori.|\u041C\u0438 \u043A\u0443\u043F\u0430\u0454\u043C\u043E\u0441\u044F \u0432 \u043C\u043E\u0440\u0456.|\u041C\u044B \u043A\u0443\u043F\u0430\u0435\u043C\u0441\u044F \u0432 \u043C\u043E\u0440\u0435.')]))])]);
       ICE_CUSTOMERS = listOf_0(['\uD83D\uDC3B', '\uD83D\uDC30', '\uD83D\uDC31', '\uD83E\uDD94', '\uD83D\uDC36', '\uD83D\uDC3C', '\uD83E\uDD8A', '\uD83D\uDC38', '\uD83D\uDC37', '\uD83D\uDC28', '\uD83D\uDC35', '\uD83D\uDC27']);
     }
   }
+  function get_APP_LANGS() {
+    _init_properties_I18n_kt__o5gif6();
+    return APP_LANGS;
+  }
+  var APP_LANGS;
   function get_DIFFICULTY_GAMES() {
     _init_properties_I18n_kt__o5gif6();
     return DIFFICULTY_GAMES;
@@ -24684,11 +25309,8 @@ var logic = function (_) {
   var Lang_IT_instance;
   var Lang_FR_instance;
   var Lang_RO_instance;
-  var Lang_SK_instance;
-  var Lang_UK_instance;
-  var Lang_RU_instance;
   function values_17() {
-    return [Lang_HU_getInstance(), Lang_DE_getInstance(), Lang_EN_getInstance(), Lang_PL_getInstance(), Lang_ES_getInstance(), Lang_IT_getInstance(), Lang_FR_getInstance(), Lang_RO_getInstance(), Lang_SK_getInstance(), Lang_UK_getInstance(), Lang_RU_getInstance()];
+    return [Lang_HU_getInstance(), Lang_DE_getInstance(), Lang_EN_getInstance(), Lang_PL_getInstance(), Lang_ES_getInstance(), Lang_IT_getInstance(), Lang_FR_getInstance(), Lang_RO_getInstance()];
   }
   function valueOf_17(value) {
     switch (value) {
@@ -24708,12 +25330,6 @@ var logic = function (_) {
         return Lang_FR_getInstance();
       case 'RO':
         return Lang_RO_getInstance();
-      case 'SK':
-        return Lang_SK_getInstance();
-      case 'UK':
-        return Lang_UK_getInstance();
-      case 'RU':
-        return Lang_RU_getInstance();
       default:
         Lang_initEntries();
         THROW_IAE('No enum constant value.');
@@ -24738,9 +25354,6 @@ var logic = function (_) {
     Lang_IT_instance = new Lang('IT', 5);
     Lang_FR_instance = new Lang('FR', 6);
     Lang_RO_instance = new Lang('RO', 7);
-    Lang_SK_instance = new Lang('SK', 8);
-    Lang_UK_instance = new Lang('UK', 9);
-    Lang_RU_instance = new Lang('RU', 10);
   }
   var $ENTRIES_17;
   function Lang(name, ordinal) {
@@ -24815,15 +25428,6 @@ var logic = function (_) {
       case 7:
         tmp = '\uD83C\uDDF7\uD83C\uDDF4';
         break;
-      case 8:
-        tmp = '\uD83C\uDDF8\uD83C\uDDF0';
-        break;
-      case 9:
-        tmp = '\uD83C\uDDFA\uD83C\uDDE6';
-        break;
-      case 10:
-        tmp = '\uD83C\uDDF7\uD83C\uDDFA';
-        break;
       default:
         noWhenBranchMatchedException();
         break;
@@ -24857,15 +25461,6 @@ var logic = function (_) {
         break;
       case 7:
         tmp = 'Rom\xE2n\u0103';
-        break;
-      case 8:
-        tmp = 'Sloven\u010Dina';
-        break;
-      case 9:
-        tmp = '\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0430';
-        break;
-      case 10:
-        tmp = '\u0420\u0443\u0441\u0441\u043A\u0438\u0439';
         break;
       default:
         noWhenBranchMatchedException();
@@ -24901,15 +25496,6 @@ var logic = function (_) {
       case 7:
         tmp = 'ro-RO';
         break;
-      case 8:
-        tmp = 'sk-SK';
-        break;
-      case 9:
-        tmp = 'uk-UA';
-        break;
-      case 10:
-        tmp = 'ru-RU';
-        break;
       default:
         noWhenBranchMatchedException();
         break;
@@ -24943,15 +25529,6 @@ var logic = function (_) {
         break;
       case 7:
         tmp = 'Nivelul ' + n;
-        break;
-      case 8:
-        tmp = '\xDArove\u0148 ' + n;
-        break;
-      case 9:
-        tmp = '\u0420\u0456\u0432\u0435\u043D\u044C ' + n;
-        break;
-      case 10:
-        tmp = '\u0423\u0440\u043E\u0432\u0435\u043D\u044C ' + n;
         break;
       default:
         noWhenBranchMatchedException();
@@ -25218,26 +25795,27 @@ var logic = function (_) {
 
         tmp_3 = tmp_4;
         break;
-      case 8:
+      case 4:
+        var c = f.fem_1 ? 'Cu\xE1ntas' : 'Cu\xE1ntos';
         var tmp_5;
         switch (q.ordinal_1) {
           case 0:
-            tmp_5 = 'Ko\u013Eko ' + w + ' vid\xED\u0161?';
+            tmp_5 = '\xBF' + c + ' ' + w + ' ves?';
             break;
           case 1:
-            tmp_5 = 'Ko\u013Eko ' + w + ' je spolu?';
+            tmp_5 = '\xBF' + c + ' ' + w + ' hay en total?';
             break;
           case 2:
-            tmp_5 = 'Kde je viac ' + w + '?';
+            tmp_5 = '\xBFD\xF3nde hay m\xE1s ' + w + '?';
             break;
           case 3:
-            tmp_5 = 'Kde je menej ' + w + '?';
+            tmp_5 = '\xBFD\xF3nde hay menos ' + w + '?';
             break;
           case 4:
-            tmp_5 = 'Ko\u013Eko ' + w + ' zostalo?';
+            tmp_5 = '\xBF' + c + ' ' + w + ' quedan?';
             break;
           case 5:
-            tmp_5 = 'Ko\u013Eko ' + w + ' ch\xFDba do desa\u0165?';
+            tmp_5 = '\xBF' + c + ' ' + w + ' faltan para llegar a diez?';
             break;
           default:
             noWhenBranchMatchedException();
@@ -25246,26 +25824,27 @@ var logic = function (_) {
 
         tmp_3 = tmp_5;
         break;
-      case 9:
+      case 5:
+        var c_0 = f.fem_1 ? 'Quante' : 'Quanti';
         var tmp_6;
         switch (q.ordinal_1) {
           case 0:
-            tmp_6 = '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 ' + w + ' \u0442\u0438 \u0431\u0430\u0447\u0438\u0448?';
+            tmp_6 = c_0 + ' ' + w + ' vedi?';
             break;
           case 1:
-            tmp_6 = '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 ' + w + ' \u0440\u0430\u0437\u043E\u043C?';
+            tmp_6 = c_0 + ' ' + w + ' ci sono in tutto?';
             break;
           case 2:
-            tmp_6 = '\u0414\u0435 \u0431\u0456\u043B\u044C\u0448\u0435 ' + w + '?';
+            tmp_6 = 'Dove ci sono pi\xF9 ' + w + '?';
             break;
           case 3:
-            tmp_6 = '\u0414\u0435 \u043C\u0435\u043D\u0448\u0435 ' + w + '?';
+            tmp_6 = 'Dove ci sono meno ' + w + '?';
             break;
           case 4:
-            tmp_6 = '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 ' + w + ' \u0437\u0430\u043B\u0438\u0448\u0438\u043B\u043E\u0441\u044F?';
+            tmp_6 = c_0 + ' ' + w + ' restano?';
             break;
           case 5:
-            tmp_6 = '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 ' + w + ' \u0431\u0440\u0430\u043A\u0443\u0454 \u0434\u043E \u0434\u0435\u0441\u044F\u0442\u0438?';
+            tmp_6 = c_0 + ' ' + w + ' mancano per arrivare a dieci?';
             break;
           default:
             noWhenBranchMatchedException();
@@ -25274,26 +25853,26 @@ var logic = function (_) {
 
         tmp_3 = tmp_6;
         break;
-      case 10:
+      case 6:
         var tmp_7;
         switch (q.ordinal_1) {
           case 0:
-            tmp_7 = '\u0421\u043A\u043E\u043B\u044C\u043A\u043E ' + w + ' \u0442\u044B \u0432\u0438\u0434\u0438\u0448\u044C?';
+            tmp_7 = 'Combien ' + frDe(w) + ' vois-tu ?';
             break;
           case 1:
-            tmp_7 = '\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0432\u0441\u0435\u0433\u043E ' + w + '?';
+            tmp_7 = 'Combien ' + frDe(w) + ' y a-t-il en tout ?';
             break;
           case 2:
-            tmp_7 = '\u0413\u0434\u0435 \u0431\u043E\u043B\u044C\u0448\u0435 ' + w + '?';
+            tmp_7 = 'O\xF9 y a-t-il plus ' + frDe(w) + ' ?';
             break;
           case 3:
-            tmp_7 = '\u0413\u0434\u0435 \u043C\u0435\u043D\u044C\u0448\u0435 ' + w + '?';
+            tmp_7 = 'O\xF9 y a-t-il moins ' + frDe(w) + ' ?';
             break;
           case 4:
-            tmp_7 = '\u0421\u043A\u043E\u043B\u044C\u043A\u043E ' + w + ' \u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C?';
+            tmp_7 = 'Combien ' + frDe(w) + ' reste-t-il ?';
             break;
           case 5:
-            tmp_7 = '\u0421\u043A\u043E\u043B\u044C\u043A\u043E ' + w + ' \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 \u0434\u043E \u0434\u0435\u0441\u044F\u0442\u0438?';
+            tmp_7 = 'Combien ' + frDe(w) + ' manque-t-il pour faire dix ?';
             break;
           default:
             noWhenBranchMatchedException();
@@ -25302,27 +25881,27 @@ var logic = function (_) {
 
         tmp_3 = tmp_7;
         break;
-      case 4:
-        var c = f.fem_1 ? 'Cu\xE1ntas' : 'Cu\xE1ntos';
+      case 7:
+        var c_1 = f.fem_1 ? 'C\xE2te' : 'C\xE2\u021Bi';
         var tmp_8;
         switch (q.ordinal_1) {
           case 0:
-            tmp_8 = '\xBF' + c + ' ' + w + ' ves?';
+            tmp_8 = c_1 + ' ' + w + ' vezi?';
             break;
           case 1:
-            tmp_8 = '\xBF' + c + ' ' + w + ' hay en total?';
+            tmp_8 = c_1 + ' ' + w + ' sunt \xEEn total?';
             break;
           case 2:
-            tmp_8 = '\xBFD\xF3nde hay m\xE1s ' + w + '?';
+            tmp_8 = 'Unde sunt mai ' + (f.fem_1 ? 'multe' : 'mul\u021Bi') + ' ' + w + '?';
             break;
           case 3:
-            tmp_8 = '\xBFD\xF3nde hay menos ' + w + '?';
+            tmp_8 = 'Unde sunt mai ' + (f.fem_1 ? 'pu\u021Bine' : 'pu\u021Bini') + ' ' + w + '?';
             break;
           case 4:
-            tmp_8 = '\xBF' + c + ' ' + w + ' quedan?';
+            tmp_8 = c_1 + ' ' + w + ' r\u0103m\xE2n?';
             break;
           case 5:
-            tmp_8 = '\xBF' + c + ' ' + w + ' faltan para llegar a diez?';
+            tmp_8 = c_1 + ' ' + w + ' lipsesc p\xE2n\u0103 la zece?';
             break;
           default:
             noWhenBranchMatchedException();
@@ -25330,92 +25909,6 @@ var logic = function (_) {
         }
 
         tmp_3 = tmp_8;
-        break;
-      case 5:
-        var c_0 = f.fem_1 ? 'Quante' : 'Quanti';
-        var tmp_9;
-        switch (q.ordinal_1) {
-          case 0:
-            tmp_9 = c_0 + ' ' + w + ' vedi?';
-            break;
-          case 1:
-            tmp_9 = c_0 + ' ' + w + ' ci sono in tutto?';
-            break;
-          case 2:
-            tmp_9 = 'Dove ci sono pi\xF9 ' + w + '?';
-            break;
-          case 3:
-            tmp_9 = 'Dove ci sono meno ' + w + '?';
-            break;
-          case 4:
-            tmp_9 = c_0 + ' ' + w + ' restano?';
-            break;
-          case 5:
-            tmp_9 = c_0 + ' ' + w + ' mancano per arrivare a dieci?';
-            break;
-          default:
-            noWhenBranchMatchedException();
-            break;
-        }
-
-        tmp_3 = tmp_9;
-        break;
-      case 6:
-        var tmp_10;
-        switch (q.ordinal_1) {
-          case 0:
-            tmp_10 = 'Combien ' + frDe(w) + ' vois-tu ?';
-            break;
-          case 1:
-            tmp_10 = 'Combien ' + frDe(w) + ' y a-t-il en tout ?';
-            break;
-          case 2:
-            tmp_10 = 'O\xF9 y a-t-il plus ' + frDe(w) + ' ?';
-            break;
-          case 3:
-            tmp_10 = 'O\xF9 y a-t-il moins ' + frDe(w) + ' ?';
-            break;
-          case 4:
-            tmp_10 = 'Combien ' + frDe(w) + ' reste-t-il ?';
-            break;
-          case 5:
-            tmp_10 = 'Combien ' + frDe(w) + ' manque-t-il pour faire dix ?';
-            break;
-          default:
-            noWhenBranchMatchedException();
-            break;
-        }
-
-        tmp_3 = tmp_10;
-        break;
-      case 7:
-        var c_1 = f.fem_1 ? 'C\xE2te' : 'C\xE2\u021Bi';
-        var tmp_11;
-        switch (q.ordinal_1) {
-          case 0:
-            tmp_11 = c_1 + ' ' + w + ' vezi?';
-            break;
-          case 1:
-            tmp_11 = c_1 + ' ' + w + ' sunt \xEEn total?';
-            break;
-          case 2:
-            tmp_11 = 'Unde sunt mai ' + (f.fem_1 ? 'multe' : 'mul\u021Bi') + ' ' + w + '?';
-            break;
-          case 3:
-            tmp_11 = 'Unde sunt mai ' + (f.fem_1 ? 'pu\u021Bine' : 'pu\u021Bini') + ' ' + w + '?';
-            break;
-          case 4:
-            tmp_11 = c_1 + ' ' + w + ' r\u0103m\xE2n?';
-            break;
-          case 5:
-            tmp_11 = c_1 + ' ' + w + ' lipsesc p\xE2n\u0103 la zece?';
-            break;
-          default:
-            noWhenBranchMatchedException();
-            break;
-        }
-
-        tmp_3 = tmp_11;
         break;
       default:
         tmp_3 = countQuestion(Lang_EN_getInstance(), o, q);
@@ -25545,7 +26038,6 @@ var logic = function (_) {
   function aloneGender(l) {
     _init_properties_I18n_kt__o5gif6();
     switch (l.ordinal_1) {
-      case 8:
       case 6:
       case 7:
         return G_F_getInstance();
@@ -25582,15 +26074,6 @@ var logic = function (_) {
         break;
       case 3:
         tmp = 'Gdzie jest kolor ' + w + '?';
-        break;
-      case 8:
-        tmp = 'Kde je ' + w + ' farba?';
-        break;
-      case 9:
-        tmp = '\u0414\u0435 ' + w + ' \u043A\u043E\u043B\u0456\u0440?';
-        break;
-      case 10:
-        tmp = '\u0413\u0434\u0435 ' + w + ' \u0446\u0432\u0435\u0442?';
         break;
       case 4:
         tmp = '\xBFD\xF3nde est\xE1 el color ' + w + '?';
@@ -25682,15 +26165,6 @@ var logic = function (_) {
       case 7:
         tmp = 'Unde este ' + x + '?';
         break;
-      case 8:
-        tmp = 'Kde je ' + x + '?';
-        break;
-      case 9:
-        tmp = '\u0414\u0435 ' + x + '?';
-        break;
-      case 10:
-        tmp = '\u0413\u0434\u0435 ' + x + '?';
-        break;
       default:
         noWhenBranchMatchedException();
         break;
@@ -25739,15 +26213,6 @@ var logic = function (_) {
       case 7:
         tmp = to('Unde este \u201E' + w + '\u201D?', 'Unde este');
         break;
-      case 8:
-        tmp = to('Kde je \u201E' + w + '\u201C?', 'Kde je');
-        break;
-      case 9:
-        tmp = to('\u0414\u0435 \xAB' + w + '\xBB?', '\u0414\u0435');
-        break;
-      case 10:
-        tmp = to('\u0413\u0434\u0435 \xAB' + w + '\xBB?', '\u0413\u0434\u0435');
-        break;
       default:
         noWhenBranchMatchedException();
         break;
@@ -25790,18 +26255,6 @@ var logic = function (_) {
     Lang_initEntries();
     return Lang_RO_instance;
   }
-  function Lang_SK_getInstance() {
-    Lang_initEntries();
-    return Lang_SK_instance;
-  }
-  function Lang_UK_getInstance() {
-    Lang_initEntries();
-    return Lang_UK_instance;
-  }
-  function Lang_RU_getInstance() {
-    Lang_initEntries();
-    return Lang_RU_instance;
-  }
   function CountQ_HOW_MANY_getInstance() {
     CountQ_initEntries();
     return CountQ_HOW_MANY_instance;
@@ -25842,15 +26295,906 @@ var logic = function (_) {
   function _init_properties_I18n_kt__o5gif6() {
     if (!properties_initialized_I18n_kt_5ky99c) {
       properties_initialized_I18n_kt_5ky99c = true;
-      DIFFICULTY_GAMES = setOf_0([GameType_MAZE_getInstance(), GameType_PUZZLE_getInstance(), GameType_MEMORY_getInstance(), GameType_DIFF_getInstance(), GameType_MISSING_getInstance(), GameType_ORDER_getInstance(), GameType_COUNT_getInstance(), GameType_TRACE_getInstance(), GameType_ROBOT_getInstance(), GameType_ICECREAM_getInstance()]);
-      SLAVIC = setOf_0([Lang_PL_getInstance(), Lang_SK_getInstance(), Lang_UK_getInstance(), Lang_RU_getInstance()]);
-      COUNT_FORMS = mapOf([to('\uD83C\uDF4E', mapOf([to(Lang_PL_getInstance(), new CountForm('jab\u0142ek')), to(Lang_SK_getInstance(), new CountForm('jab\u013Ak')), to(Lang_UK_getInstance(), new CountForm('\u044F\u0431\u043B\u0443\u043A')), to(Lang_RU_getInstance(), new CountForm('\u044F\u0431\u043B\u043E\u043A')), to(Lang_ES_getInstance(), new CountForm('manzanas', true)), to(Lang_IT_getInstance(), new CountForm('mele', true)), to(Lang_FR_getInstance(), new CountForm('pommes')), to(Lang_RO_getInstance(), new CountForm('mere', true))])), to('\uD83D\uDC1F', mapOf([to(Lang_PL_getInstance(), new CountForm('ryb')), to(Lang_SK_getInstance(), new CountForm('r\xFDb')), to(Lang_UK_getInstance(), new CountForm('\u0440\u0438\u0431')), to(Lang_RU_getInstance(), new CountForm('\u0440\u044B\u0431')), to(Lang_ES_getInstance(), new CountForm('peces')), to(Lang_IT_getInstance(), new CountForm('pesci')), to(Lang_FR_getInstance(), new CountForm('poissons')), to(Lang_RO_getInstance(), new CountForm('pe\u0219ti'))])), to('\u2B50', mapOf([to(Lang_PL_getInstance(), new CountForm('gwiazdek')), to(Lang_SK_getInstance(), new CountForm('hviezd')), to(Lang_UK_getInstance(), new CountForm('\u0437\u0456\u0440\u043E\u043A')), to(Lang_RU_getInstance(), new CountForm('\u0437\u0432\u0451\u0437\u0434')), to(Lang_ES_getInstance(), new CountForm('estrellas', true)), to(Lang_IT_getInstance(), new CountForm('stelle', true)), to(Lang_FR_getInstance(), new CountForm('\xE9toiles')), to(Lang_RO_getInstance(), new CountForm('stele', true))])), to('\uD83D\uDC1E', mapOf([to(Lang_PL_getInstance(), new CountForm('biedronek')), to(Lang_SK_getInstance(), new CountForm('lienok')), to(Lang_UK_getInstance(), new CountForm('\u0441\u043E\u043D\u0435\u0447\u043E\u043A')), to(Lang_RU_getInstance(), new CountForm('\u0431\u043E\u0436\u044C\u0438\u0445 \u043A\u043E\u0440\u043E\u0432\u043E\u043A')), to(Lang_ES_getInstance(), new CountForm('mariquitas', true)), to(Lang_IT_getInstance(), new CountForm('coccinelle', true)), to(Lang_FR_getInstance(), new CountForm('coccinelles')), to(Lang_RO_getInstance(), new CountForm('buburuze', true))])), to('\uD83C\uDF88', mapOf([to(Lang_PL_getInstance(), new CountForm('balon\xF3w')), to(Lang_SK_getInstance(), new CountForm('bal\xF3nov')), to(Lang_UK_getInstance(), new CountForm('\u043A\u0443\u043B\u044C\u043E\u043A')), to(Lang_RU_getInstance(), new CountForm('\u0448\u0430\u0440\u0438\u043A\u043E\u0432')), to(Lang_ES_getInstance(), new CountForm('globos')), to(Lang_IT_getInstance(), new CountForm('palloncini')), to(Lang_FR_getInstance(), new CountForm('ballons')), to(Lang_RO_getInstance(), new CountForm('baloane', true))])), to('\uD83D\uDE97', mapOf([to(Lang_PL_getInstance(), new CountForm('samochod\xF3w')), to(Lang_SK_getInstance(), new CountForm('\xE1ut')), to(Lang_UK_getInstance(), new CountForm('\u043C\u0430\u0448\u0438\u043D')), to(Lang_RU_getInstance(), new CountForm('\u043C\u0430\u0448\u0438\u043D')), to(Lang_ES_getInstance(), new CountForm('coches')), to(Lang_IT_getInstance(), new CountForm('macchine', true)), to(Lang_FR_getInstance(), new CountForm('voitures')), to(Lang_RO_getInstance(), new CountForm('ma\u0219ini', true))])), to('\uD83D\uDC25', mapOf([to(Lang_PL_getInstance(), new CountForm('kurczaczk\xF3w')), to(Lang_SK_getInstance(), new CountForm('kuriatok')), to(Lang_UK_getInstance(), new CountForm('\u043A\u0443\u0440\u0447\u0430\u0442')), to(Lang_RU_getInstance(), new CountForm('\u0446\u044B\u043F\u043B\u044F\u0442')), to(Lang_ES_getInstance(), new CountForm('pollitos')), to(Lang_IT_getInstance(), new CountForm('pulcini')), to(Lang_FR_getInstance(), new CountForm('poussins')), to(Lang_RO_getInstance(), new CountForm('pui'))])), to('\uD83C\uDF53', mapOf([to(Lang_PL_getInstance(), new CountForm('truskawek')), to(Lang_SK_getInstance(), new CountForm('jah\xF4d')), to(Lang_UK_getInstance(), new CountForm('\u043F\u043E\u043B\u0443\u043D\u0438\u0446\u044C')), to(Lang_RU_getInstance(), new CountForm('\u043A\u043B\u0443\u0431\u043D\u0438\u0447\u0435\u043A')), to(Lang_ES_getInstance(), new CountForm('fresas', true)), to(Lang_IT_getInstance(), new CountForm('fragole', true)), to(Lang_FR_getInstance(), new CountForm('fraises')), to(Lang_RO_getInstance(), new CountForm('c\u0103p\u0219uni', true))])), to('\uD83C\uDF38', mapOf([to(Lang_PL_getInstance(), new CountForm('kwiatk\xF3w')), to(Lang_SK_getInstance(), new CountForm('kvetov')), to(Lang_UK_getInstance(), new CountForm('\u043A\u0432\u0456\u0442\u043E\u043A')), to(Lang_RU_getInstance(), new CountForm('\u0446\u0432\u0435\u0442\u043E\u0432')), to(Lang_ES_getInstance(), new CountForm('flores', true)), to(Lang_IT_getInstance(), new CountForm('fiori')), to(Lang_FR_getInstance(), new CountForm('fleurs')), to(Lang_RO_getInstance(), new CountForm('flori', true))])), to('\uD83E\uDD86', mapOf([to(Lang_PL_getInstance(), new CountForm('kaczek')), to(Lang_SK_getInstance(), new CountForm('ka\u010Diek')), to(Lang_UK_getInstance(), new CountForm('\u043A\u0430\u0447\u043E\u043A')), to(Lang_RU_getInstance(), new CountForm('\u0443\u0442\u043E\u043A')), to(Lang_ES_getInstance(), new CountForm('patos')), to(Lang_IT_getInstance(), new CountForm('anatre', true)), to(Lang_FR_getInstance(), new CountForm('canards')), to(Lang_RO_getInstance(), new CountForm('ra\u021Be', true))]))]);
-      COLOR_FORMS = mapOf([to(Lang_PL_getInstance(), mapOf([to('red', listOf_0(['czerwony', 'czerwona', 'czerwone'])), to('blue', listOf_0(['niebieski', 'niebieska', 'niebieskie'])), to('yellow', listOf_0(['\u017C\xF3\u0142ty', '\u017C\xF3\u0142ta', '\u017C\xF3\u0142te'])), to('green', listOf_0(['zielony', 'zielona', 'zielone'])), to('orange', listOf_0(['pomara\u0144czowy', 'pomara\u0144czowa', 'pomara\u0144czowe'])), to('purple', listOf_0(['fioletowy', 'fioletowa', 'fioletowe'])), to('brown', listOf_0(['br\u0105zowy', 'br\u0105zowa', 'br\u0105zowe'])), to('pink', listOf_0(['r\xF3\u017Cowy', 'r\xF3\u017Cowa', 'r\xF3\u017Cowe'])), to('white', listOf_0(['bia\u0142y', 'bia\u0142a', 'bia\u0142e'])), to('black', listOf_0(['czarny', 'czarna', 'czarne'])), to('gray', listOf_0(['szary', 'szara', 'szare'])), to('light blue', listOf_0(['jasnoniebieski', 'jasnoniebieska', 'jasnoniebieskie'])), to('light green', listOf_0(['jasnozielony', 'jasnozielona', 'jasnozielone'])), to('dark green', listOf_0(['ciemnozielony', 'ciemnozielona', 'ciemnozielone'])), to('turquoise', listOf_0(['turkusowy', 'turkusowa', 'turkusowe'])), to('beige', listOf_0(['be\u017Cowy', 'be\u017Cowa', 'be\u017Cowe']))])), to(Lang_SK_getInstance(), mapOf([to('red', listOf_0(['\u010Derven\xFD', '\u010Derven\xE1', '\u010Derven\xE9'])), to('blue', listOf_0(['modr\xFD', 'modr\xE1', 'modr\xE9'])), to('yellow', listOf_0(['\u017Elt\xFD', '\u017Elt\xE1', '\u017Elt\xE9'])), to('green', listOf_0(['zelen\xFD', 'zelen\xE1', 'zelen\xE9'])), to('orange', listOf_0(['oran\u017Eov\xFD', 'oran\u017Eov\xE1', 'oran\u017Eov\xE9'])), to('purple', listOf_0(['fialov\xFD', 'fialov\xE1', 'fialov\xE9'])), to('brown', listOf_0(['hned\xFD', 'hned\xE1', 'hned\xE9'])), to('pink', listOf_0(['ru\u017Eov\xFD', 'ru\u017Eov\xE1', 'ru\u017Eov\xE9'])), to('white', listOf_0(['biely', 'biela', 'biele'])), to('black', listOf_0(['\u010Dierny', '\u010Dierna', '\u010Dierne'])), to('gray', listOf_0(['siv\xFD', 'siv\xE1', 'siv\xE9'])), to('light blue', listOf_0(['svetlomodr\xFD', 'svetlomodr\xE1', 'svetlomodr\xE9'])), to('light green', listOf_0(['svetlozelen\xFD', 'svetlozelen\xE1', 'svetlozelen\xE9'])), to('dark green', listOf_0(['tmavozelen\xFD', 'tmavozelen\xE1', 'tmavozelen\xE9'])), to('turquoise', listOf_0(['tyrkysov\xFD', 'tyrkysov\xE1', 'tyrkysov\xE9'])), to('beige', listOf_0(['b\xE9\u017Eov\xFD', 'b\xE9\u017Eov\xE1', 'b\xE9\u017Eov\xE9']))])), to(Lang_UK_getInstance(), mapOf([to('red', listOf_0(['\u0447\u0435\u0440\u0432\u043E\u043D\u0438\u0439', '\u0447\u0435\u0440\u0432\u043E\u043D\u0430', '\u0447\u0435\u0440\u0432\u043E\u043D\u0435'])), to('blue', listOf_0(['\u0441\u0438\u043D\u0456\u0439', '\u0441\u0438\u043D\u044F', '\u0441\u0438\u043D\u0454'])), to('yellow', listOf_0(['\u0436\u043E\u0432\u0442\u0438\u0439', '\u0436\u043E\u0432\u0442\u0430', '\u0436\u043E\u0432\u0442\u0435'])), to('green', listOf_0(['\u0437\u0435\u043B\u0435\u043D\u0438\u0439', '\u0437\u0435\u043B\u0435\u043D\u0430', '\u0437\u0435\u043B\u0435\u043D\u0435'])), to('orange', listOf_0(['\u043F\u043E\u043C\u0430\u0440\u0430\u043D\u0447\u0435\u0432\u0438\u0439', '\u043F\u043E\u043C\u0430\u0440\u0430\u043D\u0447\u0435\u0432\u0430', '\u043F\u043E\u043C\u0430\u0440\u0430\u043D\u0447\u0435\u0432\u0435'])), to('purple', listOf_0(['\u0444\u0456\u043E\u043B\u0435\u0442\u043E\u0432\u0438\u0439', '\u0444\u0456\u043E\u043B\u0435\u0442\u043E\u0432\u0430', '\u0444\u0456\u043E\u043B\u0435\u0442\u043E\u0432\u0435'])), to('brown', listOf_0(['\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0438\u0439', '\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0430', '\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0435'])), to('pink', listOf_0(['\u0440\u043E\u0436\u0435\u0432\u0438\u0439', '\u0440\u043E\u0436\u0435\u0432\u0430', '\u0440\u043E\u0436\u0435\u0432\u0435'])), to('white', listOf_0(['\u0431\u0456\u043B\u0438\u0439', '\u0431\u0456\u043B\u0430', '\u0431\u0456\u043B\u0435'])), to('black', listOf_0(['\u0447\u043E\u0440\u043D\u0438\u0439', '\u0447\u043E\u0440\u043D\u0430', '\u0447\u043E\u0440\u043D\u0435'])), to('gray', listOf_0(['\u0441\u0456\u0440\u0438\u0439', '\u0441\u0456\u0440\u0430', '\u0441\u0456\u0440\u0435'])), to('light blue', listOf_0(['\u0431\u043B\u0430\u043A\u0438\u0442\u043D\u0438\u0439', '\u0431\u043B\u0430\u043A\u0438\u0442\u043D\u0430', '\u0431\u043B\u0430\u043A\u0438\u0442\u043D\u0435'])), to('light green', listOf_0(['\u0441\u0432\u0456\u0442\u043B\u043E-\u0437\u0435\u043B\u0435\u043D\u0438\u0439', '\u0441\u0432\u0456\u0442\u043B\u043E-\u0437\u0435\u043B\u0435\u043D\u0430', '\u0441\u0432\u0456\u0442\u043B\u043E-\u0437\u0435\u043B\u0435\u043D\u0435'])), to('dark green', listOf_0(['\u0442\u0435\u043C\u043D\u043E-\u0437\u0435\u043B\u0435\u043D\u0438\u0439', '\u0442\u0435\u043C\u043D\u043E-\u0437\u0435\u043B\u0435\u043D\u0430', '\u0442\u0435\u043C\u043D\u043E-\u0437\u0435\u043B\u0435\u043D\u0435'])), to('turquoise', listOf_0(['\u0431\u0456\u0440\u044E\u0437\u043E\u0432\u0438\u0439', '\u0431\u0456\u0440\u044E\u0437\u043E\u0432\u0430', '\u0431\u0456\u0440\u044E\u0437\u043E\u0432\u0435'])), to('beige', listOf_0(['\u0431\u0435\u0436\u0435\u0432\u0438\u0439', '\u0431\u0435\u0436\u0435\u0432\u0430', '\u0431\u0435\u0436\u0435\u0432\u0435']))])), to(Lang_RU_getInstance(), mapOf([to('red', listOf_0(['\u043A\u0440\u0430\u0441\u043D\u044B\u0439', '\u043A\u0440\u0430\u0441\u043D\u0430\u044F', '\u043A\u0440\u0430\u0441\u043D\u043E\u0435'])), to('blue', listOf_0(['\u0441\u0438\u043D\u0438\u0439', '\u0441\u0438\u043D\u044F\u044F', '\u0441\u0438\u043D\u0435\u0435'])), to('yellow', listOf_0(['\u0436\u0451\u043B\u0442\u044B\u0439', '\u0436\u0451\u043B\u0442\u0430\u044F', '\u0436\u0451\u043B\u0442\u043E\u0435'])), to('green', listOf_0(['\u0437\u0435\u043B\u0451\u043D\u044B\u0439', '\u0437\u0435\u043B\u0451\u043D\u0430\u044F', '\u0437\u0435\u043B\u0451\u043D\u043E\u0435'])), to('orange', listOf_0(['\u043E\u0440\u0430\u043D\u0436\u0435\u0432\u044B\u0439', '\u043E\u0440\u0430\u043D\u0436\u0435\u0432\u0430\u044F', '\u043E\u0440\u0430\u043D\u0436\u0435\u0432\u043E\u0435'])), to('purple', listOf_0(['\u0444\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u044B\u0439', '\u0444\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u0430\u044F', '\u0444\u0438\u043E\u043B\u0435\u0442\u043E\u0432\u043E\u0435'])), to('brown', listOf_0(['\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439', '\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0430\u044F', '\u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u043E\u0435'])), to('pink', listOf_0(['\u0440\u043E\u0437\u043E\u0432\u044B\u0439', '\u0440\u043E\u0437\u043E\u0432\u0430\u044F', '\u0440\u043E\u0437\u043E\u0432\u043E\u0435'])), to('white', listOf_0(['\u0431\u0435\u043B\u044B\u0439', '\u0431\u0435\u043B\u0430\u044F', '\u0431\u0435\u043B\u043E\u0435'])), to('black', listOf_0(['\u0447\u0451\u0440\u043D\u044B\u0439', '\u0447\u0451\u0440\u043D\u0430\u044F', '\u0447\u0451\u0440\u043D\u043E\u0435'])), to('gray', listOf_0(['\u0441\u0435\u0440\u044B\u0439', '\u0441\u0435\u0440\u0430\u044F', '\u0441\u0435\u0440\u043E\u0435'])), to('light blue', listOf_0(['\u0433\u043E\u043B\u0443\u0431\u043E\u0439', '\u0433\u043E\u043B\u0443\u0431\u0430\u044F', '\u0433\u043E\u043B\u0443\u0431\u043E\u0435'])), to('light green', listOf_0(['\u0441\u0432\u0435\u0442\u043B\u043E-\u0437\u0435\u043B\u0451\u043D\u044B\u0439', '\u0441\u0432\u0435\u0442\u043B\u043E-\u0437\u0435\u043B\u0451\u043D\u0430\u044F', '\u0441\u0432\u0435\u0442\u043B\u043E-\u0437\u0435\u043B\u0451\u043D\u043E\u0435'])), to('dark green', listOf_0(['\u0442\u0451\u043C\u043D\u043E-\u0437\u0435\u043B\u0451\u043D\u044B\u0439', '\u0442\u0451\u043C\u043D\u043E-\u0437\u0435\u043B\u0451\u043D\u0430\u044F', '\u0442\u0451\u043C\u043D\u043E-\u0437\u0435\u043B\u0451\u043D\u043E\u0435'])), to('turquoise', listOf_0(['\u0431\u0438\u0440\u044E\u0437\u043E\u0432\u044B\u0439', '\u0431\u0438\u0440\u044E\u0437\u043E\u0432\u0430\u044F', '\u0431\u0438\u0440\u044E\u0437\u043E\u0432\u043E\u0435'])), to('beige', listOf_0(['\u0431\u0435\u0436\u0435\u0432\u044B\u0439', '\u0431\u0435\u0436\u0435\u0432\u0430\u044F', '\u0431\u0435\u0436\u0435\u0432\u043E\u0435']))])), to(Lang_ES_getInstance(), mapOf([to('red', listOf_0(['rojo', 'roja'])), to('blue', listOf_0(['azul', 'azul'])), to('yellow', listOf_0(['amarillo', 'amarilla'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['naranja', 'naranja'])), to('purple', listOf_0(['morado', 'morada'])), to('brown', listOf_0(['marr\xF3n', 'marr\xF3n'])), to('pink', listOf_0(['rosa', 'rosa'])), to('white', listOf_0(['blanco', 'blanca'])), to('black', listOf_0(['negro', 'negra'])), to('gray', listOf_0(['gris', 'gris'])), to('light blue', listOf_0(['celeste', 'celeste'])), to('light green', listOf_0(['verde claro', 'verde claro'])), to('dark green', listOf_0(['verde oscuro', 'verde oscuro'])), to('turquoise', listOf_0(['turquesa', 'turquesa'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_IT_getInstance(), mapOf([to('red', listOf_0(['rosso', 'rossa'])), to('blue', listOf_0(['blu', 'blu'])), to('yellow', listOf_0(['giallo', 'gialla'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['arancione', 'arancione'])), to('purple', listOf_0(['viola', 'viola'])), to('brown', listOf_0(['marrone', 'marrone'])), to('pink', listOf_0(['rosa', 'rosa'])), to('white', listOf_0(['bianco', 'bianca'])), to('black', listOf_0(['nero', 'nera'])), to('gray', listOf_0(['grigio', 'grigia'])), to('light blue', listOf_0(['azzurro', 'azzurra'])), to('light green', listOf_0(['verde chiaro', 'verde chiaro'])), to('dark green', listOf_0(['verde scuro', 'verde scuro'])), to('turquoise', listOf_0(['turchese', 'turchese'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_FR_getInstance(), mapOf([to('red', listOf_0(['rouge', 'rouge'])), to('blue', listOf_0(['bleu', 'bleue'])), to('yellow', listOf_0(['jaune', 'jaune'])), to('green', listOf_0(['vert', 'verte'])), to('orange', listOf_0(['orange', 'orange'])), to('purple', listOf_0(['violet', 'violette'])), to('brown', listOf_0(['marron', 'marron'])), to('pink', listOf_0(['rose', 'rose'])), to('white', listOf_0(['blanc', 'blanche'])), to('black', listOf_0(['noir', 'noire'])), to('gray', listOf_0(['gris', 'grise'])), to('light blue', listOf_0(['bleu clair', 'bleu clair'])), to('light green', listOf_0(['vert clair', 'vert clair'])), to('dark green', listOf_0(['vert fonc\xE9', 'vert fonc\xE9'])), to('turquoise', listOf_0(['turquoise', 'turquoise'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_RO_getInstance(), mapOf([to('red', listOf_0(['ro\u0219u', 'ro\u0219ie'])), to('blue', listOf_0(['albastru', 'albastr\u0103'])), to('yellow', listOf_0(['galben', 'galben\u0103'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['portocaliu', 'portocalie'])), to('purple', listOf_0(['mov', 'mov'])), to('brown', listOf_0(['maro', 'maro'])), to('pink', listOf_0(['roz', 'roz'])), to('white', listOf_0(['alb', 'alb\u0103'])), to('black', listOf_0(['negru', 'neagr\u0103'])), to('gray', listOf_0(['gri', 'gri'])), to('light blue', listOf_0(['bleu', 'bleu'])), to('light green', listOf_0(['verde deschis', 'verde deschis'])), to('dark green', listOf_0(['verde \xEEnchis', 'verde \xEEnchis'])), to('turquoise', listOf_0(['turcoaz', 'turcoaz'])), to('beige', listOf_0(['bej', 'bej']))]))]);
-      SHAPE_NOUNS = mapOf([to(Lang_PL_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('ko\u0142o', G_N_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('kwadrat', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('tr\xF3jk\u0105t', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('gwiazda', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('serce', G_N_getInstance()))])), to(Lang_SK_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('kruh', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('\u0161tvorec', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('trojuholn\xEDk', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('hviezda', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('srdce', G_N_getInstance()))])), to(Lang_UK_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('\u043A\u043E\u043B\u043E', G_N_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('\u043A\u0432\u0430\u0434\u0440\u0430\u0442', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('\u0442\u0440\u0438\u043A\u0443\u0442\u043D\u0438\u043A', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('\u0437\u0456\u0440\u043A\u0430', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('\u0441\u0435\u0440\u0446\u0435', G_N_getInstance()))])), to(Lang_RU_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('\u043A\u0440\u0443\u0433', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('\u043A\u0432\u0430\u0434\u0440\u0430\u0442', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('\u0442\u0440\u0435\u0443\u0433\u043E\u043B\u044C\u043D\u0438\u043A', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('\u0437\u0432\u0435\u0437\u0434\u0430', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('\u0441\u0435\u0440\u0434\u0446\u0435', G_N_getInstance()))])), to(Lang_ES_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('el c\xEDrculo', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('el cuadrado', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('el tri\xE1ngulo', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('la estrella', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('el coraz\xF3n', G_M_getInstance()))])), to(Lang_IT_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('il cerchio', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('il quadrato', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('il triangolo', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('la stella', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('il cuore', G_M_getInstance()))])), to(Lang_FR_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('le cercle', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('le carr\xE9', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('le triangle', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun("l'\xE9toile", G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('le c\u0153ur', G_M_getInstance()))])), to(Lang_RO_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('cercul', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('p\u0103tratul', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('triunghiul', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('steaua', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('inima', G_F_getInstance()))]))]);
+      APP_LANGS = listOf_0([Lang_HU_getInstance(), Lang_DE_getInstance(), Lang_EN_getInstance()]);
+      DIFFICULTY_GAMES = setOf_0([GameType_MAZE_getInstance(), GameType_PUZZLE_getInstance(), GameType_MEMORY_getInstance(), GameType_DIFF_getInstance(), GameType_MISSING_getInstance(), GameType_ORDER_getInstance(), GameType_COUNT_getInstance(), GameType_TRACE_getInstance(), GameType_ROBOT_getInstance(), GameType_ICECREAM_getInstance(), GameType_MARBLE_getInstance()]);
+      SLAVIC = setOf(Lang_PL_getInstance());
+      COUNT_FORMS = mapOf([to('\uD83C\uDF4E', mapOf([to(Lang_PL_getInstance(), new CountForm('jab\u0142ek')), to(Lang_ES_getInstance(), new CountForm('manzanas', true)), to(Lang_IT_getInstance(), new CountForm('mele', true)), to(Lang_FR_getInstance(), new CountForm('pommes')), to(Lang_RO_getInstance(), new CountForm('mere', true))])), to('\uD83D\uDC1F', mapOf([to(Lang_PL_getInstance(), new CountForm('ryb')), to(Lang_ES_getInstance(), new CountForm('peces')), to(Lang_IT_getInstance(), new CountForm('pesci')), to(Lang_FR_getInstance(), new CountForm('poissons')), to(Lang_RO_getInstance(), new CountForm('pe\u0219ti'))])), to('\u2B50', mapOf([to(Lang_PL_getInstance(), new CountForm('gwiazdek')), to(Lang_ES_getInstance(), new CountForm('estrellas', true)), to(Lang_IT_getInstance(), new CountForm('stelle', true)), to(Lang_FR_getInstance(), new CountForm('\xE9toiles')), to(Lang_RO_getInstance(), new CountForm('stele', true))])), to('\uD83D\uDC1E', mapOf([to(Lang_PL_getInstance(), new CountForm('biedronek')), to(Lang_ES_getInstance(), new CountForm('mariquitas', true)), to(Lang_IT_getInstance(), new CountForm('coccinelle', true)), to(Lang_FR_getInstance(), new CountForm('coccinelles')), to(Lang_RO_getInstance(), new CountForm('buburuze', true))])), to('\uD83C\uDF88', mapOf([to(Lang_PL_getInstance(), new CountForm('balon\xF3w')), to(Lang_ES_getInstance(), new CountForm('globos')), to(Lang_IT_getInstance(), new CountForm('palloncini')), to(Lang_FR_getInstance(), new CountForm('ballons')), to(Lang_RO_getInstance(), new CountForm('baloane', true))])), to('\uD83D\uDE97', mapOf([to(Lang_PL_getInstance(), new CountForm('samochod\xF3w')), to(Lang_ES_getInstance(), new CountForm('coches')), to(Lang_IT_getInstance(), new CountForm('macchine', true)), to(Lang_FR_getInstance(), new CountForm('voitures')), to(Lang_RO_getInstance(), new CountForm('ma\u0219ini', true))])), to('\uD83D\uDC25', mapOf([to(Lang_PL_getInstance(), new CountForm('kurczaczk\xF3w')), to(Lang_ES_getInstance(), new CountForm('pollitos')), to(Lang_IT_getInstance(), new CountForm('pulcini')), to(Lang_FR_getInstance(), new CountForm('poussins')), to(Lang_RO_getInstance(), new CountForm('pui'))])), to('\uD83C\uDF53', mapOf([to(Lang_PL_getInstance(), new CountForm('truskawek')), to(Lang_ES_getInstance(), new CountForm('fresas', true)), to(Lang_IT_getInstance(), new CountForm('fragole', true)), to(Lang_FR_getInstance(), new CountForm('fraises')), to(Lang_RO_getInstance(), new CountForm('c\u0103p\u0219uni', true))])), to('\uD83C\uDF38', mapOf([to(Lang_PL_getInstance(), new CountForm('kwiatk\xF3w')), to(Lang_ES_getInstance(), new CountForm('flores', true)), to(Lang_IT_getInstance(), new CountForm('fiori')), to(Lang_FR_getInstance(), new CountForm('fleurs')), to(Lang_RO_getInstance(), new CountForm('flori', true))])), to('\uD83E\uDD86', mapOf([to(Lang_PL_getInstance(), new CountForm('kaczek')), to(Lang_ES_getInstance(), new CountForm('patos')), to(Lang_IT_getInstance(), new CountForm('anatre', true)), to(Lang_FR_getInstance(), new CountForm('canards')), to(Lang_RO_getInstance(), new CountForm('ra\u021Be', true))]))]);
+      COLOR_FORMS = mapOf([to(Lang_PL_getInstance(), mapOf([to('red', listOf_0(['czerwony', 'czerwona', 'czerwone'])), to('blue', listOf_0(['niebieski', 'niebieska', 'niebieskie'])), to('yellow', listOf_0(['\u017C\xF3\u0142ty', '\u017C\xF3\u0142ta', '\u017C\xF3\u0142te'])), to('green', listOf_0(['zielony', 'zielona', 'zielone'])), to('orange', listOf_0(['pomara\u0144czowy', 'pomara\u0144czowa', 'pomara\u0144czowe'])), to('purple', listOf_0(['fioletowy', 'fioletowa', 'fioletowe'])), to('brown', listOf_0(['br\u0105zowy', 'br\u0105zowa', 'br\u0105zowe'])), to('pink', listOf_0(['r\xF3\u017Cowy', 'r\xF3\u017Cowa', 'r\xF3\u017Cowe'])), to('white', listOf_0(['bia\u0142y', 'bia\u0142a', 'bia\u0142e'])), to('black', listOf_0(['czarny', 'czarna', 'czarne'])), to('gray', listOf_0(['szary', 'szara', 'szare'])), to('light blue', listOf_0(['jasnoniebieski', 'jasnoniebieska', 'jasnoniebieskie'])), to('light green', listOf_0(['jasnozielony', 'jasnozielona', 'jasnozielone'])), to('dark green', listOf_0(['ciemnozielony', 'ciemnozielona', 'ciemnozielone'])), to('turquoise', listOf_0(['turkusowy', 'turkusowa', 'turkusowe'])), to('beige', listOf_0(['be\u017Cowy', 'be\u017Cowa', 'be\u017Cowe']))])), to(Lang_ES_getInstance(), mapOf([to('red', listOf_0(['rojo', 'roja'])), to('blue', listOf_0(['azul', 'azul'])), to('yellow', listOf_0(['amarillo', 'amarilla'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['naranja', 'naranja'])), to('purple', listOf_0(['morado', 'morada'])), to('brown', listOf_0(['marr\xF3n', 'marr\xF3n'])), to('pink', listOf_0(['rosa', 'rosa'])), to('white', listOf_0(['blanco', 'blanca'])), to('black', listOf_0(['negro', 'negra'])), to('gray', listOf_0(['gris', 'gris'])), to('light blue', listOf_0(['celeste', 'celeste'])), to('light green', listOf_0(['verde claro', 'verde claro'])), to('dark green', listOf_0(['verde oscuro', 'verde oscuro'])), to('turquoise', listOf_0(['turquesa', 'turquesa'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_IT_getInstance(), mapOf([to('red', listOf_0(['rosso', 'rossa'])), to('blue', listOf_0(['blu', 'blu'])), to('yellow', listOf_0(['giallo', 'gialla'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['arancione', 'arancione'])), to('purple', listOf_0(['viola', 'viola'])), to('brown', listOf_0(['marrone', 'marrone'])), to('pink', listOf_0(['rosa', 'rosa'])), to('white', listOf_0(['bianco', 'bianca'])), to('black', listOf_0(['nero', 'nera'])), to('gray', listOf_0(['grigio', 'grigia'])), to('light blue', listOf_0(['azzurro', 'azzurra'])), to('light green', listOf_0(['verde chiaro', 'verde chiaro'])), to('dark green', listOf_0(['verde scuro', 'verde scuro'])), to('turquoise', listOf_0(['turchese', 'turchese'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_FR_getInstance(), mapOf([to('red', listOf_0(['rouge', 'rouge'])), to('blue', listOf_0(['bleu', 'bleue'])), to('yellow', listOf_0(['jaune', 'jaune'])), to('green', listOf_0(['vert', 'verte'])), to('orange', listOf_0(['orange', 'orange'])), to('purple', listOf_0(['violet', 'violette'])), to('brown', listOf_0(['marron', 'marron'])), to('pink', listOf_0(['rose', 'rose'])), to('white', listOf_0(['blanc', 'blanche'])), to('black', listOf_0(['noir', 'noire'])), to('gray', listOf_0(['gris', 'grise'])), to('light blue', listOf_0(['bleu clair', 'bleu clair'])), to('light green', listOf_0(['vert clair', 'vert clair'])), to('dark green', listOf_0(['vert fonc\xE9', 'vert fonc\xE9'])), to('turquoise', listOf_0(['turquoise', 'turquoise'])), to('beige', listOf_0(['beige', 'beige']))])), to(Lang_RO_getInstance(), mapOf([to('red', listOf_0(['ro\u0219u', 'ro\u0219ie'])), to('blue', listOf_0(['albastru', 'albastr\u0103'])), to('yellow', listOf_0(['galben', 'galben\u0103'])), to('green', listOf_0(['verde', 'verde'])), to('orange', listOf_0(['portocaliu', 'portocalie'])), to('purple', listOf_0(['mov', 'mov'])), to('brown', listOf_0(['maro', 'maro'])), to('pink', listOf_0(['roz', 'roz'])), to('white', listOf_0(['alb', 'alb\u0103'])), to('black', listOf_0(['negru', 'neagr\u0103'])), to('gray', listOf_0(['gri', 'gri'])), to('light blue', listOf_0(['bleu', 'bleu'])), to('light green', listOf_0(['verde deschis', 'verde deschis'])), to('dark green', listOf_0(['verde \xEEnchis', 'verde \xEEnchis'])), to('turquoise', listOf_0(['turcoaz', 'turcoaz'])), to('beige', listOf_0(['bej', 'bej']))]))]);
+      SHAPE_NOUNS = mapOf([to(Lang_PL_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('ko\u0142o', G_N_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('kwadrat', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('tr\xF3jk\u0105t', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('gwiazda', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('serce', G_N_getInstance()))])), to(Lang_ES_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('el c\xEDrculo', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('el cuadrado', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('el tri\xE1ngulo', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('la estrella', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('el coraz\xF3n', G_M_getInstance()))])), to(Lang_IT_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('il cerchio', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('il quadrato', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('il triangolo', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('la stella', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('il cuore', G_M_getInstance()))])), to(Lang_FR_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('le cercle', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('le carr\xE9', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('le triangle', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun("l'\xE9toile", G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('le c\u0153ur', G_M_getInstance()))])), to(Lang_RO_getInstance(), mapOf([to(ShapeKind_CIRCLE_getInstance(), new Noun('cercul', G_M_getInstance())), to(ShapeKind_SQUARE_getInstance(), new Noun('p\u0103tratul', G_M_getInstance())), to(ShapeKind_TRIANGLE_getInstance(), new Noun('triunghiul', G_M_getInstance())), to(ShapeKind_STAR_getInstance(), new Noun('steaua', G_F_getInstance())), to(ShapeKind_HEART_getInstance(), new Noun('inima', G_F_getInstance()))]))]);
       VOCAB = listOf_0([new Vocab('\uD83C\uDF4E', listOf_0(['alma', 'Apfel', 'apple', 'jab\u0142ko', 'manzana', 'mela', 'pomme', 'm\u0103r', 'jablko', '\u044F\u0431\u043B\u0443\u043A\u043E', '\u044F\u0431\u043B\u043E\u043A\u043E'])), new Vocab('\uD83C\uDF4C', listOf_0(['ban\xE1n', 'Banane', 'banana', 'banan', 'pl\xE1tano', 'banana', 'banane', 'banan\u0103', 'ban\xE1n', '\u0431\u0430\u043D\u0430\u043D', '\u0431\u0430\u043D\u0430\u043D'])), new Vocab('\uD83D\uDC36', listOf_0(['kutya', 'Hund', 'dog', 'pies', 'perro', 'cane', 'chien', 'c\xE2ine', 'pes', '\u0441\u043E\u0431\u0430\u043A\u0430', '\u0441\u043E\u0431\u0430\u043A\u0430'])), new Vocab('\uD83D\uDC31', listOf_0(['cica', 'Katze', 'cat', 'kot', 'gato', 'gatto', 'chat', 'pisic\u0103', 'ma\u010Dka', '\u043A\u0456\u0442', '\u043A\u043E\u0448\u043A\u0430'])), new Vocab('\uD83D\uDC1F', listOf_0(['hal', 'Fisch', 'fish', 'ryba', 'pez', 'pesce', 'poisson', 'pe\u0219te', 'ryba', '\u0440\u0438\u0431\u0430', '\u0440\u044B\u0431\u0430'])), new Vocab('\uD83D\uDC26', listOf_0(['mad\xE1r', 'Vogel', 'bird', 'ptak', 'p\xE1jaro', 'uccello', 'oiseau', 'pas\u0103re', 'vt\xE1k', '\u043F\u0442\u0430\u0445', '\u043F\u0442\u0438\u0446\u0430'])), new Vocab('\uD83D\uDC34', listOf_0(['l\xF3', 'Pferd', 'horse', 'ko\u0144', 'caballo', 'cavallo', 'cheval', 'cal', 'k\xF4\u0148', '\u043A\u0456\u043D\u044C', '\u043B\u043E\u0448\u0430\u0434\u044C'])), new Vocab('\uD83D\uDC2E', listOf_0(['teh\xE9n', 'Kuh', 'cow', 'krowa', 'vaca', 'mucca', 'vache', 'vac\u0103', 'krava', '\u043A\u043E\u0440\u043E\u0432\u0430', '\u043A\u043E\u0440\u043E\u0432\u0430'])), new Vocab('\uD83E\uDD81', listOf_0(['oroszl\xE1n', 'L\xF6we', 'lion', 'lew', 'le\xF3n', 'leone', 'lion', 'leu', 'lev', '\u043B\u0435\u0432', '\u043B\u0435\u0432'])), new Vocab('\uD83D\uDC18', listOf_0(['elef\xE1nt', 'Elefant', 'elephant', 's\u0142o\u0144', 'elefante', 'elefante', '\xE9l\xE9phant', 'elefant', 'slon', '\u0441\u043B\u043E\u043D', '\u0441\u043B\u043E\u043D'])), new Vocab('\uD83D\uDE97', listOf_0(['aut\xF3', 'Auto', 'car', 'samoch\xF3d', 'coche', 'macchina', 'voiture', 'ma\u0219in\u0103', 'auto', '\u043C\u0430\u0448\u0438\u043D\u0430', '\u043C\u0430\u0448\u0438\u043D\u0430'])), new Vocab('\uD83C\uDFE0', listOf_0(['h\xE1z', 'Haus', 'house', 'dom', 'casa', 'casa', 'maison', 'cas\u0103', 'dom', '\u0431\u0443\u0434\u0438\u043D\u043E\u043A', '\u0434\u043E\u043C'])), new Vocab('\u2600\uFE0F', listOf_0(['nap', 'Sonne', 'sun', 's\u0142o\u0144ce', 'sol', 'sole', 'soleil', 'soare', 'slnko', '\u0441\u043E\u043D\u0446\u0435', '\u0441\u043E\u043B\u043D\u0446\u0435'])), new Vocab('\uD83C\uDF19', listOf_0(['hold', 'Mond', 'moon', 'ksi\u0119\u017Cyc', 'luna', 'luna', 'lune', 'lun\u0103', 'mesiac', '\u043C\u0456\u0441\u044F\u0446\u044C', '\u043B\u0443\u043D\u0430'])), new Vocab('\u2B50', listOf_0(['csillag', 'Stern', 'star', 'gwiazda', 'estrella', 'stella', '\xE9toile', 'stea', 'hviezda', '\u0437\u0456\u0440\u043A\u0430', '\u0437\u0432\u0435\u0437\u0434\u0430'])), new Vocab('\uD83C\uDF33', listOf_0(['fa', 'Baum', 'tree', 'drzewo', '\xE1rbol', 'albero', 'arbre', 'copac', 'strom', '\u0434\u0435\u0440\u0435\u0432\u043E', '\u0434\u0435\u0440\u0435\u0432\u043E'])), new Vocab('\uD83C\uDF38', listOf_0(['vir\xE1g', 'Blume', 'flower', 'kwiat', 'flor', 'fiore', 'fleur', 'floare', 'kvet', '\u043A\u0432\u0456\u0442\u043A\u0430', '\u0446\u0432\u0435\u0442\u043E\u043A'])), new Vocab('\uD83C\uDF53', listOf_0(['eper', 'Erdbeere', 'strawberry', 'truskawka', 'fresa', 'fragola', 'fraise', 'c\u0103p\u0219un\u0103', 'jahoda', '\u043F\u043E\u043B\u0443\u043D\u0438\u0446\u044F', '\u043A\u043B\u0443\u0431\u043D\u0438\u043A\u0430'])), new Vocab('\uD83D\uDC3B', listOf_0(['medve', 'B\xE4r', 'bear', 'nied\u017Awied\u017A', 'oso', 'orso', 'ours', 'urs', 'medve\u010F', '\u0432\u0435\u0434\u043C\u0456\u0434\u044C', '\u043C\u0435\u0434\u0432\u0435\u0434\u044C'])), new Vocab('\uD83D\uDC2D', listOf_0(['eg\xE9r', 'Maus', 'mouse', 'mysz', 'rat\xF3n', 'topo', 'souris', '\u0219oarece', 'my\u0161', '\u043C\u0438\u0448\u0430', '\u043C\u044B\u0448\u044C'])), new Vocab('\uD83D\uDE82', listOf_0(['vonat', 'Zug', 'train', 'poci\u0105g', 'tren', 'treno', 'train', 'tren', 'vlak', '\u043F\u043E\u0457\u0437\u0434', '\u043F\u043E\u0435\u0437\u0434'])), new Vocab('\u26BD', listOf_0(['labda', 'Ball', 'ball', 'pi\u0142ka', 'pelota', 'palla', 'ballon', 'minge', 'lopta', "\u043C'\u044F\u0447", '\u043C\u044F\u0447'])), new Vocab('\uD83D\uDC38', listOf_0(['b\xE9ka', 'Frosch', 'frog', '\u017Caba', 'rana', 'rana', 'grenouille', 'broasc\u0103', '\u017Eaba', '\u0436\u0430\u0431\u0430', '\u043B\u044F\u0433\u0443\u0448\u043A\u0430'])), new Vocab('\uD83E\uDD86', listOf_0(['kacsa', 'Ente', 'duck', 'kaczka', 'pato', 'anatra', 'canard', 'ra\u021B\u0103', 'ka\u010Dka', '\u043A\u0430\u0447\u043A\u0430', '\u0443\u0442\u043A\u0430']))]);
-      ANIMAL_SOUNDS_X = mapOf([to('\uD83D\uDC36', mapOf([to(Lang_PL_getInstance(), 'hau hau'), to(Lang_ES_getInstance(), 'guau guau'), to(Lang_IT_getInstance(), 'bau bau'), to(Lang_FR_getInstance(), 'ouaf ouaf'), to(Lang_RO_getInstance(), 'ham ham'), to(Lang_SK_getInstance(), 'hav hav'), to(Lang_UK_getInstance(), '\u0433\u0430\u0432-\u0433\u0430\u0432'), to(Lang_RU_getInstance(), '\u0433\u0430\u0432-\u0433\u0430\u0432')])), to('\uD83D\uDC31', mapOf([to(Lang_PL_getInstance(), 'miau'), to(Lang_ES_getInstance(), 'miau'), to(Lang_IT_getInstance(), 'miao'), to(Lang_FR_getInstance(), 'miaou'), to(Lang_RO_getInstance(), 'miau'), to(Lang_SK_getInstance(), 'm\u0148au'), to(Lang_UK_getInstance(), '\u043D\u044F\u0432'), to(Lang_RU_getInstance(), '\u043C\u044F\u0443')])), to('\uD83D\uDC2E', mapOf([to(Lang_PL_getInstance(), 'muu'), to(Lang_ES_getInstance(), 'muu'), to(Lang_IT_getInstance(), 'muu'), to(Lang_FR_getInstance(), 'meuh'), to(Lang_RO_getInstance(), 'muu'), to(Lang_SK_getInstance(), 'b\xFA\xFA'), to(Lang_UK_getInstance(), '\u043C\u0443-\u0443'), to(Lang_RU_getInstance(), '\u043C\u0443-\u0443')])), to('\uD83D\uDC13', mapOf([to(Lang_PL_getInstance(), 'kukuryku'), to(Lang_ES_getInstance(), 'quiquiriqu\xED'), to(Lang_IT_getInstance(), 'chicchirich\xEC'), to(Lang_FR_getInstance(), 'cocorico'), to(Lang_RO_getInstance(), 'cucurigu'), to(Lang_SK_getInstance(), 'kikirik\xED'), to(Lang_UK_getInstance(), '\u043A\u0443\u043A\u0443\u0440\u0456\u043A\u0443'), to(Lang_RU_getInstance(), '\u043A\u0443\u043A\u0430\u0440\u0435\u043A\u0443')])), to('\uD83E\uDD86', mapOf([to(Lang_PL_getInstance(), 'kwa kwa'), to(Lang_ES_getInstance(), 'cuac cuac'), to(Lang_IT_getInstance(), 'qua qua'), to(Lang_FR_getInstance(), 'coin-coin'), to(Lang_RO_getInstance(), 'mac mac'), to(Lang_SK_getInstance(), 'ka\u010D ka\u010D'), to(Lang_UK_getInstance(), '\u043A\u0440\u044F-\u043A\u0440\u044F'), to(Lang_RU_getInstance(), '\u043A\u0440\u044F-\u043A\u0440\u044F')])), to('\uD83D\uDC37', mapOf([to(Lang_PL_getInstance(), 'chrum chrum'), to(Lang_ES_getInstance(), 'oink oink'), to(Lang_IT_getInstance(), 'oink oink'), to(Lang_FR_getInstance(), 'groin groin'), to(Lang_RO_getInstance(), 'gui\u021B gui\u021B'), to(Lang_SK_getInstance(), 'kroch kroch'), to(Lang_UK_getInstance(), '\u0445\u0440\u044E-\u0445\u0440\u044E'), to(Lang_RU_getInstance(), '\u0445\u0440\u044E-\u0445\u0440\u044E')])), to('\uD83D\uDC11', mapOf([to(Lang_PL_getInstance(), 'bee'), to(Lang_ES_getInstance(), 'bee'), to(Lang_IT_getInstance(), 'bee'), to(Lang_FR_getInstance(), 'b\xEA\xEA'), to(Lang_RO_getInstance(), 'bee'), to(Lang_SK_getInstance(), 'b\xE9 b\xE9'), to(Lang_UK_getInstance(), '\u0431\u0435-\u0435'), to(Lang_RU_getInstance(), '\u0431\u0435-\u0435')])), to('\uD83D\uDC38', mapOf([to(Lang_PL_getInstance(), 'kum kum'), to(Lang_ES_getInstance(), 'croac croac'), to(Lang_IT_getInstance(), 'cra cra'), to(Lang_FR_getInstance(), 'cro\xE2 cro\xE2'), to(Lang_RO_getInstance(), 'oac oac'), to(Lang_SK_getInstance(), 'kvak kvak'), to(Lang_UK_getInstance(), '\u043A\u0432\u0430-\u043A\u0432\u0430'), to(Lang_RU_getInstance(), '\u043A\u0432\u0430-\u043A\u0432\u0430')]))]);
-      WORDS_X = mapOf([to(Lang_PL_getInstance(), listOf_0([new Word('\uD83C\uDF49', 'arbuz'), new Word('\uD83D\uDE97', 'auto'), new Word('\uD83C\uDF4C', 'banan'), new Word('\uD83C\uDF88', 'balon'), new Word('\uD83C\uDF4B', 'cytryna'), new Word('\uD83C\uDFE0', 'dom'), new Word('\uD83D\uDC2C', 'delfin'), new Word('\uD83C\uDFB8', 'gitara'), new Word('\uD83C\uDF50', 'gruszka'), new Word('\uD83E\uDD9B', 'hipopotam'), new Word('\uD83C\uDF4E', 'jab\u0142ko'), new Word('\uD83E\uDD5A', 'jajko'), new Word('\uD83D\uDC31', 'kot'), new Word('\uD83D\uDC34', 'ko\u0144'), new Word('\uD83E\uDD86', 'kaczka'), new Word('\uD83E\uDD81', 'lew'), new Word('\uD83E\uDD8A', 'lis'), new Word('\uD83C\uDF66', 'lody'), new Word('\uD83D\uDC2D', 'mysz'), new Word('\uD83D\uDC12', 'ma\u0142pa'), new Word('\uD83E\uDDF8', 'mi\u015B'), new Word('\uD83D\uDC43', 'nos'), new Word('\uD83D\uDC36', 'pies'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC27', 'pingwin'), new Word('\uD83D\uDE80', 'rakieta'), new Word('\uD83D\uDC1F', 'ryba'), new Word('\uD83D\uDC18', 's\u0142o\u0144'), new Word('\u2600\uFE0F', 's\u0142o\u0144ce'), new Word('\uD83E\uDDC0', 'ser'), new Word('\uD83D\uDC2F', 'tygrys'), new Word('\uD83C\uDF82', 'tort'), new Word('\uD83D\uDC0D', 'w\u0105\u017C'), new Word('\uD83D\uDC33', 'wieloryb'), new Word('\uD83E\uDD93', 'zebra'), new Word('\uD83C\uDFF0', 'zamek')])), to(Lang_SK_getInstance(), listOf_0([new Word('\uD83D\uDE97', 'auto'), new Word('\uD83C\uDF4D', 'anan\xE1s'), new Word('\uD83C\uDF4C', 'ban\xE1n'), new Word('\uD83C\uDF88', 'bal\xF3n'), new Word('\uD83C\uDF4B', 'citr\xF3n'), new Word('\uD83C\uDFE0', 'dom'), new Word('\uD83D\uDC2C', 'delf\xEDn'), new Word('\uD83C\uDFB8', 'gitara'), new Word('\uD83C\uDFF0', 'hrad'), new Word('\uD83C\uDF4E', 'jablko'), new Word('\uD83C\uDF53', 'jahoda'), new Word('\uD83E\uDD86', 'ka\u010Dka'), new Word('\uD83D\uDC34', 'k\xF4\u0148'), new Word('\uD83E\uDD81', 'lev'), new Word('\uD83E\uDD8A', 'l\xED\u0161ka'), new Word('\uD83D\uDC31', 'ma\u010Dka'), new Word('\uD83D\uDC2D', 'my\u0161'), new Word('\uD83C\uDF6F', 'med'), new Word('\uD83D\uDC43', 'nos'), new Word('\uD83D\uDC12', 'opica'), new Word('\uD83D\uDC36', 'pes'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC1F', 'ryba'), new Word('\uD83D\uDE80', 'raketa'), new Word('\uD83D\uDC18', 'slon'), new Word('\u2600\uFE0F', 'slnko'), new Word('\uD83E\uDDC0', 'syr'), new Word('\uD83D\uDC2F', 'tiger'), new Word('\uD83C\uDF82', 'torta'), new Word('\uD83D\uDE82', 'vlak'), new Word('\uD83E\uDD93', 'zebra'), new Word('\uD83C\uDF66', 'zmrzlina')])), to(Lang_UK_getInstance(), listOf_0([new Word('\uD83D\uDE8C', '\u0430\u0432\u0442\u043E\u0431\u0443\u0441'), new Word('\uD83C\uDF4D', '\u0430\u043D\u0430\u043D\u0430\u0441'), new Word('\uD83C\uDF4C', '\u0431\u0430\u043D\u0430\u043D'), new Word('\uD83D\uDC3A', '\u0432\u043E\u0432\u043A'), new Word('\uD83D\uDC3B', '\u0432\u0435\u0434\u043C\u0456\u0434\u044C'), new Word('\uD83C\uDF44', '\u0433\u0440\u0438\u0431'), new Word('\uD83C\uDFE0', '\u0434\u0456\u043C'), new Word('\uD83D\uDC2C', '\u0434\u0435\u043B\u044C\u0444\u0456\u043D'), new Word('\uD83D\uDC38', '\u0436\u0430\u0431\u0430'), new Word('\uD83E\uDD93', '\u0437\u0435\u0431\u0440\u0430'), new Word('\uD83D\uDC30', '\u0437\u0430\u0454\u0446\u044C'), new Word('\uD83D\uDC31', '\u043A\u0456\u0442'), new Word('\uD83D\uDC34', '\u043A\u0456\u043D\u044C'), new Word('\uD83E\uDD86', '\u043A\u0430\u0447\u043A\u0430'), new Word('\uD83E\uDD81', '\u043B\u0435\u0432'), new Word('\uD83E\uDD8A', '\u043B\u0438\u0441\u0438\u0446\u044F'), new Word('\uD83D\uDC12', '\u043C\u0430\u0432\u043F\u0430'), new Word('\uD83D\uDC2D', '\u043C\u0438\u0448\u0430'), new Word('\uD83D\uDC43', '\u043D\u0456\u0441'), new Word('\uD83C\uDF55', '\u043F\u0456\u0446\u0430'), new Word('\uD83D\uDC27', '\u043F\u0456\u043D\u0433\u0432\u0456\u043D'), new Word('\uD83D\uDC1F', '\u0440\u0438\u0431\u0430'), new Word('\uD83D\uDE80', '\u0440\u0430\u043A\u0435\u0442\u0430'), new Word('\uD83D\uDC18', '\u0441\u043B\u043E\u043D'), new Word('\u2600\uFE0F', '\u0441\u043E\u043D\u0446\u0435'), new Word('\uD83E\uDDC0', '\u0441\u0438\u0440'), new Word('\uD83D\uDC2F', '\u0442\u0438\u0433\u0440'), new Word('\uD83C\uDF82', '\u0442\u043E\u0440\u0442'), new Word('\uD83D\uDC22', '\u0447\u0435\u0440\u0435\u043F\u0430\u0445\u0430'), new Word('\uD83C\uDF4E', '\u044F\u0431\u043B\u0443\u043A\u043E')])), to(Lang_RU_getInstance(), listOf_0([new Word('\uD83C\uDF4A', '\u0430\u043F\u0435\u043B\u044C\u0441\u0438\u043D'), new Word('\uD83C\uDF49', '\u0430\u0440\u0431\u0443\u0437'), new Word('\uD83C\uDF4C', '\u0431\u0430\u043D\u0430\u043D'), new Word('\uD83E\uDD8B', '\u0431\u0430\u0431\u043E\u0447\u043A\u0430'), new Word('\uD83D\uDC3A', '\u0432\u043E\u043B\u043A'), new Word('\uD83C\uDF44', '\u0433\u0440\u0438\u0431'), new Word('\uD83C\uDFB8', '\u0433\u0438\u0442\u0430\u0440\u0430'), new Word('\uD83C\uDFE0', '\u0434\u043E\u043C'), new Word('\uD83D\uDC2C', '\u0434\u0435\u043B\u044C\u0444\u0438\u043D'), new Word('\uD83E\uDD92', '\u0436\u0438\u0440\u0430\u0444'), new Word('\uD83E\uDD93', '\u0437\u0435\u0431\u0440\u0430'), new Word('\uD83D\uDC30', '\u0437\u0430\u044F\u0446'), new Word('\uD83D\uDC31', '\u043A\u043E\u0442'), new Word('\uD83D\uDC2E', '\u043A\u043E\u0440\u043E\u0432\u0430'), new Word('\uD83E\uDD81', '\u043B\u0435\u0432'), new Word('\uD83E\uDD8A', '\u043B\u0438\u0441\u0430'), new Word('\uD83D\uDC2D', '\u043C\u044B\u0448\u044C'), new Word('\uD83D\uDE97', '\u043C\u0430\u0448\u0438\u043D\u0430'), new Word('\uD83D\uDC43', '\u043D\u043E\u0441'), new Word('\uD83D\uDC12', '\u043E\u0431\u0435\u0437\u044C\u044F\u043D\u0430'), new Word('\uD83D\uDC27', '\u043F\u0438\u043D\u0433\u0432\u0438\u043D'), new Word('\uD83C\uDF55', '\u043F\u0438\u0446\u0446\u0430'), new Word('\uD83D\uDC1F', '\u0440\u044B\u0431\u0430'), new Word('\uD83D\uDE80', '\u0440\u0430\u043A\u0435\u0442\u0430'), new Word('\uD83D\uDC18', '\u0441\u043B\u043E\u043D'), new Word('\u2600\uFE0F', '\u0441\u043E\u043B\u043D\u0446\u0435'), new Word('\uD83E\uDDC0', '\u0441\u044B\u0440'), new Word('\uD83D\uDC2F', '\u0442\u0438\u0433\u0440'), new Word('\uD83C\uDF82', '\u0442\u043E\u0440\u0442'), new Word('\uD83D\uDC22', '\u0447\u0435\u0440\u0435\u043F\u0430\u0445\u0430'), new Word('\uD83C\uDF4E', '\u044F\u0431\u043B\u043E\u043A\u043E')])), to(Lang_ES_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avi\xF3n'), new Word('\uD83D\uDC1D', 'abeja'), new Word('\u26F5', 'barco'), new Word('\uD83D\uDC33', 'ballena'), new Word('\u26BD', 'bal\xF3n'), new Word('\uD83C\uDFE0', 'casa'), new Word('\uD83D\uDC2C', 'delf\xEDn'), new Word('\uD83C\uDFB2', 'dado'), new Word('\uD83D\uDC18', 'elefante'), new Word('\u2B50', 'estrella'), new Word('\uD83C\uDF53', 'fresa'), new Word('\uD83C\uDF38', 'flor'), new Word('\uD83D\uDC31', 'gato'), new Word('\uD83E\uDD81', 'le\xF3n'), new Word('\uD83C\uDF19', 'luna'), new Word('\uD83D\uDC12', 'mono'), new Word('\uD83C\uDF4E', 'manzana'), new Word('\uD83D\uDC43', 'nariz'), new Word('\uD83D\uDC3B', 'oso'), new Word('\uD83D\uDC11', 'oveja'), new Word('\uD83D\uDC36', 'perro'), new Word('\uD83D\uDC1F', 'pez'), new Word('\uD83E\uDD86', 'pato'), new Word('\uD83D\uDC2D', 'rat\xF3n'), new Word('\uD83D\uDC38', 'rana'), new Word('\u2600\uFE0F', 'sol'), new Word('\uD83D\uDC0D', 'serpiente'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'tren'), new Word('\uD83C\uDF45', 'tomate'), new Word('\uD83C\uDF47', 'uvas'), new Word('\uD83D\uDC2E', 'vaca'), new Word('\uD83E\uDD55', 'zanahoria')])), to(Lang_IT_getInstance(), listOf_0([new Word('\uD83D\uDC1D', 'ape'), new Word('\uD83E\uDD86', 'anatra'), new Word('\uD83C\uDF33', 'albero'), new Word('\uD83C\uDF4C', 'banana'), new Word('\u26F5', 'barca'), new Word('\uD83D\uDC36', 'cane'), new Word('\uD83C\uDFE0', 'casa'), new Word('\uD83D\uDC2C', 'delfino'), new Word('\uD83D\uDC18', 'elefante'), new Word('\uD83C\uDF53', 'fragola'), new Word('\uD83C\uDF38', 'fiore'), new Word('\uD83D\uDC31', 'gatto'), new Word('\uD83E\uDD81', 'leone'), new Word('\uD83C\uDF19', 'luna'), new Word('\uD83C\uDF4E', 'mela'), new Word('\uD83D\uDC2E', 'mucca'), new Word('\uD83D\uDC43', 'naso'), new Word('\uD83D\uDC3B', 'orso'), new Word('\uD83D\uDC1F', 'pesce'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC38', 'rana'), new Word('\uD83D\uDE80', 'razzo'), new Word('\u2600\uFE0F', 'sole'), new Word('\uD83D\uDC0D', 'serpente'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'treno'), new Word('\uD83C\uDF82', 'torta'), new Word('\uD83C\uDF47', 'uva'), new Word('\uD83E\uDD5A', 'uovo'), new Word('\uD83E\uDD8A', 'volpe'), new Word('\uD83E\uDD93', 'zebra')])), to(Lang_FR_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avion'), new Word('\uD83D\uDC1D', 'abeille'), new Word('\uD83C\uDF33', 'arbre'), new Word('\uD83C\uDF4C', 'banane'), new Word('\u26BD', 'ballon'), new Word('\u26F5', 'bateau'), new Word('\uD83E\uDD86', 'canard'), new Word('\uD83E\uDD55', 'carotte'), new Word('\uD83D\uDC2C', 'dauphin'), new Word('\uD83C\uDF53', 'fraise'), new Word('\uD83C\uDF38', 'fleur'), new Word('\uD83C\uDF82', 'g\xE2teau'), new Word('\uD83E\uDD81', 'lion'), new Word('\uD83C\uDF19', 'lune'), new Word('\uD83D\uDC30', 'lapin'), new Word('\uD83C\uDFE0', 'maison'), new Word('\uD83D\uDC11', 'mouton'), new Word('\uD83D\uDC43', 'nez'), new Word('\uD83C\uDF4A', 'orange'), new Word('\uD83C\uDF4E', 'pomme'), new Word('\uD83D\uDC1F', 'poisson'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83E\uDD8A', 'renard'), new Word('\u2600\uFE0F', 'soleil'), new Word('\uD83D\uDC0D', 'serpent'), new Word('\uD83D\uDC12', 'singe'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'train'), new Word('\uD83C\uDF45', 'tomate'), new Word('\uD83D\uDC2E', 'vache'), new Word('\uD83D\uDE97', 'voiture'), new Word('\uD83E\uDD93', 'z\xE8bre')])), to(Lang_RO_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avion'), new Word('\uD83D\uDC1D', 'albin\u0103'), new Word('\uD83C\uDF4C', 'banan\u0103'), new Word('\uD83C\uDF88', 'balon'), new Word('\uD83C\uDFE0', 'cas\u0103'), new Word('\uD83D\uDC34', 'cal'), new Word('\uD83D\uDC2C', 'delfin'), new Word('\uD83D\uDC18', 'elefant'), new Word('\uD83C\uDF38', 'floare'), new Word('\uD83E\uDD8B', 'fluture'), new Word('\uD83E\uDD81', 'leu'), new Word('\uD83C\uDF19', 'lun\u0103'), new Word('\uD83E\uDD5B', 'lapte'), new Word('\uD83C\uDF4E', 'm\u0103r'), new Word('\uD83D\uDC12', 'maimu\u021B\u0103'), new Word('\uD83D\uDC43', 'nas'), new Word('\uD83D\uDC11', 'oaie'), new Word('\uD83E\uDD5A', 'ou'), new Word('\uD83D\uDC1F', 'pe\u0219te'), new Word('\uD83D\uDC31', 'pisic\u0103'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83E\uDD86', 'ra\u021B\u0103'), new Word('\uD83D\uDE80', 'rachet\u0103'), new Word('\u2600\uFE0F', 'soare'), new Word('\uD83C\uDF47', 'struguri'), new Word('\uD83D\uDC2F', 'tigru'), new Word('\uD83D\uDE82', 'tren'), new Word('\uD83C\uDF82', 'tort'), new Word('\uD83D\uDC3B', 'urs'), new Word('\uD83D\uDC2E', 'vac\u0103'), new Word('\uD83E\uDD8A', 'vulpe'), new Word('\uD83E\uDD93', 'zebr\u0103')]))]);
-      TABLE = mapOf([tr('Hi! What shall we play?', 'Cze\u015B\u0107! W co si\u0119 pobawimy?', '\xA1Hola! \xBFA qu\xE9 jugamos?', 'Ciao! A cosa giochiamo?', 'Salut ! \xC0 quoi on joue ?', 'Bun\u0103! Ce ne juc\u0103m?', 'Ahoj! \u010Co sa budeme hra\u0165?', '\u041F\u0440\u0438\u0432\u0456\u0442! \u0423 \u0449\u043E \u043F\u043E\u0433\u0440\u0430\u0454\u043C\u043E?', '\u041F\u0440\u0438\u0432\u0435\u0442! \u0412\u043E \u0447\u0442\u043E \u043F\u043E\u0438\u0433\u0440\u0430\u0435\u043C?'), tr('Hi {0}! What shall we play?', 'Cze\u015B\u0107, {0}! W co si\u0119 pobawimy?', '\xA1Hola, {0}! \xBFA qu\xE9 jugamos?', 'Ciao {0}! A cosa giochiamo?', 'Salut {0} ! \xC0 quoi on joue ?', 'Bun\u0103, {0}! Ce ne juc\u0103m?', 'Ahoj, {0}! \u010Co sa budeme hra\u0165?', '\u041F\u0440\u0438\u0432\u0456\u0442, {0}! \u0423 \u0449\u043E \u043F\u043E\u0433\u0440\u0430\u0454\u043C\u043E?', '\u041F\u0440\u0438\u0432\u0435\u0442, {0}! \u0412\u043E \u0447\u0442\u043E \u043F\u043E\u0438\u0433\u0440\u0430\u0435\u043C?'), tr('Well done!', 'Dobra robota!', '\xA1Muy bien!', 'Bravissimo!', 'Bien jou\xE9 !', 'Foarte bine!', 'V\xFDborne!', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C!', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446!'), tr('Super!', 'Super!', '\xA1S\xFAper!', 'Super!', 'Super !', 'Super!', 'Super!', '\u0421\u0443\u043F\u0435\u0440!', '\u0421\u0443\u043F\u0435\u0440!'), tr('Great job!', '\u015Awietnie!', '\xA1Genial!', 'Ottimo lavoro!', 'G\xE9nial !', 'Grozav!', 'Skvel\xE9!', '\u0427\u0443\u0434\u043E\u0432\u043E!', '\u041E\u0442\u043B\u0438\u0447\u043D\u043E!'), tr('Hooray!', 'Hurra!', '\xA1Hurra!', 'Evviva!', 'Hourra !', 'Ura!', 'Hur\xE1!', '\u0423\u0440\u0430!', '\u0423\u0440\u0430!'), tr("That's it!", 'W\u0142a\u015Bnie tak!', '\xA1Eso es!', 'Esatto!', "C'est \xE7a !", 'Exact!', 'Presne tak!', '\u0421\u0430\u043C\u0435 \u0442\u0430\u043A!', '\u0418\u043C\u0435\u043D\u043D\u043E \u0442\u0430\u043A!'), tr('Bravo!', 'Brawo!', '\xA1Bravo!', 'Bravo!', 'Bravo !', 'Bravo!', 'Bravo!', '\u0411\u0440\u0430\u0432\u043E!', '\u0411\u0440\u0430\u0432\u043E!'), tr('Try again!', 'Spr\xF3buj jeszcze raz!', '\xA1Int\xE9ntalo otra vez!', 'Riprova!', 'Essaie encore !', 'Mai \xEEncearc\u0103!', 'Sk\xFAs to znova!', '\u0421\u043F\u0440\u043E\u0431\u0443\u0439 \u0449\u0435 \u0440\u0430\u0437!', '\u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439 \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Almost! One more time!', 'Prawie! Jeszcze raz!', '\xA1Casi! \xA1Otra vez!', 'Quasi! Ancora una volta!', 'Presque ! Encore une fois !', 'Aproape! \xCEnc\u0103 o dat\u0103!', 'Skoro! E\u0161te raz!', '\u041C\u0430\u0439\u0436\u0435! \u0429\u0435 \u0440\u0430\u0437!', '\u041F\u043E\u0447\u0442\u0438! \u0415\u0449\u0451 \u0440\u0430\u0437!'), tr('You have five stars! Well done!', 'Masz pi\u0119\u0107 gwiazdek! Dobra robota!', '\xA1Tienes cinco estrellas! \xA1Muy bien!', 'Hai cinque stelle! Bravissimo!', 'Tu as cinq \xE9toiles ! Bien jou\xE9 !', 'Ai cinci stele! Foarte bine!', 'M\xE1\u0161 p\xE4\u0165 hviezd! V\xFDborne!', "\u0423 \u0442\u0435\u0431\u0435 \u043F'\u044F\u0442\u044C \u0437\u0456\u0440\u043E\u043A! \u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C!", '\u0423 \u0442\u0435\u0431\u044F \u043F\u044F\u0442\u044C \u0437\u0432\u0451\u0437\u0434! \u041C\u043E\u043B\u043E\u0434\u0435\u0446!'), tr('You got a new sticker!', 'Masz now\u0105 naklejk\u0119!', '\xA1Tienes una pegatina nueva!', 'Hai un nuovo adesivo!', 'Tu as un nouvel autocollant !', 'Ai un ab\u021Bibild nou!', 'M\xE1\u0161 nov\xFA n\xE1lepku!', '\u0423 \u0442\u0435\u0431\u0435 \u043D\u043E\u0432\u0430 \u043D\u0430\u043B\u0456\u043F\u043A\u0430!', '\u0423 \u0442\u0435\u0431\u044F \u043D\u043E\u0432\u0430\u044F \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0430!'), tr('My stickers', 'Moje naklejki', 'Mis pegatinas', 'I miei adesivi', 'Mes autocollants', 'Ab\u021Bibildurile mele', 'Moje n\xE1lepky', '\u041C\u043E\u0457 \u043D\u0430\u043B\u0456\u043F\u043A\u0438', '\u041C\u043E\u0438 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438'), tr('Harder level', 'Trudniejszy poziom', 'Nivel m\xE1s dif\xEDcil', 'Livello pi\xF9 difficile', 'Niveau plus difficile', 'Nivel mai greu', '\u0164a\u017E\u0161ia \xFArove\u0148', '\u0421\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C', '\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043B\u043E\u0436\u043D\u0435\u0435'), tr('This is the hardest level! \uD83C\uDFC6', 'To najtrudniejszy poziom! \uD83C\uDFC6', '\xA1Es el nivel m\xE1s dif\xEDcil! \uD83C\uDFC6', '\xC8 il livello pi\xF9 difficile! \uD83C\uDFC6', "C'est le niveau le plus difficile ! \uD83C\uDFC6", 'Este cel mai greu nivel! \uD83C\uDFC6', 'Toto je naj\u0165a\u017E\u0161ia \xFArove\u0148! \uD83C\uDFC6', '\u0426\u0435 \u043D\u0430\u0439\u0441\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C! \uD83C\uDFC6', '\u042D\u0442\u043E \u0441\u0430\u043C\u044B\u0439 \u0441\u043B\u043E\u0436\u043D\u044B\u0439 \u0443\u0440\u043E\u0432\u0435\u043D\u044C! \uD83C\uDFC6'), tr('Which language shall we practise?', 'Jaki j\u0119zyk \u0107wiczymy?', '\xBFQu\xE9 idioma practicamos?', 'Quale lingua esercitiamo?', 'Quelle langue on pratique ?', 'Ce limb\u0103 exers\u0103m?', 'Ktor\xFD jazyk budeme cvi\u010Di\u0165?', '\u042F\u043A\u0443 \u043C\u043E\u0432\u0443 \u0431\u0443\u0434\u0435\u043C\u043E \u0432\u0447\u0438\u0442\u0438?', '\u041A\u0430\u043A\u043E\u0439 \u044F\u0437\u044B\u043A \u0431\u0443\u0434\u0435\u043C \u0443\u0447\u0438\u0442\u044C?'), tr('One more round!', 'Jeszcze raz!', '\xA1Otra ronda!', 'Un altro giro!', 'Encore une partie !', '\xCEnc\u0103 o rund\u0103!', 'E\u0161te jedno kolo!', '\u0429\u0435 \u0440\u0430\u0437!', '\u0415\u0449\u0451 \u0440\u0430\u0443\u043D\u0434!'), tr('One more minute!', 'Jeszcze jedna minuta!', '\xA1Queda un minuto!', 'Ancora un minuto!', 'Encore une minute !', '\xCEnc\u0103 un minut!', 'E\u0161te jedna min\xFAta!', '\u0429\u0435 \u043E\u0434\u043D\u0430 \u0445\u0432\u0438\u043B\u0438\u043D\u0430!', '\u0415\u0449\u0451 \u043E\u0434\u043D\u0430 \u043C\u0438\u043D\u0443\u0442\u0430!'), tr("That's all for this morning! We'll play again in the afternoon.", 'Na dzi\u015B rano to wszystko! Pobawimy si\u0119 znowu po po\u0142udniu.', '\xA1Esto es todo por esta ma\xF1ana! Jugaremos otra vez por la tarde.', 'Per stamattina basta cos\xEC! Giocheremo di nuovo nel pomeriggio.', "C'est fini pour ce matin ! On rejouera cet apr\xE8s-midi.", 'Gata pentru diminea\u021Ba asta! Ne juc\u0103m din nou dup\u0103-amiaz\u0103.', 'Na dne\u0161n\xE9 r\xE1no je to v\u0161etko! Popoludn\xED sa budeme hra\u0165 znova.', '\u041D\u0430 \u0440\u0430\u043D\u043E\u043A \u0434\u043E\u0441\u0438\u0442\u044C! \u041F\u043E\u0433\u0440\u0430\u0454\u043C\u043E \u0449\u0435 \u043F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443.', '\u041D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F\u0448\u043D\u0435\u0435 \u0443\u0442\u0440\u043E \u0432\u0441\u0451! \u041F\u043E\u0438\u0433\u0440\u0430\u0435\u043C \u0441\u043D\u043E\u0432\u0430 \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430.'), tr("That's all for today! See you tomorrow morning.", 'Na dzi\u015B to wszystko! Do jutra rana.', '\xA1Esto es todo por hoy! Hasta ma\xF1ana por la ma\xF1ana.', 'Per oggi basta cos\xEC! A domani mattina.', "C'est fini pour aujourd'hui ! \xC0 demain matin.", 'Gata pentru azi! Ne vedem m\xE2ine diminea\u021B\u0103.', 'Na dnes je to v\u0161etko! Uvid\xEDme sa zajtra r\xE1no.', '\u041D\u0430 \u0441\u044C\u043E\u0433\u043E\u0434\u043D\u0456 \u0432\u0441\u0435! \u0414\u043E \u0437\u0430\u0432\u0442\u0440\u0430 \u0432\u0440\u0430\u043D\u0446\u0456.', '\u041D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F \u0432\u0441\u0451! \u0414\u043E \u0437\u0430\u0432\u0442\u0440\u0430 \u0443\u0442\u0440\u043E\u043C.'), tr('Counting', 'Liczenie', 'Contar', 'Contare', 'Compter', 'Num\u0103rat', 'Po\u010D\xEDtanie', '\u041B\u0456\u0447\u0431\u0430', '\u0421\u0447\u0451\u0442'), tr('Letters', 'Litery', 'Letras', 'Lettere', 'Lettres', 'Litere', 'P\xEDsmen\xE1', '\u041B\u0456\u0442\u0435\u0440\u0438', '\u0411\u0443\u043A\u0432\u044B'), tr('Colors, shapes', 'Kolory, kszta\u0142ty', 'Colores, formas', 'Colori, forme', 'Couleurs, formes', 'Culori, forme', 'Farby, tvary', '\u041A\u043E\u043B\u044C\u043E\u0440\u0438, \u0444\u0456\u0433\u0443\u0440\u0438', '\u0426\u0432\u0435\u0442\u0430, \u0444\u0438\u0433\u0443\u0440\u044B'), tr('Thinking', 'My\u015Blenie', 'Pensar', 'Pensare', 'R\xE9fl\xE9chir', 'G\xE2ndire', 'Prem\xFD\u0161\u013Eanie', '\u041C\u0438\u0441\u043B\u0435\u043D\u043D\u044F', '\u041B\u043E\u0433\u0438\u043A\u0430'), tr('Other languages', 'Inne j\u0119zyki', 'Otros idiomas', 'Altre lingue', 'Autres langues', 'Alte limbi', 'In\xE9 jazyky', '\u0406\u043D\u0448\u0456 \u043C\u043E\u0432\u0438', '\u0414\u0440\u0443\u0433\u0438\u0435 \u044F\u0437\u044B\u043A\u0438'), tr('Our world', 'Nasz \u015Bwiat', 'Nuestro mundo', 'Il nostro mondo', 'Notre monde', 'Lumea noastr\u0103', 'N\xE1\u0161 svet', '\u041D\u0430\u0448 \u0441\u0432\u0456\u0442', '\u041D\u0430\u0448 \u043C\u0438\u0440'), tr('Feelings', 'Uczucia', 'Emociones', 'Emozioni', '\xC9motions', 'Emo\u021Bii', 'Pocity', '\u041F\u043E\u0447\u0443\u0442\u0442\u044F', '\u0427\u0443\u0432\u0441\u0442\u0432\u0430'), tr('Memory', 'Memory', 'Memoria', 'Memory', 'M\xE9moire', 'Memorie', 'Pexeso', "\u041F\u0430\u043C'\u044F\u0442\u044C", '\u041F\u0430\u043C\u044F\u0442\u044C'), tr("What's missing?", 'Czego brakuje?', '\xBFQu\xE9 falta?', 'Cosa manca?', "Qu'est-ce qui manque ?", 'Ce lipse\u0219te?', '\u010Co ch\xFDba?', '\u0427\u043E\u0433\u043E \u0431\u0440\u0430\u043A\u0443\u0454?', '\u0427\u0435\u0433\u043E \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442?'), tr('Spot it', 'Znajd\u017A r\xF3\u017Cnic\u0119', 'Busca la diferencia', 'Trova la differenza', 'Trouve la diff\xE9rence', 'G\u0103se\u0219te diferen\u021Ba', 'N\xE1jdi rozdiel', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0440\u0456\u0437\u043D\u0438\u0446\u044E', '\u041D\u0430\u0439\u0434\u0438 \u043E\u0442\u043B\u0438\u0447\u0438\u0435'), tr('Small \u2013 big', 'Ma\u0142y \u2013 du\u017Cy', 'Peque\xF1o \u2013 grande', 'Piccolo \u2013 grande', 'Petit \u2013 grand', 'Mic \u2013 mare', 'Mal\xFD \u2013 ve\u013Ek\xFD', '\u041C\u0430\u043B\u0438\u0439 \u2013 \u0432\u0435\u043B\u0438\u043A\u0438\u0439', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u2013 \u0431\u043E\u043B\u044C\u0448\u043E\u0439'), tr('Puzzle', 'Puzzle', 'Puzle', 'Puzzle', 'Puzzle', 'Puzzle', 'Puzzle', '\u041F\u0430\u0437\u043B', '\u041F\u0430\u0437\u043B'), tr('Coloring', 'Kolorowanie', 'Colorear', 'Colorare', 'Coloriage', 'Colorat', 'Vyfarbovanie', '\u0420\u043E\u0437\u043C\u0430\u043B\u044C\u043E\u0432\u043A\u0430', '\u0420\u0430\u0441\u043A\u0440\u0430\u0441\u043A\u0430'), tr('Which one starts with the letter {0}?', 'Co zaczyna si\u0119 na liter\u0119 {0}?', '\xBFQu\xE9 empieza por la letra {0}?', 'Cosa comincia con la lettera {0}?', "Qu'est-ce qui commence par la lettre {0} ?", 'Ce \xEEncepe cu litera {0}?', '\u010Co sa za\u010D\xEDna na p\xEDsmeno {0}?', '\u0429\u043E \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F \u043D\u0430 \u043B\u0456\u0442\u0435\u0440\u0443 {0}?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u043D\u0430 \u0431\u0443\u043A\u0432\u0443 {0}?'), tr('Which letter does {0} start with?', 'Na jak\u0105 liter\u0119 zaczyna si\u0119 {0}?', '\xBFPor qu\xE9 letra empieza {0}?', 'Con quale lettera comincia {0}?', 'Par quelle lettre commence {0} ?', 'Cu ce liter\u0103 \xEEncepe {0}?', 'Na ak\xE9 p\xEDsmeno sa za\u010D\xEDna {0}?', '\u041D\u0430 \u044F\u043A\u0443 \u043B\u0456\u0442\u0435\u0440\u0443 \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F {0}?', '\u041D\u0430 \u043A\u0430\u043A\u0443\u044E \u0431\u0443\u043A\u0432\u0443 \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F {0}?'), tr('Which one starts like {0}?', 'Co zaczyna si\u0119 tak samo jak {0}?', '\xBFQu\xE9 empieza igual que {0}?', 'Cosa comincia come {0}?', "Qu'est-ce qui commence comme {0} ?", 'Ce \xEEncepe la fel ca {0}?', '\u010Co sa za\u010D\xEDna rovnako ako {0}?', '\u0429\u043E \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F \u0442\u0430\u043A \u0441\u0430\u043C\u043E, \u044F\u043A {0}?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u0442\u0430\u043A \u0436\u0435, \u043A\u0430\u043A {0}?'), tr('Who says {0}?', 'Kto robi {0}?', '\xBFQui\xE9n hace {0}?', 'Chi fa {0}?', 'Qui fait {0} ?', 'Cine face {0}?', 'Kto rob\xED {0}?', '\u0425\u0442\u043E \u043A\u0430\u0436\u0435 {0}?', '\u041A\u0442\u043E \u0433\u043E\u0432\u043E\u0440\u0438\u0442 {0}?'), tr('Which face is {0}?', 'Kt\xF3ra buzia jest {0}?', '\xBFQu\xE9 cara est\xE1 {0}?', 'Quale faccia \xE8 {0}?', 'Quel visage est {0} ?', 'Care fa\u021B\u0103 este {0}?', 'Ktor\xE1 tv\xE1r je {0}?', '\u042F\u043A\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F {0}?', '\u041A\u0430\u043A\u043E\u0435 \u043B\u0438\u0446\u043E {0}?'), tr("Which one doesn't belong?", 'Co tu nie pasuje?', '\xBFCu\xE1l no va con los dem\xE1s?', "Quale non c'entra?", "Qu'est-ce qui ne va pas avec les autres ?", 'Care nu se potrive\u0219te?', '\u010Co sem nepatr\xED?', '\u0429\u043E \u0442\u0443\u0442 \u0437\u0430\u0439\u0432\u0435?', '\u0427\u0442\u043E \u0437\u0434\u0435\u0441\u044C \u043B\u0438\u0448\u043D\u0435\u0435?'), tr('What comes next?', 'Co b\u0119dzie dalej?', '\xBFQu\xE9 viene despu\xE9s?', 'Cosa viene dopo?', "Qu'est-ce qui vient apr\xE8s ?", 'Ce urmeaz\u0103?', '\u010Co bude \u010Falej?', '\u0429\u043E \u0431\u0443\u0434\u0435 \u0434\u0430\u043B\u0456?', '\u0427\u0442\u043E \u0431\u0443\u0434\u0435\u0442 \u0434\u0430\u043B\u044C\u0448\u0435?'), tr('Whose shadow is this?', 'Czyj to cie\u0144?', '\xBFDe qui\xE9n es esta sombra?', "Di chi \xE8 quest'ombra?", '\xC0 qui est cette ombre ?', 'A cui e umbra asta?', '\u010C\xED je to tie\u0148?', '\u0427\u0438\u044F \u0446\u0435 \u0442\u0456\u043D\u044C?', '\u0427\u044C\u044F \u044D\u0442\u043E \u0442\u0435\u043D\u044C?'), tr('How do you feel?', 'Jak\u0105 masz min\u0119?', '\xBFQu\xE9 cara pones?', 'Che faccia fai?', 'Quelle t\xEAte fais-tu ?', 'Ce fa\u021B\u0103 faci?', 'Ak\xFA m\xE1\u0161 tv\xE1ri\u010Dku?', '\u042F\u043A\u0435 \u0432 \u0442\u0435\u0431\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F?', '\u041A\u0430\u043A\u043E\u0435 \u0443 \u0442\u0435\u0431\u044F \u043B\u0438\u0446\u043E?'), tr('Find the pairs!', 'Znajd\u017A pary!', '\xA1Encuentra las parejas!', 'Trova le coppie!', 'Trouve les paires !', 'G\u0103se\u0219te perechile!', 'N\xE1jdi dvojice!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u043F\u0430\u0440\u0438!', '\u041D\u0430\u0439\u0434\u0438 \u043F\u0430\u0440\u044B!'), tr('What is missing?', 'Czego brakuje?', '\xBFQu\xE9 falta?', 'Cosa manca?', "Qu'est-ce qui manque ?", 'Ce lipse\u0219te?', '\u010Co ch\xFDba?', '\u0427\u043E\u0433\u043E \u0431\u0440\u0430\u043A\u0443\u0454?', '\u0427\u0435\u0433\u043E \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442?'), tr('Look at the pictures carefully!', 'Przyjrzyj si\u0119 dobrze obrazkom!', '\xA1Mira bien los dibujos!', 'Guarda bene le figure!', 'Regarde bien les images !', 'Uit\u0103-te bine la imagini!', 'Dobre si pozri obr\xE1zky!', '\u0414\u043E\u0431\u0440\u0435 \u0440\u043E\u0437\u0434\u0438\u0432\u0438\u0441\u044F \u043C\u0430\u043B\u044E\u043D\u043A\u0438!', '\u0412\u043D\u0438\u043C\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u043F\u043E\u0441\u043C\u043E\u0442\u0440\u0438 \u043D\u0430 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438!'), tr('What is different? Tap it!', 'Co jest inne? Dotknij!', '\xBFQu\xE9 es diferente? \xA1T\xF3calo!', 'Cosa \xE8 diverso? Toccalo!', "Qu'est-ce qui est diff\xE9rent ? Touche-le !", 'Ce este diferit? Atinge!', '\u010Co je in\xE9? \u0164ukni na to!', '\u0429\u043E \u0432\u0456\u0434\u0440\u0456\u0437\u043D\u044F\u0454\u0442\u044C\u0441\u044F? \u0422\u043E\u0440\u043A\u043D\u0438\u0441\u044F!', '\u0427\u0442\u043E \u043E\u0442\u043B\u0438\u0447\u0430\u0435\u0442\u0441\u044F? \u041A\u043E\u0441\u043D\u0438\u0441\u044C!'), tr('Tap them from the smallest to the biggest!', 'Dotykaj od najmniejszego do najwi\u0119kszego!', '\xA1T\xF3calos del m\xE1s peque\xF1o al m\xE1s grande!', 'Toccali dal pi\xF9 piccolo al pi\xF9 grande!', 'Touche-les du plus petit au plus grand !', 'Atinge-le de la cel mai mic la cel mai mare!', '\u0164ukaj od najmen\u0161ieho po najv\xE4\u010D\u0161\xED!', '\u0422\u043E\u0440\u043A\u0430\u0439\u0441\u044F \u0432\u0456\u0434 \u043D\u0430\u0439\u043C\u0435\u043D\u0448\u043E\u0433\u043E \u0434\u043E \u043D\u0430\u0439\u0431\u0456\u043B\u044C\u0448\u043E\u0433\u043E!', '\u041D\u0430\u0436\u0438\u043C\u0430\u0439 \u043E\u0442 \u0441\u0430\u043C\u043E\u0433\u043E \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u043E\u0433\u043E \u0434\u043E \u0441\u0430\u043C\u043E\u0433\u043E \u0431\u043E\u043B\u044C\u0448\u043E\u0433\u043E!'), tr('Put the picture together! Tap two pieces to swap them.', 'U\u0142\xF3\u017C obrazek! Dotknij dw\xF3ch kawa\u0142k\xF3w, \u017Ceby je zamieni\u0107.', '\xA1Arma el dibujo! Toca dos piezas para cambiarlas.', 'Ricomponi il disegno! Tocca due pezzi per scambiarli.', "Reconstitue l'image ! Touche deux morceaux pour les \xE9changer.", 'Ref\u0103 imaginea! Atinge dou\u0103 buc\u0103\u021Bi ca s\u0103 le schimbi.', 'Poskladaj obr\xE1zok! \u0164ukni na dva k\xFAsky a vymenia sa.', '\u0421\u043A\u043B\u0430\u0434\u0438 \u043C\u0430\u043B\u044E\u043D\u043E\u043A! \u0422\u043E\u0440\u043A\u043D\u0438\u0441\u044F \u0434\u0432\u043E\u0445 \u0447\u0430\u0441\u0442\u0438\u043D\u043E\u043A, \u0449\u043E\u0431 \u043F\u043E\u043C\u0456\u043D\u044F\u0442\u0438 \u0457\u0445.', '\u0421\u043E\u0431\u0435\u0440\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443! \u041A\u043E\u0441\u043D\u0438\u0441\u044C \u0434\u0432\u0443\u0445 \u043A\u0443\u0441\u043E\u0447\u043A\u043E\u0432, \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u043C\u0435\u043D\u044F\u0442\u044C \u0438\u0445.'), tr('Color the picture! Pick a color, then tap the picture.', 'Pokoloruj obrazek! Wybierz kolor i dotknij obrazka.', '\xA1Colorea el dibujo! Elige un color y toca el dibujo.', 'Colora il disegno! Scegli un colore e tocca il disegno.', 'Colorie le dessin ! Choisis une couleur, puis touche le dessin.', 'Coloreaz\u0103 desenul! Alege o culoare, apoi atinge desenul.', 'Vyfarbi obr\xE1zok! Vyber farbu a \u0165ukni na obr\xE1zok.', '\u0420\u043E\u0437\u0444\u0430\u0440\u0431\u0443\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A! \u0412\u0438\u0431\u0435\u0440\u0438 \u043A\u043E\u043B\u0456\u0440 \u0456 \u0442\u043E\u0440\u043A\u043D\u0438\u0441\u044F \u043C\u0430\u043B\u044E\u043D\u043A\u0430.', '\u0420\u0430\u0441\u043A\u0440\u0430\u0441\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443! \u0412\u044B\u0431\u0435\u0440\u0438 \u0446\u0432\u0435\u0442 \u0438 \u043A\u043E\u0441\u043D\u0438\u0441\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438.'), tr('happy', 'weso\u0142a', 'contenta', 'felice', 'content', 'vesel\u0103', 'vesel\xE1', '\u0432\u0435\u0441\u0435\u043B\u0435', '\u0432\u0435\u0441\u0451\u043B\u043E\u0435'), tr('sad', 'smutna', 'triste', 'triste', 'triste', 'trist\u0103', 'smutn\xE1', '\u0441\u0443\u043C\u043D\u0435', '\u0433\u0440\u0443\u0441\u0442\u043D\u043E\u0435'), tr('angry', 'z\u0142a', 'enfadada', 'arrabbiata', 'f\xE2ch\xE9', 'sup\u0103rat\u0103', 'nahnevan\xE1', '\u0441\u0435\u0440\u0434\u0438\u0442\u0435', '\u0441\u0435\u0440\u0434\u0438\u0442\u043E\u0435'), tr('scared', 'przestraszona', 'asustada', 'spaventata', 'effray\xE9', 'speriat\u0103', 'vystra\u0161en\xE1', '\u043D\u0430\u043B\u044F\u043A\u0430\u043D\u0435', '\u0438\u0441\u043F\u0443\u0433\u0430\u043D\u043D\u043E\u0435'), tr('surprised', 'zdziwiona', 'sorprendida', 'sorpresa', 'surpris', 'surprins\u0103', 'prekvapen\xE1', '\u0437\u0434\u0438\u0432\u043E\u0432\u0430\u043D\u0435', '\u0443\u0434\u0438\u0432\u043B\u0451\u043D\u043D\u043E\u0435'), tr('shy', 'nie\u015Bmia\u0142a', 't\xEDmida', 'timida', 'timide', 'timid\u0103', 'hanbliv\xE1', "\u0441\u043E\u0440\u043E\u043C'\u044F\u0437\u043B\u0438\u0432\u0435", '\u0437\u0430\u0441\u0442\u0435\u043D\u0447\u0438\u0432\u043E\u0435'), tr('calm', 'spokojna', 'tranquila', 'tranquilla', 'calme', 'calm\u0103', 'pokojn\xE1', '\u0441\u043F\u043E\u043A\u0456\u0439\u043D\u0435', '\u0441\u043F\u043E\u043A\u043E\u0439\u043D\u043E\u0435'), tr('tired', 'zm\u0119czona', 'cansada', 'stanca', 'fatigu\xE9', 'obosit\u0103', 'unaven\xE1', '\u0432\u0442\u043E\u043C\u043B\u0435\u043D\u0435', '\u0443\u0441\u0442\u0430\u043B\u043E\u0435'), tr('You get a present.', 'Dostajesz prezent.', 'Te dan un regalo.', 'Ricevi un regalo.', 'Tu re\xE7ois un cadeau.', 'Prime\u0219ti un cadou.', 'Dostane\u0161 dar\u010Dek.', '\u0422\u043E\u0431\u0456 \u0434\u0430\u0440\u0443\u044E\u0442\u044C \u043F\u043E\u0434\u0430\u0440\u0443\u043D\u043E\u043A.', '\u0422\u0435\u0431\u0435 \u0434\u0430\u0440\u044F\u0442 \u043F\u043E\u0434\u0430\u0440\u043E\u043A.'), tr('Today is your birthday.', 'Dzi\u015B s\u0105 twoje urodziny.', 'Hoy es tu cumplea\xF1os.', 'Oggi \xE8 il tuo compleanno.', "Aujourd'hui, c'est ton anniversaire.", 'Azi e ziua ta.', 'Dnes m\xE1\u0161 narodeniny.', '\u0421\u044C\u043E\u0433\u043E\u0434\u043D\u0456 \u0442\u0432\u0456\u0439 \u0434\u0435\u043D\u044C \u043D\u0430\u0440\u043E\u0434\u0436\u0435\u043D\u043D\u044F.', '\u0421\u0435\u0433\u043E\u0434\u043D\u044F \u0442\u0432\u043E\u0439 \u0434\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F.'), tr('Your best friend comes to visit.', 'Przychodzi do ciebie najlepszy przyjaciel.', 'Tu mejor amigo viene a visitarte.', 'Il tuo migliore amico viene a trovarti.', 'Ton meilleur ami vient te voir.', 'Cel mai bun prieten vine \xEEn vizit\u0103.', 'Pri\u0161iel \u0165a nav\u0161t\xEDvi\u0165 najlep\u0161\xED kamar\xE1t.', '\u0414\u043E \u0442\u0435\u0431\u0435 \u0432 \u0433\u043E\u0441\u0442\u0456 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442\u044C \u043D\u0430\u0439\u043A\u0440\u0430\u0449\u0438\u0439 \u0434\u0440\u0443\u0433.', '\u041A \u0442\u0435\u0431\u0435 \u0432 \u0433\u043E\u0441\u0442\u0438 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442 \u043B\u0443\u0447\u0448\u0438\u0439 \u0434\u0440\u0443\u0433.'), tr('Your ice cream fell on the ground.', 'Lody spad\u0142y ci na ziemi\u0119.', 'Se te cay\xF3 el helado al suelo.', 'Il gelato ti \xE8 caduto per terra.', 'Ta glace est tomb\xE9e par terre.', '\u021Ai-a c\u0103zut \xEEnghe\u021Bata pe jos.', 'Spadla ti zmrzlina na zem.', '\u0422\u0432\u043E\u0454 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E \u0432\u043F\u0430\u043B\u043E \u043D\u0430 \u0437\u0435\u043C\u043B\u044E.', '\u0422\u0432\u043E\u0451 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435 \u0443\u043F\u0430\u043B\u043E \u043D\u0430 \u0437\u0435\u043C\u043B\u044E.'), tr('Your balloon flew away.', 'Ulecia\u0142 ci balonik.', 'Se te escap\xF3 el globo.', 'Ti \xE8 volato via il palloncino.', "Ton ballon s'est envol\xE9.", '\u021Ai-a zburat balonul.', 'Uletel ti bal\xF3n.', '\u0422\u0432\u043E\u044F \u043A\u0443\u043B\u044C\u043A\u0430 \u043F\u043E\u043B\u0435\u0442\u0456\u043B\u0430.', '\u0423 \u0442\u0435\u0431\u044F \u0443\u043B\u0435\u0442\u0435\u043B \u0448\u0430\u0440\u0438\u043A.'), tr('Someone took your toy.', 'Kto\u015B zabra\u0142 ci zabawk\u0119.', 'Alguien te quit\xF3 tu juguete.', 'Qualcuno ti ha preso il giocattolo.', "Quelqu'un a pris ton jouet.", 'Cineva \u021Bi-a luat juc\u0103ria.', 'Niekto ti zobral hra\u010Dku.', '\u0425\u0442\u043E\u0441\u044C \u0437\u0430\u0431\u0440\u0430\u0432 \u0442\u0432\u043E\u044E \u0456\u0433\u0440\u0430\u0448\u043A\u0443.', '\u041A\u0442\u043E-\u0442\u043E \u0437\u0430\u0431\u0440\u0430\u043B \u0442\u0432\u043E\u044E \u0438\u0433\u0440\u0443\u0448\u043A\u0443.'), tr('Someone knocked over your tower.', 'Kto\u015B przewr\xF3ci\u0142 twoj\u0105 wie\u017C\u0119.', 'Alguien tir\xF3 tu torre.', 'Qualcuno ha buttato gi\xF9 la tua torre.', "Quelqu'un a fait tomber ta tour.", 'Cineva \u021Bi-a d\u0103r\xE2mat turnul.', 'Niekto ti zb\xFAral ve\u017Eu.', '\u0425\u0442\u043E\u0441\u044C \u0437\u0440\u0443\u0439\u043D\u0443\u0432\u0430\u0432 \u0442\u0432\u043E\u044E \u0432\u0435\u0436\u0443.', '\u041A\u0442\u043E-\u0442\u043E \u0441\u043B\u043E\u043C\u0430\u043B \u0442\u0432\u043E\u044E \u0431\u0430\u0448\u043D\u044E.'), tr('There is loud thunder at night.', 'W nocy g\u0142o\u015Bno grzmi.', 'Por la noche truena muy fuerte.', 'Di notte tuona forte.', 'La nuit, le tonnerre gronde tr\xE8s fort.', 'Noaptea tun\u0103 foarte tare.', 'V noci hlasno hrm\xED.', '\u0423\u043D\u043E\u0447\u0456 \u0433\u0443\u0447\u043D\u043E \u0433\u0440\u0438\u043C\u0438\u0442\u044C \u0433\u0440\u0456\u043C.', '\u041D\u043E\u0447\u044C\u044E \u0433\u0440\u043E\u043C\u043A\u043E \u0433\u0440\u0435\u043C\u0438\u0442 \u0433\u0440\u043E\u043C.'), tr('A big dog barks loudly.', 'Du\u017Cy pies g\u0142o\u015Bno szczeka.', 'Un perro grande ladra muy fuerte.', 'Un cane grande abbaia forte.', 'Un gros chien aboie tr\xE8s fort.', 'Un c\xE2ine mare latr\u0103 tare.', 'Ve\u013Ek\xFD pes hlasno \u0161tek\xE1.', '\u0412\u0435\u043B\u0438\u043A\u0438\u0439 \u043F\u0435\u0441 \u0433\u043E\u043B\u043E\u0441\u043D\u043E \u0433\u0430\u0432\u043A\u0430\u0454.', '\u0411\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u043E\u0431\u0430\u043A\u0430 \u0433\u0440\u043E\u043C\u043A\u043E \u043B\u0430\u0435\u0442.'), tr('You come home and everyone shouts: surprise!', 'Wracasz do domu, a wszyscy krzycz\u0105: niespodzianka!', 'Llegas a casa y todos gritan: \xA1sorpresa!', 'Torni a casa e tutti gridano: sorpresa!', 'Tu rentres et tout le monde crie : surprise !', 'Ajungi acas\u0103 \u0219i to\u021Bi strig\u0103: surpriz\u0103!', 'Pr\xEDde\u0161 domov a v\u0161etci kri\u010Dia: prekvapenie!', '\u0422\u0438 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0448 \u0434\u043E\u0434\u043E\u043C\u0443, \u0430 \u0432\u0441\u0456 \u043A\u0440\u0438\u0447\u0430\u0442\u044C: \u0441\u044E\u0440\u043F\u0440\u0438\u0437!', '\u0422\u044B \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0448\u044C \u0434\u043E\u043C\u043E\u0439, \u0430 \u0432\u0441\u0435 \u043A\u0440\u0438\u0447\u0430\u0442: \u0441\u044E\u0440\u043F\u0440\u0438\u0437!'), tr('You played all day and now it is evening.', 'Ca\u0142y dzie\u0144 by\u0142a zabawa, a teraz jest wiecz\xF3r.', 'Jugaste todo el d\xEDa y ya es de noche.', 'Hai giocato tutto il giorno e ora \xE8 sera.', "Tu as jou\xE9 toute la journ\xE9e et c'est le soir.", 'Te-ai jucat toat\u0103 ziua \u0219i acum e sear\u0103.', 'Cel\xFD de\u0148 bola z\xE1bava a teraz je ve\u010Der.', '\u0426\u0456\u043B\u0438\u0439 \u0434\u0435\u043D\u044C \u0431\u0443\u043B\u0438 \u0456\u0433\u0440\u0438, \u0430 \u0442\u0435\u043F\u0435\u0440 \u0432\u0435\u0447\u0456\u0440.', '\u0412\u0435\u0441\u044C \u0434\u0435\u043D\u044C \u0431\u044B\u043B\u0438 \u0438\u0433\u0440\u044B, \u0430 \u0442\u0435\u043F\u0435\u0440\u044C \u0432\u0435\u0447\u0435\u0440.'), tr('You lost your teddy.', 'Tw\xF3j mi\u015B si\u0119 zgubi\u0142.', 'Has perdido tu osito.', 'Hai perso il tuo orsetto.', 'Tu as perdu ton nounours.', '\u021Ai-ai pierdut ursule\u021Bul.', 'Stratil sa ti macko.', '\u0422\u0432\u0456\u0439 \u0432\u0435\u0434\u043C\u0435\u0434\u0438\u043A \u0437\u0430\u0433\u0443\u0431\u0438\u0432\u0441\u044F.', '\u0422\u0432\u043E\u0439 \u043C\u0438\u0448\u043A\u0430 \u043F\u043E\u0442\u0435\u0440\u044F\u043B\u0441\u044F.'), tr('Mum praises you.', 'Mama ci\u0119 chwali.', 'Mam\xE1 te felicita.', 'La mamma ti fa i complimenti.', 'Maman te f\xE9licite.', 'Mama te laud\u0103.', 'Mama \u0165a pochv\xE1li.', '\u041C\u0430\u043C\u0430 \u0442\u0435\u0431\u0435 \u0445\u0432\u0430\u043B\u0438\u0442\u044C.', '\u041C\u0430\u043C\u0430 \u0442\u0435\u0431\u044F \u0445\u0432\u0430\u043B\u0438\u0442.'), tr('Your brother scribbled on your drawing.', 'Brat pobazgra\u0142 tw\xF3j rysunek.', 'Tu hermano ha garabateado tu dibujo.', 'Tuo fratello ha scarabocchiato il tuo disegno.', 'Ton fr\xE8re a gribouill\xE9 sur ton dessin.', 'Fratele t\u0103u \u021Bi-a m\xE2zg\u0103lit desenul.', 'Brat ti po\u010Dm\xE1ral obr\xE1zok.', '\u0411\u0440\u0430\u0442 \u043F\u043E\u0447\u0435\u0440\u043A\u0430\u0432 \u0442\u0432\u0456\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A.', '\u0411\u0440\u0430\u0442 \u0438\u0441\u0447\u0435\u0440\u043A\u0430\u043B \u0442\u0432\u043E\u0439 \u0440\u0438\u0441\u0443\u043D\u043E\u043A.'), tr('A big spider is crawling on the wall.', 'Po \u015Bcianie chodzi du\u017Cy paj\u0105k.', 'Una ara\xF1a grande sube por la pared.', 'Un grosso ragno cammina sul muro.', 'Une grosse araign\xE9e grimpe sur le mur.', 'Un p\u0103ianjen mare merge pe perete.', 'Po stene lezie ve\u013Ek\xFD pav\xFAk.', '\u041F\u043E \u0441\u0442\u0456\u043D\u0456 \u043F\u043E\u0432\u0437\u0435 \u0432\u0435\u043B\u0438\u043A\u0438\u0439 \u043F\u0430\u0432\u0443\u043A.', '\u041F\u043E \u0441\u0442\u0435\u043D\u0435 \u043F\u043E\u043B\u0437\u0451\u0442 \u0431\u043E\u043B\u044C\u0448\u043E\u0439 \u043F\u0430\u0443\u043A.'), tr('You open the box and a clown jumps out!', 'Otwierasz pude\u0142ko, a z niego wyskakuje klaun!', '\xA1Abres la caja y sale un payaso de un salto!', 'Apri la scatola e salta fuori un pagliaccio!', "Tu ouvres la bo\xEEte et un clown en sort d'un bond !", 'Deschizi cutia \u0219i sare din ea un clovn!', 'Otvor\xED\u0161 krabicu a vysko\u010D\xED z nej klaun!', '\u0422\u0438 \u0432\u0456\u0434\u043A\u0440\u0438\u0432\u0430\u0454\u0448 \u043A\u043E\u0440\u043E\u0431\u043A\u0443, \u0430 \u0437\u0432\u0456\u0434\u0442\u0438 \u0432\u0438\u0441\u0442\u0440\u0438\u0431\u0443\u0454 \u043A\u043B\u043E\u0443\u043D!', '\u0422\u044B \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0448\u044C \u043A\u043E\u0440\u043E\u0431\u043A\u0443, \u0430 \u043E\u0442\u0442\u0443\u0434\u0430 \u0432\u044B\u0441\u043A\u0430\u043A\u0438\u0432\u0430\u0435\u0442 \u043A\u043B\u043E\u0443\u043D!'), tr('It is late in the evening and you yawn a lot.', 'Jest p\xF3\u017Any wiecz\xF3r i du\u017Co ziewasz.', 'Es muy tarde y bostezas mucho.', '\xC8 sera tardi e sbadigli tanto.', 'Il est tard le soir et tu b\xE2illes beaucoup.', 'E sear\u0103 t\xE2rziu \u0219i ca\u0219ti mult.', 'Je neskoro ve\u010Der a ve\u013Ea z\xEDv\xE4\u0161.', '\u041F\u0456\u0437\u043D\u0456\u0439 \u0432\u0435\u0447\u0456\u0440, \u0456 \u0442\u0438 \u0431\u0430\u0433\u0430\u0442\u043E \u043F\u043E\u0437\u0456\u0445\u0430\u0454\u0448.', '\u041F\u043E\u0437\u0434\u043D\u0438\u0439 \u0432\u0435\u0447\u0435\u0440, \u0438 \u0442\u044B \u043C\u043D\u043E\u0433\u043E \u0437\u0435\u0432\u0430\u0435\u0448\u044C.'), tr('You have to sing in front of everyone.', 'Musisz za\u015Bpiewa\u0107 przed wszystkimi.', 'Tienes que cantar delante de todos.', 'Devi cantare davanti a tutti.', 'Tu dois chanter devant tout le monde.', 'Trebuie s\u0103 c\xE2n\u021Bi \xEEn fa\u021Ba tuturor.', 'M\xE1\u0161 spieva\u0165 pred v\u0161etk\xFDmi.', '\u0422\u043E\u0431\u0456 \u0442\u0440\u0435\u0431\u0430 \u0437\u0430\u0441\u043F\u0456\u0432\u0430\u0442\u0438 \u043F\u0435\u0440\u0435\u0434 \u0443\u0441\u0456\u043C\u0430.', '\u0422\u0435\u0431\u0435 \u043D\u0443\u0436\u043D\u043E \u0441\u043F\u0435\u0442\u044C \u043F\u0435\u0440\u0435\u0434 \u0432\u0441\u0435\u043C\u0438.'), tr("A lady you don't know says hello in the shop.", 'W sklepie wita si\u0119 z tob\u0105 nieznajoma pani.', 'En la tienda te saluda una se\xF1ora que no conoces.', 'Nel negozio ti saluta una signora che non conosci.', 'Au magasin, une dame que tu ne connais pas te dit bonjour.', 'La magazin te salut\u0103 o doamn\u0103 pe care n-o cuno\u0219ti.', 'V obchode \u0165a pozdrav\xED nezn\xE1ma pani.', '\u0423 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0456 \u0437 \u0442\u043E\u0431\u043E\u044E \u0432\u0456\u0442\u0430\u0454\u0442\u044C\u0441\u044F \u043D\u0435\u0437\u043D\u0430\u0439\u043E\u043C\u0430 \u043F\u0430\u043D\u0456.', '\u0412 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435 \u0441 \u0442\u043E\u0431\u043E\u0439 \u0437\u0434\u043E\u0440\u043E\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0430\u044F \u0442\u0451\u0442\u044F.'), tr('In the evening Mum reads you a story.', 'Wieczorem mama czyta ci bajk\u0119.', 'Por la noche mam\xE1 te lee un cuento.', 'La sera la mamma ti legge una storia.', 'Le soir, maman te lit une histoire.', 'Seara mama \xEE\u021Bi cite\u0219te o poveste.', 'Ve\u010Der ti mama \u010D\xEDta rozpr\xE1vku.', '\u0423\u0432\u0435\u0447\u0435\u0440\u0456 \u043C\u0430\u043C\u0430 \u0447\u0438\u0442\u0430\u0454 \u0442\u043E\u0431\u0456 \u043A\u0430\u0437\u043A\u0443.', '\u0412\u0435\u0447\u0435\u0440\u043E\u043C \u043C\u0430\u043C\u0430 \u0447\u0438\u0442\u0430\u0435\u0442 \u0442\u0435\u0431\u0435 \u0441\u043A\u0430\u0437\u043A\u0443.'), tr('You are sitting in a warm bath.', 'Siedzisz w ciep\u0142ej k\u0105pieli.', 'Est\xE1s en un ba\xF1o calentito.', 'Sei in un bagno caldo.', 'Tu es dans un bain bien chaud.', 'Stai \xEEntr-o baie cald\u0103.', 'Sed\xED\u0161 v teplom k\xFApeli.', '\u0422\u0438 \u0441\u0438\u0434\u0438\u0448 \u0443 \u0442\u0435\u043F\u043B\u0456\u0439 \u0432\u0430\u043D\u043D\u0456.', '\u0422\u044B \u0441\u0438\u0434\u0438\u0448\u044C \u0432 \u0442\u0451\u043F\u043B\u043E\u0439 \u0432\u0430\u043D\u043D\u0435.'), tr('I draw a nice picture for her.', 'Rysuj\u0119 dla niej \u0142adny obrazek.', 'Le hago un dibujo bonito.', 'Le faccio un bel disegno.', 'Je lui fais un joli dessin.', '\xCEi fac un desen frumos.', 'Nakresl\xEDm jej pekn\xFD obr\xE1zok.', '\u042F \u043C\u0430\u043B\u044E\u044E \u0434\u043B\u044F \u043D\u0435\u0457 \u0433\u0430\u0440\u043D\u0438\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A.', '\u042F \u0440\u0438\u0441\u0443\u044E \u0434\u043B\u044F \u043D\u0435\u0451 \u043A\u0440\u0430\u0441\u0438\u0432\u044B\u0439 \u0440\u0438\u0441\u0443\u043D\u043E\u043A.'), tr('I go over and say hello.', 'Podchodz\u0119 i m\xF3wi\u0119 cze\u015B\u0107.', 'Me acerco y le digo hola.', 'Mi avvicino e lo saluto.', 'Je vais le voir et je lui dis bonjour.', 'M\u0103 duc la el \u0219i \xEEl salut.', 'Pr\xEDdem k nemu a pozdrav\xEDm ho.', '\u042F \u043F\u0456\u0434\u0445\u043E\u0434\u0436\u0443 \u0456 \u0432\u0456\u0442\u0430\u044E\u0441\u044F.', '\u042F \u043F\u043E\u0434\u0445\u043E\u0436\u0443 \u0438 \u0437\u0434\u043E\u0440\u043E\u0432\u0430\u044E\u0441\u044C.'), tr('I give a hug.', 'Przytulam.', 'Le doy un abrazo.', 'Lo abbraccio.', 'Je fais un c\xE2lin.', '\xCEl \xEEmbr\u0103\u021Bi\u0219ez.', 'Obj\xEDmem ho.', '\u042F \u043E\u0431\u0456\u0439\u043C\u0430\u044E.', '\u042F \u043E\u0431\u043D\u0438\u043C\u0430\u044E.'), tr('I laugh at them.', '\u015Amiej\u0119 si\u0119 z niego.', 'Me r\xEDo de \xE9l.', 'Lo prendo in giro.', 'Je me moque.', 'R\xE2d de el.', 'Vysmejem sa mu.', '\u042F \u0441\u043C\u0456\u044E\u0441\u044F \u0437 \u043D\u044C\u043E\u0433\u043E.', '\u042F \u0441\u043C\u0435\u044E\u0441\u044C \u043D\u0430\u0434 \u043D\u0438\u043C.'), tr('I run away.', 'Uciekam.', 'Salgo corriendo.', 'Scappo via.', "Je m'enfuis.", 'Fug.', 'Ute\u010Diem.', '\u042F \u0442\u0456\u043A\u0430\u044E.', '\u042F \u0443\u0431\u0435\u0433\u0430\u044E.'), tr('I look away.', 'Odwracam wzrok.', 'Miro hacia otro lado.', 'Guardo altrove.', 'Je regarde ailleurs.', 'M\u0103 uit \xEEn alt\u0103 parte.', 'Pozriem sa inam.', '\u042F \u0432\u0456\u0434\u0432\u0435\u0440\u0442\u0430\u044E\u0441\u044F.', '\u042F \u043E\u0442\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u044E\u0441\u044C.'), tr('I help them get up.', 'Pomagam mu wsta\u0107.', 'Le ayudo a levantarse.', 'Lo aiuto ad alzarsi.', "Je l'aide \xE0 se relever.", '\xCEl ajut s\u0103 se ridice.', 'Pom\xF4\u017Eem mu vsta\u0165.', '\u042F \u0434\u043E\u043F\u043E\u043C\u0430\u0433\u0430\u044E \u0439\u043E\u043C\u0443 \u0432\u0441\u0442\u0430\u0442\u0438.', '\u042F \u043F\u043E\u043C\u043E\u0433\u0430\u044E \u0435\u043C\u0443 \u0432\u0441\u0442\u0430\u0442\u044C.'), tr('I ask what is wrong.', 'Pytam, co si\u0119 sta\u0142o.', 'Le pregunto qu\xE9 le pasa.', "Gli chiedo cosa c'\xE8.", 'Je demande ce qui ne va pas.', '\xCEntreb ce s-a \xEEnt\xE2mplat.', 'Sp\xFDtam sa, \u010Do sa stalo.', '\u042F \u043F\u0438\u0442\u0430\u044E, \u0449\u043E \u0441\u0442\u0430\u043B\u043E\u0441\u044F.', '\u042F \u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u044E, \u0447\u0442\u043E \u0441\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C.'), tr('I share my teddy.', 'Daj\u0119 mu mojego misia.', 'Le dejo mi osito.', 'Gli presto il mio orsetto.', 'Je lui pr\xEAte mon nounours.', '\xCEi dau ursule\u021Bul meu.', 'D\xE1m mu svojho macka.', '\u042F \u0434\u0430\u044E \u0439\u043E\u043C\u0443 \u0441\u0432\u043E\u0433\u043E \u0432\u0435\u0434\u043C\u0435\u0434\u0438\u043A\u0430.', '\u042F \u0434\u0430\u044E \u0435\u043C\u0443 \u0441\u0432\u043E\u0435\u0433\u043E \u043C\u0438\u0448\u043A\u0443.'), tr('I turn on the light.', 'Zapalam \u015Bwiat\u0142o.', 'Enciendo la luz.', 'Accendo la luce.', "J'allume la lumi\xE8re.", 'Aprind lumina.', 'Zapnem svetlo.', '\u042F \u0432\u043C\u0438\u043A\u0430\u044E \u0441\u0432\u0456\u0442\u043B\u043E.', '\u042F \u0432\u043A\u043B\u044E\u0447\u0430\u044E \u0441\u0432\u0435\u0442.'), tr('I take a deep breath.', 'Bior\u0119 g\u0142\u0119boki oddech.', 'Respiro hondo.', 'Faccio un respiro profondo.', 'Je respire profond\xE9ment.', 'Respir ad\xE2nc.', 'Zhlboka sa nad\xFDchnem.', '\u042F \u0433\u043B\u0438\u0431\u043E\u043A\u043E \u0434\u0438\u0445\u0430\u044E.', '\u042F \u0433\u043B\u0443\u0431\u043E\u043A\u043E \u0434\u044B\u0448\u0443.'), tr('I throw my toys around.', 'Rzucam zabawkami.', 'Tiro los juguetes.', 'Lancio i giocattoli.', 'Je lance mes jouets.', 'Arunc juc\u0103riile.', 'H\xE1d\u017Eem hra\u010Dky.', '\u042F \u043A\u0438\u0434\u0430\u044E \u0456\u0433\u0440\u0430\u0448\u043A\u0438.', '\u042F \u0440\u0430\u0437\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u044E \u0438\u0433\u0440\u0443\u0448\u043A\u0438.'), tr('I scream very loudly.', 'G\u0142o\u015Bno krzycz\u0119.', 'Grito muy fuerte.', 'Urlo fortissimo.', 'Je crie tr\xE8s fort.', '\u021Aip foarte tare.', 'Hlasno kri\u010D\xEDm.', '\u042F \u0433\u043E\u043B\u043E\u0441\u043D\u043E \u043A\u0440\u0438\u0447\u0443.', '\u042F \u0433\u0440\u043E\u043C\u043A\u043E \u043A\u0440\u0438\u0447\u0443.'), tr('Someone is crying. What can you do?', 'Kto\u015B p\u0142acze. Co mo\u017Cesz zrobi\u0107?', 'Alguien est\xE1 llorando. \xBFQu\xE9 puedes hacer?', 'Qualcuno piange. Cosa puoi fare?', "Quelqu'un pleure. Que peux-tu faire ?", 'Cineva pl\xE2nge. Ce po\u021Bi face?', 'Niekto pla\u010De. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u0425\u0442\u043E\u0441\u044C \u043F\u043B\u0430\u0447\u0435. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u041A\u0442\u043E-\u0442\u043E \u043F\u043B\u0430\u0447\u0435\u0442. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('Your friend fell down. What do you do?', 'Tw\xF3j przyjaciel si\u0119 przewr\xF3ci\u0142. Co robisz?', 'Tu amigo se ha ca\xEDdo. \xBFQu\xE9 haces?', 'Il tuo amico \xE8 caduto. Cosa fai?', 'Ton ami est tomb\xE9. Que fais-tu ?', 'Prietenul t\u0103u a c\u0103zut. Ce faci?', 'Tvoj kamar\xE1t spadol. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0434\u0440\u0443\u0433 \u0443\u043F\u0430\u0432. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0434\u0440\u0443\u0433 \u0443\u043F\u0430\u043B. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Your brother is angry. What can you do?', 'Tw\xF3j brat jest z\u0142y. Co mo\u017Cesz zrobi\u0107?', 'Tu hermano est\xE1 enfadado. \xBFQu\xE9 puedes hacer?', 'Tuo fratello \xE8 arrabbiato. Cosa puoi fare?', 'Ton fr\xE8re est f\xE2ch\xE9. Que peux-tu faire ?', 'Fratele t\u0103u e sup\u0103rat. Ce po\u021Bi face?', 'Tvoj brat sa hnev\xE1. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u0422\u0432\u0456\u0439 \u0431\u0440\u0430\u0442 \u0441\u0435\u0440\u0434\u0438\u0442\u044C\u0441\u044F. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u0422\u0432\u043E\u0439 \u0431\u0440\u0430\u0442 \u0441\u0435\u0440\u0434\u0438\u0442\u0441\u044F. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('Your friend is sad because they have no toy. What do you do?', 'Tw\xF3j przyjaciel jest smutny, bo nie ma zabawki. Co robisz?', 'Tu amigo est\xE1 triste porque no tiene juguete. \xBFQu\xE9 haces?', 'Il tuo amico \xE8 triste perch\xE9 non ha un giocattolo. Cosa fai?', "Ton ami est triste parce qu'il n'a pas de jouet. Que fais-tu ?", 'Prietenul t\u0103u e trist pentru c\u0103 nu are nicio juc\u0103rie. Ce faci?', 'Tvoj kamar\xE1t je smutn\xFD, lebo nem\xE1 hra\u010Dku. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0434\u0440\u0443\u0433 \u0441\u0443\u043C\u043D\u0438\u0439, \u0431\u043E \u0432 \u043D\u044C\u043E\u0433\u043E \u043D\u0435\u043C\u0430\u0454 \u0456\u0433\u0440\u0430\u0448\u043A\u0438. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0434\u0440\u0443\u0433 \u0433\u0440\u0443\u0441\u0442\u0438\u0442, \u043F\u043E\u0442\u043E\u043C\u0443 \u0447\u0442\u043E \u0443 \u043D\u0435\u0433\u043E \u043D\u0435\u0442 \u0438\u0433\u0440\u0443\u0448\u043A\u0438. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Your little sibling is scared of the dark. What do you do?', 'Tw\xF3j m\u0142odszy brat boi si\u0119 ciemno\u015Bci. Co robisz?', 'Tu hermanito tiene miedo de la oscuridad. \xBFQu\xE9 haces?', 'Il tuo fratellino ha paura del buio. Cosa fai?', 'Ton petit fr\xE8re a peur du noir. Que fais-tu ?', 'Fr\u0103\u021Biorul t\u0103u se teme de \xEEntuneric. Ce faci?', 'Tvoj bra\u010Dek sa boj\xED tmy. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0431\u0440\u0430\u0442\u0438\u043A \u0431\u043E\u0457\u0442\u044C\u0441\u044F \u0442\u0435\u043C\u0440\u044F\u0432\u0438. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0431\u0440\u0430\u0442\u0438\u043A \u0431\u043E\u0438\u0442\u0441\u044F \u0442\u0435\u043C\u043D\u043E\u0442\u044B. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Mum is tired and sad. What can you do?', 'Mama jest zm\u0119czona i smutna. Co mo\u017Cesz zrobi\u0107?', 'Mam\xE1 est\xE1 cansada y triste. \xBFQu\xE9 puedes hacer?', 'La mamma \xE8 stanca e triste. Cosa puoi fare?', 'Maman est fatigu\xE9e et triste. Que peux-tu faire ?', 'Mama e obosit\u0103 \u0219i trist\u0103. Ce po\u021Bi face?', 'Mama je unaven\xE1 a smutn\xE1. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u041C\u0430\u043C\u0430 \u0432\u0442\u043E\u043C\u043B\u0435\u043D\u0430 \u0439 \u0441\u0443\u043C\u043D\u0430. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u041C\u0430\u043C\u0430 \u0443\u0441\u0442\u0430\u043B\u0430 \u0438 \u0433\u0440\u0443\u0441\u0442\u0438\u0442. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('A new child is standing alone at nursery. What do you do?', 'Nowe dziecko stoi samo w przedszkolu. Co robisz?', 'Un ni\xF1o nuevo est\xE1 solo en la guarder\xEDa. \xBFQu\xE9 haces?', "Un bambino nuovo \xE8 da solo all'asilo. Cosa fai?", "Un nouvel enfant est tout seul \xE0 l'\xE9cole. Que fais-tu ?", 'Un copil nou st\u0103 singur la gr\u0103dini\u021B\u0103. Ce faci?', 'Nov\xE9 die\u0165a stoj\xED samo v \u0161k\xF4lke. \u010Co urob\xED\u0161?', '\u041D\u043E\u0432\u0430 \u0434\u0438\u0442\u0438\u043D\u0430 \u0441\u0442\u043E\u0457\u0442\u044C \u0441\u0430\u043C\u0430 \u0432 \u0441\u0430\u0434\u043E\u0447\u043A\u0443. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u041D\u043E\u0432\u044B\u0439 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u0441\u0442\u043E\u0438\u0442 \u043E\u0434\u0438\u043D \u0432 \u0441\u0430\u0434\u0438\u043A\u0435. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr("Let's breathe together! Watch the balloon.", 'Oddychajmy razem! Patrz na balonik.', '\xA1Respiremos juntos! Mira el globo.', 'Respiriamo insieme! Guarda il palloncino.', 'Respirons ensemble ! Regarde le ballon.', 'Hai s\u0103 respir\u0103m \xEEmpreun\u0103! Uit\u0103-te la balon.', 'D\xFDchajme spolu! Pozeraj na bal\xF3n.', '\u0414\u0438\u0445\u0430\u0439\u043C\u043E \u0440\u0430\u0437\u043E\u043C! \u0414\u0438\u0432\u0438\u0441\u044C \u043D\u0430 \u043A\u0443\u043B\u044C\u043A\u0443.', '\u0414\u0430\u0432\u0430\u0439 \u043F\u043E\u0434\u044B\u0448\u0438\u043C \u0432\u043C\u0435\u0441\u0442\u0435! \u0421\u043C\u043E\u0442\u0440\u0438 \u043D\u0430 \u0448\u0430\u0440\u0438\u043A.'), tr('Breathe in\u2026', 'Wdech\u2026', 'Toma aire\u2026', 'Inspira\u2026', 'Inspire\u2026', 'Inspir\u0103\u2026', 'N\xE1dych\u2026', '\u0412\u0434\u0438\u0445\u2026', '\u0412\u0434\u043E\u0445\u2026'), tr('\u2026and out.', '\u2026i wydech.', '\u2026y su\xE9ltalo.', '\u2026ed espira.', '\u2026et expire.', '\u2026\u0219i expir\u0103.', '\u2026a v\xFDdych.', '\u2026\u0456 \u0432\u0438\u0434\u0438\u0445.', '\u2026\u0438 \u0432\u044B\u0434\u043E\u0445.'), tr('Calm balloon', 'Balonik spokoju', 'Globo de la calma', 'Palloncino della calma', 'Ballon du calme', 'Balonul lini\u0219tii', 'Bal\xF3nik pokoja', '\u041A\u0443\u043B\u044C\u043A\u0430 \u0441\u043F\u043E\u043A\u043E\u044E', '\u0428\u0430\u0440\u0438\u043A \u0441\u043F\u043E\u043A\u043E\u0439\u0441\u0442\u0432\u0438\u044F'), tr('How many breaths?', 'Ile oddech\xF3w?', '\xBFCu\xE1ntas respiraciones?', 'Quanti respiri?', 'Combien de respirations ?', 'C\xE2te respira\u021Bii?', 'Ko\u013Eko n\xE1dychov?', '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 \u0432\u0434\u0438\u0445\u0456\u0432?', '\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0432\u0434\u043E\u0445\u043E\u0432?'), tr('Well done! Do you feel calmer now?', 'Brawo! Czujesz si\u0119 teraz spokojniej?', '\xA1Muy bien! \xBFYa est\xE1s m\xE1s en calma?', 'Bravo! Ora va meglio?', 'Bravo ! Tu te sens plus calme maintenant ?', 'Bravo! Acum e mai bine?', 'V\xFDborne! U\u017E je ti lep\u0161ie?', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C! \u0422\u0435\u043F\u0435\u0440 \u0442\u043E\u0431\u0456 \u0441\u043F\u043E\u043A\u0456\u0439\u043D\u0456\u0448\u0435?', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446! \u0422\u0435\u043F\u0435\u0440\u044C \u0442\u0435\u0431\u0435 \u0441\u043F\u043E\u043A\u043E\u0439\u043D\u0435\u0435?'), tr('Copy this face!', 'Zr\xF3b tak\u0105 min\u0119!', '\xA1Pon esta cara!', 'Fai questa faccia!', 'Fais cette t\xEAte !', 'F\u0103 fa\u021Ba asta!', 'Urob tak\xFAto tv\xE1r!', '\u041F\u043E\u043A\u0430\u0436\u0438 \u0442\u0430\u043A\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F!', '\u0421\u0434\u0435\u043B\u0430\u0439 \u0442\u0430\u043A\u043E\u0435 \u043B\u0438\u0446\u043E!'), tr('You are very angry. What helps you calm down?', 'Czujesz z\u0142o\u015B\u0107. Co pomo\u017Ce ci si\u0119 uspokoi\u0107?', 'Sientes mucha rabia. \xBFQu\xE9 te ayuda a calmarte?', 'Senti tanta rabbia. Cosa ti aiuta a calmarti?', "Tu es tr\xE8s en col\xE8re. Qu'est-ce qui t'aide \xE0 te calmer ?", 'Sim\u021Bi mult\u0103 furie. Ce te ajut\u0103 s\u0103 te lini\u0219te\u0219ti?', 'C\xEDti\u0161 ve\u013Ek\xFD hnev. \u010Co ti pom\xF4\u017Ee upokoji\u0165 sa?', '\u0422\u0438 \u0434\u0443\u0436\u0435 \u0441\u0435\u0440\u0434\u0438\u0448\u0441\u044F. \u0429\u043E \u0434\u043E\u043F\u043E\u043C\u043E\u0436\u0435 \u0442\u043E\u0431\u0456 \u0437\u0430\u0441\u043F\u043E\u043A\u043E\u0457\u0442\u0438\u0441\u044F?', '\u0422\u044B \u043E\u0447\u0435\u043D\u044C \u0441\u0435\u0440\u0434\u0438\u0448\u044C\u0441\u044F. \u0427\u0442\u043E \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0442\u0435\u0431\u0435 \u0443\u0441\u043F\u043E\u043A\u043E\u0438\u0442\u044C\u0441\u044F?'), tr('What do we take when it rains?', 'Co bierzemy, gdy pada deszcz?', '\xBFQu\xE9 llevamos cuando llueve?', 'Cosa prendiamo quando piove?', "Qu'est-ce qu'on prend quand il pleut ?", 'Ce lu\u0103m c\xE2nd plou\u0103?', '\u010Co si berieme, ke\u010F pr\u0161\xED?', '\u0429\u043E \u043C\u0438 \u0431\u0435\u0440\u0435\u043C\u043E, \u043A\u043E\u043B\u0438 \u0439\u0434\u0435 \u0434\u043E\u0449?', '\u0427\u0442\u043E \u043C\u044B \u0431\u0435\u0440\u0451\u043C, \u043A\u043E\u0433\u0434\u0430 \u0438\u0434\u0451\u0442 \u0434\u043E\u0436\u0434\u044C?'), tr('What do we build from snow in winter?', 'Co lepimy zim\u0105 ze \u015Bniegu?', '\xBFQu\xE9 hacemos con la nieve en invierno?', "Cosa costruiamo con la neve d'inverno?", "Qu'est-ce qu'on fait avec la neige en hiver ?", 'Ce facem iarna din z\u0103pad\u0103?', '\u010Co stavame v zime zo snehu?', '\u0429\u043E \u043C\u0438 \u043B\u0456\u043F\u0438\u043C\u043E \u0432\u0437\u0438\u043C\u043A\u0443 \u0437\u0456 \u0441\u043D\u0456\u0433\u0443?', '\u0427\u0442\u043E \u043C\u044B \u043B\u0435\u043F\u0438\u043C \u0437\u0438\u043C\u043E\u0439 \u0438\u0437 \u0441\u043D\u0435\u0433\u0430?'), tr("What do we eat in summer when it's hot?", 'Co jemy latem, gdy jest gor\u0105co?', '\xBFQu\xE9 comemos en verano cuando hace calor?', "Cosa mangiamo d'estate quando fa caldo?", "Qu'est-ce qu'on mange en \xE9t\xE9 quand il fait chaud ?", 'Ce m\xE2nc\u0103m vara, c\xE2nd e cald?', '\u010Co jeme v lete, ke\u010F je teplo?', '\u0429\u043E \u043C\u0438 \u0457\u043C\u043E \u0432\u043B\u0456\u0442\u043A\u0443, \u043A\u043E\u043B\u0438 \u0441\u043F\u0435\u043A\u043E\u0442\u043D\u043E?', '\u0427\u0442\u043E \u043C\u044B \u0435\u0434\u0438\u043C \u043B\u0435\u0442\u043E\u043C, \u043A\u043E\u0433\u0434\u0430 \u0436\u0430\u0440\u043A\u043E?'), tr('What shines in the sky at night?', 'Co \u015Bwieci noc\u0105 na niebie?', '\xBFQu\xE9 brilla en el cielo por la noche?', 'Cosa brilla nel cielo di notte?', "Qu'est-ce qui brille dans le ciel la nuit ?", 'Ce str\u0103luce\u0219te noaptea pe cer?', '\u010Co svieti v noci na oblohe?', '\u0429\u043E \u0441\u0432\u0456\u0442\u0438\u0442\u044C \u0443\u043D\u043E\u0447\u0456 \u043D\u0430 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u0441\u0432\u0435\u0442\u0438\u0442 \u043D\u043E\u0447\u044C\u044E \u043D\u0430 \u043D\u0435\u0431\u0435?'), tr('What shines in the sky during the day?', 'Co \u015Bwieci w dzie\u0144 na niebie?', '\xBFQu\xE9 brilla en el cielo durante el d\xEDa?', 'Cosa splende nel cielo di giorno?', "Qu'est-ce qui brille dans le ciel le jour ?", 'Ce str\u0103luce\u0219te ziua pe cer?', '\u010Co svieti cez de\u0148 na oblohe?', '\u0429\u043E \u0441\u0432\u0456\u0442\u0438\u0442\u044C \u0443\u0434\u0435\u043D\u044C \u043D\u0430 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u0441\u0432\u0435\u0442\u0438\u0442 \u0434\u043D\u0451\u043C \u043D\u0430 \u043D\u0435\u0431\u0435?'), tr("What do we wear when it's cold?", 'Co zak\u0142adamy, gdy jest zimno?', '\xBFQu\xE9 nos ponemos cuando hace fr\xEDo?', 'Cosa mettiamo quando fa freddo?', "Qu'est-ce qu'on met quand il fait froid ?", 'Ce purt\u0103m c\xE2nd e frig?', '\u010Co si obliekame, ke\u010F je zima?', '\u0429\u043E \u043C\u0438 \u0432\u0434\u044F\u0433\u0430\u0454\u043C\u043E, \u043A\u043E\u043B\u0438 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?', '\u0427\u0442\u043E \u043C\u044B \u043D\u0430\u0434\u0435\u0432\u0430\u0435\u043C, \u043A\u043E\u0433\u0434\u0430 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?'), tr('What falls from the trees in autumn?', 'Co spada jesieni\u0105 z drzew?', '\xBFQu\xE9 cae de los \xE1rboles en oto\xF1o?', 'Cosa cade dagli alberi in autunno?', "Qu'est-ce qui tombe des arbres en automne ?", 'Ce cade toamna din copaci?', '\u010Co pad\xE1 na jese\u0148 zo stromov?', '\u0429\u043E \u043F\u0430\u0434\u0430\u0454 \u0432\u043E\u0441\u0435\u043D\u0438 \u0437 \u0434\u0435\u0440\u0435\u0432?', '\u0427\u0442\u043E \u043F\u0430\u0434\u0430\u0435\u0442 \u043E\u0441\u0435\u043D\u044C\u044E \u0441 \u0434\u0435\u0440\u0435\u0432\u044C\u0435\u0432?'), tr('What blooms in spring?', 'Co kwitnie wiosn\u0105?', '\xBFQu\xE9 florece en primavera?', 'Cosa fiorisce in primavera?', "Qu'est-ce qui fleurit au printemps ?", 'Ce \xEEnflore\u0219te prim\u0103vara?', '\u010Co kvitne na jar?', '\u0429\u043E \u0446\u0432\u0456\u0442\u0435 \u043D\u0430\u0432\u0435\u0441\u043D\u0456?', '\u0427\u0442\u043E \u0446\u0432\u0435\u0442\u0451\u0442 \u0432\u0435\u0441\u043D\u043E\u0439?'), tr('Who lives in the water?', 'Kto mieszka w wodzie?', '\xBFQui\xE9n vive en el agua?', "Chi vive nell'acqua?", "Qui vit dans l'eau ?", 'Cine tr\u0103ie\u0219te \xEEn ap\u0103?', 'Kto \u017Eije vo vode?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u0443 \u0432\u043E\u0434\u0456?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u0432 \u0432\u043E\u0434\u0435?'), tr("Who lives on the ice, where it's cold?", 'Kto mieszka na lodzie, gdzie jest zimno?', '\xBFQui\xE9n vive en el hielo, donde hace fr\xEDo?', 'Chi vive sul ghiaccio, dove fa freddo?', 'Qui vit sur la glace, l\xE0 o\xF9 il fait froid ?', 'Cine tr\u0103ie\u0219te pe ghea\u021B\u0103, unde e frig?', 'Kto \u017Eije na \u013Eade, kde je zima?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u043D\u0430 \u043A\u0440\u0438\u0437\u0456, \u0434\u0435 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u043D\u0430 \u043B\u044C\u0434\u0443, \u0433\u0434\u0435 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?'), tr('Who lives in the desert?', 'Kto mieszka na pustyni?', '\xBFQui\xE9n vive en el desierto?', 'Chi vive nel deserto?', 'Qui vit dans le d\xE9sert ?', 'Cine tr\u0103ie\u0219te \xEEn de\u0219ert?', 'Kto \u017Eije na p\xFA\u0161ti?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u0432 \u043F\u0443\u0441\u0442\u0435\u043B\u0456?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u0432 \u043F\u0443\u0441\u0442\u044B\u043D\u0435?'), tr('Who can fly?', 'Kto umie lata\u0107?', '\xBFQui\xE9n sabe volar?', 'Chi sa volare?', 'Qui sait voler ?', 'Cine poate zbura?', 'Kto vie lieta\u0165?', '\u0425\u0442\u043E \u0432\u043C\u0456\u0454 \u043B\u0456\u0442\u0430\u0442\u0438?', '\u041A\u0442\u043E \u0443\u043C\u0435\u0435\u0442 \u043B\u0435\u0442\u0430\u0442\u044C?'), tr('Which animal gives milk?', 'Kt\xF3re zwierz\u0119 daje mleko?', '\xBFQu\xE9 animal da leche?', 'Quale animale d\xE0 il latte?', 'Quel animal donne du lait ?', 'Ce animal d\u0103 lapte?', 'Ktor\xE9 zviera d\xE1va mlieko?', '\u042F\u043A\u0430 \u0442\u0432\u0430\u0440\u0438\u043D\u0430 \u0434\u0430\u0454 \u043C\u043E\u043B\u043E\u043A\u043E?', '\u041A\u0430\u043A\u043E\u0435 \u0436\u0438\u0432\u043E\u0442\u043D\u043E\u0435 \u0434\u0430\u0451\u0442 \u043C\u043E\u043B\u043E\u043A\u043E?'), tr('Who lays eggs?', 'Kto znosi jajka?', '\xBFQui\xE9n pone huevos?', 'Chi fa le uova?', 'Qui pond des \u0153ufs ?', 'Cine face ou\u0103?', 'Kto zn\xE1\u0161a vaj\xED\u010Dka?', '\u0425\u0442\u043E \u043D\u0435\u0441\u0435 \u044F\u0439\u0446\u044F?', '\u041A\u0442\u043E \u043D\u0435\u0441\u0451\u0442 \u044F\u0439\u0446\u0430?'), tr('Who loves carrots?', 'Kto lubi marchewki?', '\xBFA qui\xE9n le gustan las zanahorias?', 'A chi piacciono le carote?', 'Qui adore les carottes ?', 'Cine iube\u0219te morcovii?', 'Kto m\xE1 r\xE1d mrkvu?', '\u0425\u0442\u043E \u043B\u044E\u0431\u0438\u0442\u044C \u043C\u043E\u0440\u043A\u0432\u0443?', '\u041A\u0442\u043E \u043B\u044E\u0431\u0438\u0442 \u043C\u043E\u0440\u043A\u043E\u0432\u043A\u0443?'), tr('Who loves bananas?', 'Kto lubi banany?', '\xBFA qui\xE9n le gustan los pl\xE1tanos?', 'A chi piacciono le banane?', 'Qui adore les bananes ?', 'Cine iube\u0219te bananele?', 'Kto m\xE1 r\xE1d ban\xE1ny?', '\u0425\u0442\u043E \u043B\u044E\u0431\u0438\u0442\u044C \u0431\u0430\u043D\u0430\u043D\u0438?', '\u041A\u0442\u043E \u043B\u044E\u0431\u0438\u0442 \u0431\u0430\u043D\u0430\u043D\u044B?'), tr('At which light can we cross the street?', 'Przy jakim \u015Bwietle mo\u017Cemy przej\u015B\u0107 przez ulic\u0119?', '\xBFCon qu\xE9 luz podemos cruzar la calle?', 'Con quale luce possiamo attraversare la strada?', '\xC0 quelle couleur peut-on traverser la rue ?', 'La ce culoare putem traversa strada?', 'Pri akom svetle m\xF4\u017Eeme prejs\u0165 cez cestu?', '\u041D\u0430 \u044F\u043A\u0435 \u0441\u0432\u0456\u0442\u043B\u043E \u043C\u043E\u0436\u043D\u0430 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0438\u0442\u0438 \u0434\u043E\u0440\u043E\u0433\u0443?', '\u041D\u0430 \u043A\u0430\u043A\u043E\u0439 \u0441\u0432\u0435\u0442 \u043C\u043E\u0436\u043D\u043E \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0438\u0442\u044C \u0434\u043E\u0440\u043E\u0433\u0443?'), tr('At which light do we have to stop?', 'Przy jakim \u015Bwietle musimy si\u0119 zatrzyma\u0107?', '\xBFCon qu\xE9 luz tenemos que parar?', 'Con quale luce dobbiamo fermarci?', "\xC0 quelle couleur doit-on s'arr\xEAter ?", 'La ce culoare trebuie s\u0103 ne oprim?', 'Pri akom svetle mus\xEDme zastavi\u0165?', '\u041D\u0430 \u044F\u043A\u0435 \u0441\u0432\u0456\u0442\u043B\u043E \u0442\u0440\u0435\u0431\u0430 \u0437\u0443\u043F\u0438\u043D\u0438\u0442\u0438\u0441\u044F?', '\u041D\u0430 \u043A\u0430\u043A\u043E\u0439 \u0441\u0432\u0435\u0442 \u043D\u0443\u0436\u043D\u043E \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C\u0441\u044F?'), tr('Who puts out fires?', 'Kto gasi po\u017Car?', '\xBFQui\xE9n apaga el fuego?', 'Chi spegne il fuoco?', 'Qui \xE9teint le feu ?', 'Cine stinge focul?', 'Kto has\xED ohe\u0148?', '\u0425\u0442\u043E \u0433\u0430\u0441\u0438\u0442\u044C \u043F\u043E\u0436\u0435\u0436\u0443?', '\u041A\u0442\u043E \u0442\u0443\u0448\u0438\u0442 \u043F\u043E\u0436\u0430\u0440?'), tr('What takes sick people to hospital?', 'Co wiezie chorych do szpitala?', '\xBFQu\xE9 lleva a los enfermos al hospital?', 'Cosa porta i malati in ospedale?', "Qu'est-ce qui emm\xE8ne les malades \xE0 l'h\xF4pital ?", 'Ce duce bolnavii la spital?', '\u010Co vezie chor\xFDch do nemocnice?', '\u0429\u043E \u0432\u0435\u0437\u0435 \u0445\u0432\u043E\u0440\u0438\u0445 \u0434\u043E \u043B\u0456\u043A\u0430\u0440\u043D\u0456?', '\u0427\u0442\u043E \u0432\u0435\u0437\u0451\u0442 \u0431\u043E\u043B\u044C\u043D\u044B\u0445 \u0432 \u0431\u043E\u043B\u044C\u043D\u0438\u0446\u0443?'), tr('What runs on rails?', 'Co je\u017Adzi po szynach?', '\xBFQu\xE9 va sobre ra\xEDles?', 'Cosa va sui binari?', "Qu'est-ce qui roule sur des rails ?", 'Ce merge pe \u0219ine?', '\u010Co jazd\xED po ko\u013Eajniciach?', '\u0429\u043E \u0457\u0437\u0434\u0438\u0442\u044C \u043F\u043E \u0440\u0435\u0439\u043A\u0430\u0445?', '\u0427\u0442\u043E \u0435\u0437\u0434\u0438\u0442 \u043F\u043E \u0440\u0435\u043B\u044C\u0441\u0430\u043C?'), tr('What flies in the sky?', 'Co lata po niebie?', '\xBFQu\xE9 vuela por el cielo?', 'Cosa vola nel cielo?', "Qu'est-ce qui vole dans le ciel ?", 'Ce zboar\u0103 pe cer?', '\u010Co lieta po oblohe?', '\u0429\u043E \u043B\u0456\u0442\u0430\u0454 \u0432 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u043B\u0435\u0442\u0430\u0435\u0442 \u0432 \u043D\u0435\u0431\u0435?'), tr('What sails on the water?', 'Co p\u0142ywa po wodzie?', '\xBFQu\xE9 navega por el agua?', "Cosa naviga sull'acqua?", "Qu'est-ce qui navigue sur l'eau ?", 'Ce plute\u0219te pe ap\u0103?', '\u010Co pl\xE1va po vode?', '\u0429\u043E \u043F\u043B\u0438\u0432\u0435 \u043F\u043E \u0432\u043E\u0434\u0456?', '\u0427\u0442\u043E \u043F\u043B\u044B\u0432\u0451\u0442 \u043F\u043E \u0432\u043E\u0434\u0435?'), tr('What do we hear with?', 'Czym s\u0142yszymy?', '\xBFCon qu\xE9 o\xEDmos?', 'Con cosa sentiamo?', 'Avec quoi entend-on ?', 'Cu ce auzim?', '\u010C\xEDm po\u010Dujeme?', '\u0427\u0438\u043C \u043C\u0438 \u0447\u0443\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0441\u043B\u044B\u0448\u0438\u043C?'), tr('What do we see with?', 'Czym widzimy?', '\xBFCon qu\xE9 vemos?', 'Con cosa vediamo?', 'Avec quoi voit-on ?', 'Cu ce vedem?', '\u010C\xEDm vid\xEDme?', '\u0427\u0438\u043C \u043C\u0438 \u0431\u0430\u0447\u0438\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0432\u0438\u0434\u0438\u043C?'), tr('What do we smell with?', 'Czym w\u0105chamy?', '\xBFCon qu\xE9 olemos?', 'Con cosa annusiamo?', 'Avec quoi sent-on les odeurs ?', 'Cu ce mirosim?', '\u010C\xEDm voniame?', '\u0427\u0438\u043C \u043C\u0438 \u043D\u044E\u0445\u0430\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u043D\u044E\u0445\u0430\u0435\u043C?'), tr('What do we eat with?', 'Czym jemy?', '\xBFCon qu\xE9 comemos?', 'Con cosa mangiamo?', 'Avec quoi mange-t-on ?', 'Cu ce m\xE2nc\u0103m?', '\u010C\xEDm jeme?', '\u0427\u0438\u043C \u043C\u0438 \u0457\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0435\u0434\u0438\u043C?'), tr('What do we walk with?', 'Czym chodzimy?', '\xBFCon qu\xE9 caminamos?', 'Con cosa camminiamo?', 'Avec quoi marche-t-on ?', 'Cu ce mergem?', '\u010C\xEDm chod\xEDme?', '\u0427\u0438\u043C \u043C\u0438 \u0445\u043E\u0434\u0438\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0445\u043E\u0434\u0438\u043C?'), tr('What do we wave with?', 'Czym machamy?', '\xBFCon qu\xE9 saludamos?', 'Con cosa salutiamo?', 'Avec quoi fait-on coucou ?', 'Cu ce salut\u0103m?', '\u010C\xEDm m\xE1vame?', '\u0427\u0438\u043C \u043C\u0438 \u043C\u0430\u0445\u0430\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u043C\u0430\u0448\u0435\u043C?'), tr('\uD83D\uDD12 Parents only', '\uD83D\uDD12 Tylko dla rodzic\xF3w', '\uD83D\uDD12 Solo para padres', '\uD83D\uDD12 Solo per genitori', '\uD83D\uDD12 R\xE9serv\xE9 aux parents', '\uD83D\uDD12 Doar pentru p\u0103rin\u021Bi', '\uD83D\uDD12 Len pre rodi\u010Dov', '\uD83D\uDD12 \u0422\u0456\u043B\u044C\u043A\u0438 \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432', '\uD83D\uDD12 \u0422\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439'), tr('What is', 'Ile to', 'Cu\xE1nto es', 'Quanto fa', 'Combien font', 'C\xE2t face', 'Ko\u013Eko je', '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 \u0431\u0443\u0434\u0435', '\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0431\u0443\u0434\u0435\u0442'), tr('Cancel', 'Anuluj', 'Cancelar', 'Annulla', 'Annuler', 'Anuleaz\u0103', 'Zru\u0161i\u0165', '\u0421\u043A\u0430\u0441\u0443\u0432\u0430\u0442\u0438', '\u041E\u0442\u043C\u0435\u043D\u0430'), tr('\u2699\uFE0F Parent settings', '\u2699\uFE0F Ustawienia dla rodzic\xF3w', '\u2699\uFE0F Ajustes para padres', '\u2699\uFE0F Impostazioni genitori', '\u2699\uFE0F R\xE9glages parents', '\u2699\uFE0F Set\u0103ri pentru p\u0103rin\u021Bi', '\u2699\uFE0F Nastavenia pre rodi\u010Dov', '\u2699\uFE0F \u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432', '\u2699\uFE0F \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439'), tr('Language', 'J\u0119zyk', 'Idioma', 'Lingua', 'Langue', 'Limba', 'Jazyk', '\u041C\u043E\u0432\u0430', '\u042F\u0437\u044B\u043A'), tr('All texts and speech use only this language. The exception is the \u201COther languages\u201D game, where your child practises the words of another language.', 'Wszystkie teksty i nagrania s\u0105 tylko w tym j\u0119zyku. Wyj\u0105tkiem jest gra \u201EInne j\u0119zyki\u201D, w kt\xF3rej dziecko \u0107wiczy s\u0142owa z innego j\u0119zyka.', 'Todos los textos y la voz est\xE1n solo en este idioma. La excepci\xF3n es el juego \xABOtros idiomas\xBB, donde tu hijo practica palabras de otro idioma.', "Tutti i testi e la voce sono solo in questa lingua. L'eccezione \xE8 il gioco \xABAltre lingue\xBB, dove il bambino esercita le parole di un'altra lingua.", "Tous les textes et la voix sont uniquement dans cette langue. L'exception est le jeu \xAB Autres langues \xBB, o\xF9 votre enfant apprend les mots d'une autre langue.", 'Toate textele \u0219i vocea sunt doar \xEEn aceast\u0103 limb\u0103. Excep\u021Bie face jocul \u201EAlte limbi\u201D, unde copilul exerseaz\u0103 cuvinte dintr-o alt\u0103 limb\u0103.', 'V\u0161etky texty a hlas s\xFA len v tomto jazyku. V\xFDnimkou je hra \u201EIn\xE9 jazyky\u201C, kde die\u0165a cvi\u010D\xED slov\xE1 z in\xE9ho jazyka.', '\u0423\u0441\u0456 \u0442\u0435\u043A\u0441\u0442\u0438 \u0439 \u043E\u0437\u0432\u0443\u0447\u0435\u043D\u043D\u044F \u043B\u0438\u0448\u0435 \u0446\u0456\u0454\u044E \u043C\u043E\u0432\u043E\u044E. \u0412\u0438\u043D\u044F\u0442\u043E\u043A \u2014 \u0433\u0440\u0430 \xAB\u0406\u043D\u0448\u0456 \u043C\u043E\u0432\u0438\xBB, \u0434\u0435 \u0434\u0438\u0442\u0438\u043D\u0430 \u0432\u0447\u0438\u0442\u044C \u0441\u043B\u043E\u0432\u0430 \u0456\u043D\u0448\u043E\u0457 \u043C\u043E\u0432\u0438.', '\u0412\u0441\u0435 \u0442\u0435\u043A\u0441\u0442\u044B \u0438 \u043E\u0437\u0432\u0443\u0447\u043A\u0430 \u0442\u043E\u043B\u044C\u043A\u043E \u043D\u0430 \u044D\u0442\u043E\u043C \u044F\u0437\u044B\u043A\u0435. \u0418\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u2014 \u0438\u0433\u0440\u0430 \xAB\u0414\u0440\u0443\u0433\u0438\u0435 \u044F\u0437\u044B\u043A\u0438\xBB, \u0433\u0434\u0435 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u0443\u0447\u0438\u0442 \u0441\u043B\u043E\u0432\u0430 \u0434\u0440\u0443\u0433\u043E\u0433\u043E \u044F\u0437\u044B\u043A\u0430.'), tr('min', 'min', 'min', 'min', 'min', 'min', 'min', '\u0445\u0432', '\u043C\u0438\u043D'), tr('Play time', 'Czas gry', 'Tiempo de juego', 'Tempo di gioco', 'Temps de jeu', 'Timp de joac\u0103', '\u010Cas hry', '\u0427\u0430\u0441 \u0433\u0440\u0438', '\u0412\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B'), tr('\uD83C\uDF1E Morning', '\uD83C\uDF1E Rano', '\uD83C\uDF1E Ma\xF1ana', '\uD83C\uDF1E Mattina', '\uD83C\uDF1E Matin', '\uD83C\uDF1E Diminea\u021Ba', '\uD83C\uDF1E R\xE1no', '\uD83C\uDF1E \u0420\u0430\u043D\u043E\u043A', '\uD83C\uDF1E \u0423\u0442\u0440\u043E'), tr('\uD83C\uDF19 Afternoon', '\uD83C\uDF19 Po po\u0142udniu', '\uD83C\uDF19 Tarde', '\uD83C\uDF19 Pomeriggio', '\uD83C\uDF19 Apr\xE8s-midi', '\uD83C\uDF19 Dup\u0103-amiaza', '\uD83C\uDF19 Popoludnie', '\uD83C\uDF19 \u041F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443', '\uD83C\uDF19 \u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430'), tr('Morning = before 12:00, afternoon = from 12:00. 0 minutes: no play at that time of day. Time only runs while the game is on screen. Each player has their own time.', 'Rano = przed 12:00, po po\u0142udniu = od 12:00. 0 minut: o tej porze nie ma gry. Czas p\u0142ynie tylko wtedy, gdy gra jest na ekranie. Ka\u017Cdy gracz ma w\u0142asny czas.', 'Ma\xF1ana = antes de las 12:00, tarde = desde las 12:00. 0 minutos: en ese momento del d\xEDa no se juega. El tiempo solo corre mientras el juego est\xE1 en pantalla. Cada jugador tiene su propio tiempo.', 'Mattina = prima delle 12:00, pomeriggio = dalle 12:00. 0 minuti: in quel momento della giornata non si gioca. Il tempo scorre solo mentre il gioco \xE8 sullo schermo. Ogni giocatore ha il suo tempo.', "Matin = avant 12h00, apr\xE8s-midi = \xE0 partir de 12h00. 0 minute : pas de jeu \xE0 ce moment de la journ\xE9e. Le temps ne s'\xE9coule que lorsque le jeu est \xE0 l'\xE9cran. Chaque joueur a son propre temps.", 'Diminea\u021Ba = \xEEnainte de 12:00, dup\u0103-amiaza = de la 12:00. 0 minute: atunci nu se joac\u0103. Timpul curge doar c\xE2t jocul e pe ecran. Fiecare juc\u0103tor are timpul lui.', 'R\xE1no = pred 12:00, popoludnie = od 12:00. 0 min\xFAt: v tejto \u010Dasti d\u0148a sa nehr\xE1. \u010Cas plynie, len ke\u010F je hra na obrazovke. Ka\u017Ed\xFD hr\xE1\u010D m\xE1 vlastn\xFD \u010Das.', '\u0420\u0430\u043D\u043E\u043A = \u0434\u043E 12:00, \u043F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443 = \u0437 12:00. 0 \u0445\u0432\u0438\u043B\u0438\u043D: \u0443 \u0446\u0435\u0439 \u0447\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435\u043C\u0430\u0454. \u0427\u0430\u0441 \u0456\u0434\u0435 \u043B\u0438\u0448\u0435 \u0442\u043E\u0434\u0456, \u043A\u043E\u043B\u0438 \u0433\u0440\u0430 \u043D\u0430 \u0435\u043A\u0440\u0430\u043D\u0456. \u041A\u043E\u0436\u0435\u043D \u0433\u0440\u0430\u0432\u0435\u0446\u044C \u043C\u0430\u0454 \u0441\u0432\u0456\u0439 \u0447\u0430\u0441.', '\u0423\u0442\u0440\u043E = \u0434\u043E 12:00, \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430 = \u0441 12:00. 0 \u043C\u0438\u043D\u0443\u0442: \u0432 \u044D\u0442\u043E \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435\u0442. \u0412\u0440\u0435\u043C\u044F \u0438\u0434\u0451\u0442, \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u043E\u043A\u0430 \u0438\u0433\u0440\u0430 \u043D\u0430 \u044D\u043A\u0440\u0430\u043D\u0435. \u0423 \u043A\u0430\u0436\u0434\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430 \u0441\u0432\u043E\u0451 \u0432\u0440\u0435\u043C\u044F.'), tr('Current session', 'Bie\u017C\u0105ca gra', 'Sesi\xF3n actual', 'Sessione attuale', 'Session en cours', 'Sesiunea curent\u0103', 'Aktu\xE1lne hranie', '\u041F\u043E\u0442\u043E\u0447\u043D\u0430 \u0433\u0440\u0430', '\u0422\u0435\u043A\u0443\u0449\u0430\u044F \u0438\u0433\u0440\u0430'), tr('Morning', 'Rano', 'Ma\xF1ana', 'Mattina', 'Matin', 'Diminea\u021Ba', 'R\xE1no', '\u0420\u0430\u043D\u043E\u043A', '\u0423\u0442\u0440\u043E'), tr('Afternoon', 'Po po\u0142udniu', 'Tarde', 'Pomeriggio', 'Apr\xE8s-midi', 'Dup\u0103-amiaza', 'Popoludnie', '\u041F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443', '\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430'), tr('played', 'zagrane', 'jugado', 'giocato', 'jou\xE9', 'jucat', 'odohran\xE9', '\u0437\u0456\u0433\u0440\u0430\u043D\u043E', '\u0441\u044B\u0433\u0440\u0430\u043D\u043E'), tr('left', 'zosta\u0142o', 'queda', 'rimasto', 'restant', 'r\u0103mas', 'zost\xE1va', '\u0437\u0430\u043B\u0438\u0448\u0438\u043B\u043E\u0441\u044C', '\u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C'), tr('Reset time now', 'Zresetuj czas teraz', 'Reiniciar el tiempo ahora', 'Azzera il tempo ora', 'R\xE9initialiser le temps', 'Reseteaz\u0103 timpul acum', 'Vynulova\u0165 \u010Das teraz', '\u0421\u043A\u0438\u043D\u0443\u0442\u0438 \u0447\u0430\u0441 \u0437\u0430\u0440\u0430\u0437', '\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F \u0441\u0435\u0439\u0447\u0430\u0441'), tr('Voice', 'G\u0142os', 'Voz', 'Voce', 'Voix', 'Voce', 'Hlas', '\u0413\u043E\u043B\u043E\u0441', '\u0413\u043E\u043B\u043E\u0441'), tr('\u2705 available', '\u2705 dost\u0119pny', '\u2705 disponible', '\u2705 disponibile', '\u2705 disponible', '\u2705 disponibil', '\u2705 dostupn\xFD', '\u2705 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0438\u0439', '\u2705 \u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D'), tr('\u26A0\uFE0F not installed', '\u26A0\uFE0F nie zainstalowano', '\u26A0\uFE0F no instalada', '\u26A0\uFE0F non installata', '\u26A0\uFE0F non install\xE9e', '\u26A0\uFE0F neinstalat\u0103', '\u26A0\uFE0F nenain\u0161talovan\xFD', '\u26A0\uFE0F \u043D\u0435 \u0432\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u043E', '\u26A0\uFE0F \u043D\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D'), tr('If a language is missing: Settings \u2192 Text-to-speech \u2192 Speech Services by Google \u2192 install voice data.', 'Je\u015Bli brakuje j\u0119zyka: Ustawienia \u2192 Zamiana tekstu na mow\u0119 \u2192 Us\u0142ugi mowy Google \u2192 zainstaluj dane g\u0142osowe.', 'Si falta un idioma: Ajustes \u2192 S\xEDntesis de voz \u2192 Servicios de voz de Google \u2192 instalar datos de voz.', 'Se manca una lingua: Impostazioni \u2192 Sintesi vocale \u2192 Servizi di sintesi vocale Google \u2192 installa i dati vocali.', "S'il manque une langue : Param\xE8tres \u2192 Synth\xE8se vocale \u2192 Services vocaux Google \u2192 installer les donn\xE9es vocales.", 'Dac\u0103 lipse\u0219te o limb\u0103: Set\u0103ri \u2192 Redare vocal\u0103 a textului \u2192 Serviciile de vorbire Google \u2192 instaleaz\u0103 datele vocale.', 'Ak jazyk ch\xFDba: Nastavenia \u2192 Prevod textu na re\u010D \u2192 Hlasov\xE9 slu\u017Eby Google \u2192 nain\u0161talova\u0165 hlasov\xE9 \xFAdaje.', '\u042F\u043A\u0449\u043E \u043C\u043E\u0432\u0438 \u043D\u0435\u043C\u0430\u0454: \u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u2192 \u0421\u0438\u043D\u0442\u0435\u0437 \u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F \u2192 \u041C\u043E\u0432\u043D\u0456 \u0441\u043B\u0443\u0436\u0431\u0438 Google \u2192 \u0432\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u0438 \u0433\u043E\u043B\u043E\u0441\u043E\u0432\u0456 \u0434\u0430\u043D\u0456.', '\u0415\u0441\u043B\u0438 \u044F\u0437\u044B\u043A\u0430 \u043D\u0435\u0442: \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u2192 \u0421\u0438\u043D\u0442\u0435\u0437 \u0440\u0435\u0447\u0438 \u2192 \u0420\u0435\u0447\u0435\u0432\u044B\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\u044B Google \u2192 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u043B\u043E\u0441\u043E\u0432\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435.'), tr('Open voice settings', 'Otw\xF3rz ustawienia g\u0142osu', 'Abrir ajustes de voz', 'Apri impostazioni voce', 'Ouvrir les r\xE9glages de voix', 'Deschide set\u0103rile vocii', 'Otvori\u0165 nastavenia hlasu', '\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0433\u043E\u043B\u043E\u0441\u0443', '\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0433\u043E\u043B\u043E\u0441\u0430'), tr('Progress', 'Post\u0119py', 'Progreso', 'Progressi', 'Progr\xE8s', 'Progres', 'Pokrok', '\u041F\u0440\u043E\u0433\u0440\u0435\u0441', '\u041F\u0440\u043E\u0433\u0440\u0435\u0441\u0441'), tr('correct', 'dobrze', 'aciertos', 'giuste', 'bonnes r\xE9ponses', 'corecte', 'spr\xE1vne', '\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E', '\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E'), tr('Total stars', 'Wszystkie gwiazdki', 'Estrellas en total', 'Stelle in totale', '\xC9toiles au total', 'Total stele', 'Hviezdy spolu', '\u0423\u0441\u044C\u043E\u0433\u043E \u0437\u0456\u0440\u043E\u043A', '\u0412\u0441\u0435\u0433\u043E \u0437\u0432\u0451\u0437\u0434'), tr('Every game has 3 levels. After 5 stars your child can choose a harder level and gets a sticker for every finished round.', 'Ka\u017Cda gra ma 3 poziomy. Po 5 gwiazdkach dziecko mo\u017Ce wybra\u0107 trudniejszy poziom i za ka\u017Cd\u0105 uko\u0144czon\u0105 rund\u0119 dostaje naklejk\u0119.', 'Cada juego tiene 3 niveles. Tras 5 estrellas, tu hijo puede elegir un nivel m\xE1s dif\xEDcil y recibe una pegatina por cada ronda terminada.', 'Ogni gioco ha 3 livelli. Dopo 5 stelle il bambino pu\xF2 scegliere un livello pi\xF9 difficile e riceve un adesivo per ogni giro finito.', 'Chaque jeu a 3 niveaux. Apr\xE8s 5 \xE9toiles, votre enfant peut choisir un niveau plus difficile et re\xE7oit un autocollant pour chaque partie termin\xE9e.', 'Fiecare joc are 3 niveluri. Dup\u0103 5 stele, copilul poate alege un nivel mai greu \u0219i prime\u0219te un ab\u021Bibild pentru fiecare rund\u0103 terminat\u0103.', 'Ka\u017Ed\xE1 hra m\xE1 3 \xFArovne. Po 5 hviezdach si die\u0165a m\xF4\u017Ee vybra\u0165 \u0165a\u017E\u0161iu \xFArove\u0148 a za ka\u017Ed\xE9 dokon\u010Den\xE9 kolo dostane n\xE1lepku.', '\u041A\u043E\u0436\u043D\u0430 \u0433\u0440\u0430 \u043C\u0430\u0454 3 \u0440\u0456\u0432\u043D\u0456. \u041F\u0456\u0441\u043B\u044F 5 \u0437\u0456\u0440\u043E\u043A \u0434\u0438\u0442\u0438\u043D\u0430 \u043C\u043E\u0436\u0435 \u043E\u0431\u0440\u0430\u0442\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C \u0456 \u043E\u0442\u0440\u0438\u043C\u0443\u0454 \u043D\u0430\u043B\u0456\u043F\u043A\u0443 \u0437\u0430 \u043A\u043E\u0436\u0435\u043D \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u0439 \u0440\u0430\u0443\u043D\u0434.', '\u0412 \u043A\u0430\u0436\u0434\u043E\u0439 \u0438\u0433\u0440\u0435 3 \u0443\u0440\u043E\u0432\u043D\u044F. \u041F\u043E\u0441\u043B\u0435 5 \u0437\u0432\u0451\u0437\u0434 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u043C\u043E\u0436\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u0442\u044C \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043B\u043E\u0436\u043D\u0435\u0435 \u0438 \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0443 \u0437\u0430 \u043A\u0430\u0436\u0434\u044B\u0439 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u0439 \u0440\u0430\u0443\u043D\u0434.'), tr('Tip', 'Wskaz\xF3wka', 'Consejo', 'Consiglio', 'Astuce', 'Sfat', 'Tip', '\u041F\u043E\u0440\u0430\u0434\u0430', '\u0421\u043E\u0432\u0435\u0442'), tr("Turn on Android's \u201CApp pinning\u201D, so your child can't leave the game for other apps.", 'W\u0142\u0105cz w Androidzie \u201EPrzypinanie aplikacji\u201D, aby dziecko nie mog\u0142o wyj\u015B\u0107 z gry do innych aplikacji.', 'Activa la \xABFijaci\xF3n de pantalla\xBB de Android para que tu hijo no pueda salir del juego a otras apps.', 'Attiva il \xABBlocco app\xBB di Android, cos\xEC il bambino non pu\xF2 uscire dal gioco.', "Activez l'\xAB \xC9pinglage d'application \xBB d'Android pour que votre enfant ne puisse pas quitter le jeu.", 'Activeaz\u0103 \u201EFixarea aplica\u021Biei\u201D din Android, ca s\u0103 nu poat\u0103 ie\u0219i copilul din joc.', 'Zapnite v Androide \u201EPripnutie aplik\xE1cie\u201C, aby die\u0165a nemohlo od\xEDs\u0165 z hry do in\xFDch aplik\xE1ci\xED.', '\u0423\u0432\u0456\u043C\u043A\u043D\u0456\u0442\u044C \u0432 Android \xAB\u0417\u0430\u043A\u0440\u0456\u043F\u043B\u0435\u043D\u043D\u044F \u0437\u0430\u0441\u0442\u043E\u0441\u0443\u043D\u043A\u0443\xBB, \u0449\u043E\u0431 \u0434\u0438\u0442\u0438\u043D\u0430 \u043D\u0435 \u043C\u043E\u0433\u043B\u0430 \u0432\u0438\u0439\u0442\u0438 \u0437 \u0433\u0440\u0438.', '\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u0435 \u0432 Android \xAB\u0417\u0430\u043A\u0440\u0435\u043F\u043B\u0435\u043D\u0438\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F\xBB, \u0447\u0442\u043E\u0431\u044B \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u043D\u0435 \u043C\u043E\u0433 \u0432\u044B\u0439\u0442\u0438 \u0438\u0437 \u0438\u0433\u0440\u044B.'), tr('Back', 'Wstecz', 'Atr\xE1s', 'Indietro', 'Retour', '\xCEnapoi', 'Sp\xE4\u0165', '\u041D\u0430\u0437\u0430\u0434', '\u041D\u0430\u0437\u0430\u0434'), tr('Players', 'Gracze', 'Jugadores', 'Giocatori', 'Joueurs', 'Juc\u0103tori', 'Hr\xE1\u010Di', '\u0413\u0440\u0430\u0432\u0446\u0456', '\u0418\u0433\u0440\u043E\u043A\u0438'), tr('Manage players', 'Zarz\u0105dzaj graczami', 'Gestionar jugadores', 'Gestisci giocatori', 'G\xE9rer les joueurs', 'Gestioneaz\u0103 juc\u0103torii', 'Spravova\u0165 hr\xE1\u010Dov', '\u041A\u0435\u0440\u0443\u0432\u0430\u0442\u0438 \u0433\u0440\u0430\u0432\u0446\u044F\u043C\u0438', '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0438\u0433\u0440\u043E\u043A\u0430\u043C\u0438'), tr('Who is playing?', 'Kto gra?', '\xBFQui\xE9n juega?', 'Chi gioca?', 'Qui joue ?', 'Cine se joac\u0103?', 'Kto sa hr\xE1?', '\u0425\u0442\u043E \u0433\u0440\u0430\u0454?', '\u041A\u0442\u043E \u0438\u0433\u0440\u0430\u0435\u0442?'), tr('Each player has their own stars, stickers and play time.', 'Ka\u017Cdy gracz ma w\u0142asne gwiazdki, naklejki i czas gry.', 'Cada jugador tiene sus propias estrellas, pegatinas y tiempo de juego.', 'Ogni giocatore ha le sue stelle, i suoi adesivi e il suo tempo di gioco.', 'Chaque joueur a ses propres \xE9toiles, autocollants et temps de jeu.', 'Fiecare juc\u0103tor are stelele, ab\u021Bibildurile \u0219i timpul lui.', 'Ka\u017Ed\xFD hr\xE1\u010D m\xE1 vlastn\xE9 hviezdy, n\xE1lepky a \u010Das hry.', '\u041A\u043E\u0436\u0435\u043D \u0433\u0440\u0430\u0432\u0435\u0446\u044C \u043C\u0430\u0454 \u0441\u0432\u043E\u0457 \u0437\u0456\u0440\u043A\u0438, \u043D\u0430\u043B\u0456\u043F\u043A\u0438 \u0439 \u0447\u0430\u0441 \u0433\u0440\u0438.', '\u0423 \u043A\u0430\u0436\u0434\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430 \u0441\u0432\u043E\u0438 \u0437\u0432\u0451\u0437\u0434\u044B, \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438 \u0438 \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B.'), tr('Delete this player? Their stars and stickers will be lost.', 'Usun\u0105\u0107 tego gracza? Jego gwiazdki i naklejki przepadn\u0105.', '\xBFBorrar este jugador? Se perder\xE1n sus estrellas y pegatinas.', 'Eliminare questo giocatore? Stelle e adesivi andranno persi.', 'Supprimer ce joueur ? Ses \xE9toiles et autocollants seront perdus.', '\u0218tergi acest juc\u0103tor? Stelele \u0219i ab\u021Bibildurile lui se vor pierde.', 'Vymaza\u0165 tohto hr\xE1\u010Da? Jeho hviezdy a n\xE1lepky sa stratia.', '\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u044C\u043E\u0433\u043E \u0433\u0440\u0430\u0432\u0446\u044F? \u0419\u043E\u0433\u043E \u0437\u0456\u0440\u043A\u0438 \u0439 \u043D\u0430\u043B\u0456\u043F\u043A\u0438 \u0437\u043D\u0438\u043A\u043D\u0443\u0442\u044C.', '\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u0442\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430? \u0415\u0433\u043E \u0437\u0432\u0451\u0437\u0434\u044B \u0438 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438 \u043F\u0440\u043E\u043F\u0430\u0434\u0443\u0442.'), tr('Delete', 'Usu\u0144', 'Borrar', 'Elimina', 'Supprimer', '\u0218terge', 'Vymaza\u0165', '\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438', '\u0423\u0434\u0430\u043B\u0438\u0442\u044C'), tr('New player', 'Nowy gracz', 'Nuevo jugador', 'Nuovo giocatore', 'Nouveau joueur', 'Juc\u0103tor nou', 'Nov\xFD hr\xE1\u010D', '\u041D\u043E\u0432\u0438\u0439 \u0433\u0440\u0430\u0432\u0435\u0446\u044C', '\u041D\u043E\u0432\u044B\u0439 \u0438\u0433\u0440\u043E\u043A'), tr('Pick a character:', 'Wybierz posta\u0107:', 'Elige un personaje:', 'Scegli un personaggio:', 'Choisis un personnage :', 'Alege un personaj:', 'Vyber si postavi\u010Dku:', '\u041E\u0431\u0435\u0440\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430:', '\u0412\u044B\u0431\u0435\u0440\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430:'), tr('Name (optional)', 'Imi\u0119 (opcjonalnie)', 'Nombre (opcional)', 'Nome (facoltativo)', 'Pr\xE9nom (facultatif)', 'Nume (op\u021Bional)', 'Meno (nepovinn\xE9)', "\u0406\u043C'\u044F (\u043D\u0435\u043E\u0431\u043E\u0432'\u044F\u0437\u043A\u043E\u0432\u043E)", '\u0418\u043C\u044F (\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E)'), tr('Save', 'Zapisz', 'Guardar', 'Salva', 'Enregistrer', 'Salveaz\u0103', 'Ulo\u017Ei\u0165', '\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438', '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'), tr('What should start over?', 'Co zacz\u0105\u0107 od nowa?', '\xBFQu\xE9 quieres empezar de nuevo?', 'Cosa vuoi ricominciare?', "Qu'est-ce qui doit recommencer ?", 'Ce o lu\u0103m de la cap\u0103t?', '\u010Co za\u010Da\u0165 odznova?', '\u0429\u043E \u043F\u043E\u0447\u0430\u0442\u0438 \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0430\u0442\u044C \u0437\u0430\u043D\u043E\u0432\u043E?'), tr('\uD83D\uDCD2 Only the sticker album', '\uD83D\uDCD2 Tylko album z naklejkami', '\uD83D\uDCD2 Solo el \xE1lbum de pegatinas', "\uD83D\uDCD2 Solo l'album degli adesivi", "\uD83D\uDCD2 Seulement l'album d'autocollants", '\uD83D\uDCD2 Doar albumul cu ab\u021Bibilduri', '\uD83D\uDCD2 Len album n\xE1lepiek', '\uD83D\uDCD2 \u041B\u0438\u0448\u0435 \u0430\u043B\u044C\u0431\u043E\u043C \u043D\u0430\u043B\u0456\u043F\u043E\u043A', '\uD83D\uDCD2 \u0422\u043E\u043B\u044C\u043A\u043E \u0430\u043B\u044C\u0431\u043E\u043C \u043D\u0430\u043A\u043B\u0435\u0435\u043A'), tr('\uD83D\uDD04 Everything: stars, stickers, levels', '\uD83D\uDD04 Wszystko: gwiazdki, naklejki, poziomy', '\uD83D\uDD04 Todo: estrellas, pegatinas, niveles', '\uD83D\uDD04 Tutto: stelle, adesivi, livelli', '\uD83D\uDD04 Tout : \xE9toiles, autocollants, niveaux', '\uD83D\uDD04 Tot: stele, ab\u021Bibilduri, niveluri', '\uD83D\uDD04 V\u0161etko: hviezdy, n\xE1lepky, \xFArovne', '\uD83D\uDD04 \u0423\u0441\u0435: \u0437\u0456\u0440\u043A\u0438, \u043D\u0430\u043B\u0456\u043F\u043A\u0438, \u0440\u0456\u0432\u043D\u0456', '\uD83D\uDD04 \u0412\u0441\u0451: \u0437\u0432\u0451\u0437\u0434\u044B, \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438, \u0443\u0440\u043E\u0432\u043D\u0438'), tr('Play time is not changed.', 'Czas gry si\u0119 nie zmienia.', 'El tiempo de juego no cambia.', 'Il tempo di gioco non cambia.', 'Le temps de jeu ne change pas.', 'Timpul de joac\u0103 nu se schimb\u0103.', '\u010Cas hry sa nemen\xED.', '\u0427\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435 \u0437\u043C\u0456\u043D\u044E\u0454\u0442\u044C\u0441\u044F.', '\u0412\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435 \u043C\u0435\u043D\u044F\u0435\u0442\u0441\u044F.'), tr('You can add more players later in the parent settings.', 'Kolejnych graczy mo\u017Cesz doda\u0107 p\xF3\u017Aniej w ustawieniach dla rodzic\xF3w.', 'Puedes a\xF1adir m\xE1s jugadores despu\xE9s en los ajustes para padres.', 'Puoi aggiungere altri giocatori pi\xF9 tardi nelle impostazioni genitori.', "Vous pourrez ajouter d'autres joueurs plus tard dans les r\xE9glages parents.", 'Po\u021Bi ad\u0103uga al\u021Bi juc\u0103tori mai t\xE2rziu \xEEn set\u0103rile pentru p\u0103rin\u021Bi.', '\u010Eal\u0161\xEDch hr\xE1\u010Dov m\xF4\u017Eete prida\u0165 nesk\xF4r v nastaveniach pre rodi\u010Dov.', '\u0406\u043D\u0448\u0438\u0445 \u0433\u0440\u0430\u0432\u0446\u0456\u0432 \u043C\u043E\u0436\u043D\u0430 \u0434\u043E\u0434\u0430\u0442\u0438 \u043F\u0456\u0437\u043D\u0456\u0448\u0435 \u0432 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F\u0445 \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432.', '\u0414\u0440\u0443\u0433\u0438\u0445 \u0438\u0433\u0440\u043E\u043A\u043E\u0432 \u043C\u043E\u0436\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435 \u0432 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\u0445 \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439.'), tr('Do you want to leave the game?', 'Chcesz wyj\u015B\u0107 z gry?', '\xBFQuieres salir del juego?', 'Vuoi uscire dal gioco?', 'Tu veux quitter le jeu ?', 'Vrei s\u0103 ie\u0219i din joc?', 'Chce\u0161 od\xEDs\u0165 z hry?', '\u0425\u043E\u0447\u0435\u0448 \u0432\u0438\u0439\u0442\u0438 \u0437 \u0433\u0440\u0438?', '\u0425\u043E\u0447\u0435\u0448\u044C \u0432\u044B\u0439\u0442\u0438 \u0438\u0437 \u0438\u0433\u0440\u044B?'), tr("Let's go!", 'Zaczynamy!', '\xA1Vamos!', 'Andiamo!', "C'est parti !", 'Hai s\u0103 \xEEncepem!', 'Po\u010Fme na to!', '\u041F\u043E\u0447\u043D\u0456\u043C\u043E!', '\u041F\u043E\u0435\u0445\u0430\u043B\u0438!'), tr('Board game', 'Gra planszowa', 'Juego de mesa', 'Gioco da tavolo', 'Jeu de plateau', 'Joc de societate', 'Spolo\u010Densk\xE1 hra', '\u041D\u0430\u0441\u0442\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430', '\u041D\u0430\u0441\u0442\u043E\u043B\u044C\u043D\u0430\u044F \u0438\u0433\u0440\u0430'), tr('For parents and teachers', 'Dla rodzic\xF3w i nauczycieli', 'Para padres y educadores', 'Per genitori ed educatori', 'Pour les parents et les \xE9ducateurs', 'Pentru p\u0103rin\u021Bi \u0219i educatori', 'Pre rodi\u010Dov a pedag\xF3gov', '\u0414\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432 \u0456 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u0456\u0432', '\u0414\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439 \u0438 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u0432'), tr('We recommend playing this game together with a parent or a teacher. There are no right or wrong answers: listen to the child, ask follow-up questions and praise their ideas. When a question has been talked through, tap \u201CDone\u201D.', 'Zalecamy gra\u0107 w t\u0119 gr\u0119 razem z rodzicem lub nauczycielem. Nie ma tu dobrych ani z\u0142ych odpowiedzi: wys\u0142uchaj dziecka, dopytaj i pochwal jego pomys\u0142y. Gdy porozmawiacie o pytaniu, naci\u015Bnijcie \u201EGotowe\u201D.', 'Recomendamos jugar a este juego junto con un padre, una madre o un educador. No hay respuestas correctas ni incorrectas: escuchad al ni\xF1o, haced preguntas y elogiad sus ideas. Cuando hay\xE1is hablado de una pregunta, pulsad \xABListo\xBB.', 'Consigliamo di giocare insieme a un genitore o a un educatore. Non ci sono risposte giuste o sbagliate: ascoltate il bambino, fate altre domande e lodate le sue idee. Quando avete parlato di una domanda, toccate \xABFatto\xBB.', "Nous conseillons de jouer \xE0 ce jeu avec un parent ou un \xE9ducateur. Il n'y a pas de bonne ou de mauvaise r\xE9ponse : \xE9coutez l'enfant, posez-lui d'autres questions et f\xE9licitez-le pour ses id\xE9es. Quand vous avez parl\xE9 d'une question, appuyez sur \xAB Fini \xBB.", 'V\u0103 recomand\u0103m s\u0103 juca\u021Bi acest joc \xEEmpreun\u0103 cu un p\u0103rinte sau un educator. Nu exist\u0103 r\u0103spunsuri bune sau gre\u0219ite: asculta\u021Bi copilul, pune\u021Bi \xEEntreb\u0103ri \u0219i l\u0103uda\u021Bi-i ideile. Dup\u0103 ce a\u021Bi vorbit despre o \xEEntrebare, ap\u0103sa\u021Bi \u201EGata\u201D.', 'T\xFAto hru odpor\xFA\u010Dame hra\u0165 spolu s rodi\u010Dom alebo pedag\xF3gom. Neexistuj\xFA dobr\xE9 ani zl\xE9 odpovede: vypo\u010Dujte si die\u0165a, p\xFDtajte sa \u010Falej a pochv\xE1\u013Ete jeho n\xE1pady. Ke\u010F sa o ot\xE1zke porozpr\xE1vate, \u0165uknite na \u201EHotovo\u201C.', '\u0420\u0430\u0434\u0438\u043C\u043E \u0433\u0440\u0430\u0442\u0438 \u0432 \u0446\u044E \u0433\u0440\u0443 \u0440\u0430\u0437\u043E\u043C \u0456\u0437 \u0431\u0430\u0442\u044C\u043A\u0430\u043C\u0438 \u0430\u0431\u043E \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u043C. \u0422\u0443\u0442 \u043D\u0435\u043C\u0430\u0454 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0445 \u0447\u0438 \u043D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0445 \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0435\u0439: \u0432\u0438\u0441\u043B\u0443\u0445\u0430\u0439\u0442\u0435 \u0434\u0438\u0442\u0438\u043D\u0443, \u043F\u043E\u0441\u0442\u0430\u0432\u0442\u0435 \u0434\u043E\u0434\u0430\u0442\u043A\u043E\u0432\u0456 \u0437\u0430\u043F\u0438\u0442\u0430\u043D\u043D\u044F \u0439 \u043F\u043E\u0445\u0432\u0430\u043B\u0456\u0442\u044C \u0457\u0457 \u0434\u0443\u043C\u043A\u0438. \u041A\u043E\u043B\u0438 \u0432\u0438 \u043E\u0431\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438 \u0437\u0430\u043F\u0438\u0442\u0430\u043D\u043D\u044F, \u043D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \xAB\u0413\u043E\u0442\u043E\u0432\u043E\xBB.', '\u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u043C \u0438\u0433\u0440\u0430\u0442\u044C \u0432 \u044D\u0442\u0443 \u0438\u0433\u0440\u0443 \u0432\u043C\u0435\u0441\u0442\u0435 \u0441 \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u043C \u0438\u043B\u0438 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u043C. \u0417\u0434\u0435\u0441\u044C \u043D\u0435\u0442 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445 \u0438 \u043D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445 \u043E\u0442\u0432\u0435\u0442\u043E\u0432: \u0432\u044B\u0441\u043B\u0443\u0448\u0430\u0439\u0442\u0435 \u0440\u0435\u0431\u0451\u043D\u043A\u0430, \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0443\u0442\u043E\u0447\u043D\u044F\u044E\u0449\u0438\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B \u0438 \u043F\u043E\u0445\u0432\u0430\u043B\u0438\u0442\u0435 \u0435\u0433\u043E \u043C\u044B\u0441\u043B\u0438. \u041A\u043E\u0433\u0434\u0430 \u0432\u044B \u043E\u0431\u0441\u0443\u0434\u0438\u043B\u0438 \u0432\u043E\u043F\u0440\u043E\u0441, \u043D\u0430\u0436\u043C\u0438\u0442\u0435 \xAB\u0413\u043E\u0442\u043E\u0432\u043E\xBB.'), tr('The game is not saved: if you leave, it starts again from the beginning next time.', 'Gra nie jest zapisywana: po wyj\u015Bciu nast\u0119pnym razem zaczyna si\u0119 od nowa.', 'La partida no se guarda: si sal\xEDs, la pr\xF3xima vez empieza desde el principio.', 'La partita non viene salvata: se uscite, la prossima volta ricomincia da capo.', "La partie n'est pas enregistr\xE9e : si vous quittez, elle recommence depuis le d\xE9but la prochaine fois.", 'Jocul nu se salveaz\u0103: dac\u0103 ie\u0219i\u021Bi, data viitoare \xEEncepe de la cap\u0103t.', 'Hra sa neuklad\xE1: ak od\xEDdete, nabud\xFAce sa za\u010Dne od za\u010Diatku.', '\u0413\u0440\u0430 \u043D\u0435 \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u0454\u0442\u044C\u0441\u044F: \u044F\u043A\u0449\u043E \u0432\u0438\u0439\u0442\u0438, \u043D\u0430\u0441\u0442\u0443\u043F\u043D\u043E\u0433\u043E \u0440\u0430\u0437\u0443 \u0432\u043E\u043D\u0430 \u043F\u043E\u0447\u043D\u0435\u0442\u044C\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443.', '\u0418\u0433\u0440\u0430 \u043D\u0435 \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442\u0441\u044F: \u0435\u0441\u043B\u0438 \u0432\u044B\u0439\u0442\u0438, \u0432 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0440\u0430\u0437 \u043E\u043D\u0430 \u043D\u0430\u0447\u043D\u0451\u0442\u0441\u044F \u0441\u043D\u0430\u0447\u0430\u043B\u0430.'), tr('Who is playing?', 'Kto gra?', '\xBFQui\xE9n juega?', 'Chi gioca?', 'Qui joue ?', 'Cine joac\u0103?', 'Kto sa hr\xE1?', '\u0425\u0442\u043E \u0433\u0440\u0430\u0454?', '\u041A\u0442\u043E \u0438\u0433\u0440\u0430\u0435\u0442?'), tr('Play alone', 'Gram w pojedynk\u0119', 'Juego solo', 'Gioco in solitaria', 'Je joue en solo', 'Joc solo', 'Hra pre jedn\xE9ho', '\u0413\u0440\u0430 \u043D\u0430 \u043E\u0434\u043D\u043E\u0433\u043E', '\u0418\u0433\u0440\u0430 \u043D\u0430 \u043E\u0434\u043D\u043E\u0433\u043E'), tr('Play together', 'Gramy razem', 'Jugamos juntos', 'Giochiamo insieme', 'On joue ensemble', 'Juc\u0103m \xEEmpreun\u0103', 'Hr\xE1me sa spolu', '\u0413\u0440\u0430\u0454\u043C\u043E \u0440\u0430\u0437\u043E\u043C', '\u0418\u0433\u0440\u0430\u0435\u043C \u0432\u043C\u0435\u0441\u0442\u0435'), tr('{0}, roll the dice!', '{0}, rzu\u0107 kostk\u0105!', '\xA1{0}, tira el dado!', '{0}, tira il dado!', '{0}, lance le d\xE9 !', '{0}, arunc\u0103 zarul!', '{0}, ho\u010F kockou!', '{0}, \u043A\u0438\u0434\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!', '{0}, \u0431\u0440\u043E\u0441\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!'), tr('Roll the dice!', 'Rzu\u0107 kostk\u0105!', '\xA1Tira el dado!', 'Tira il dado!', 'Lance le d\xE9 !', 'Arunc\u0103 zarul!', 'Ho\u010F kockou!', '\u041A\u0438\u0434\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!', '\u0411\u0440\u043E\u0441\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!'), tr('Done', 'Gotowe', 'Listo', 'Fatto', 'Fini', 'Gata', 'Hotovo', '\u0413\u043E\u0442\u043E\u0432\u043E', '\u0413\u043E\u0442\u043E\u0432\u043E'), tr('{0} has reached the finish!', '{0} jest na mecie!', '\xA1{0} ha llegado a la meta!', '{0} ha raggiunto il traguardo!', "{0} a atteint l'arriv\xE9e !", '{0} a ajuns la sosire!', '{0} je v cieli!', '{0} \u043D\u0430 \u0444\u0456\u043D\u0456\u0448\u0456!', '{0} \u043D\u0430 \u0444\u0438\u043D\u0438\u0448\u0435!'), tr('You reached the finish!', 'Jeste\u015B na mecie!', '\xA1Has llegado a la meta!', 'Hai raggiunto il traguardo!', "Tu as atteint l'arriv\xE9e !", 'Ai ajuns la sosire!', 'Si v cieli!', '\u0422\u0438 \u043D\u0430 \u0444\u0456\u043D\u0456\u0448\u0456!', '\u0422\u044B \u043D\u0430 \u0444\u0438\u043D\u0438\u0448\u0435!'), tr('New game', 'Nowa gra', 'Nueva partida', 'Nuova partita', 'Nouvelle partie', 'Joc nou', 'Nov\xE1 hra', '\u041D\u043E\u0432\u0430 \u0433\u0440\u0430', '\u041D\u043E\u0432\u0430\u044F \u0438\u0433\u0440\u0430'), tr('If you leave, the game starts again from the beginning.', 'Je\u015Bli wyjdziesz, gra zacznie si\u0119 od nowa.', 'Si sales, el juego empezar\xE1 desde el principio.', 'Se esci, il gioco ricomincia da capo.', 'Si tu quittes, le jeu recommence depuis le d\xE9but.', 'Dac\u0103 ie\u0219i, jocul \xEEncepe de la cap\u0103t.', 'Ak od\xEDde\u0161, hra sa za\u010Dne od za\u010Diatku.', '\u042F\u043A\u0449\u043E \u0432\u0438\u0439\u0434\u0435\u0448, \u0433\u0440\u0430 \u043F\u043E\u0447\u043D\u0435\u0442\u044C\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443.', '\u0415\u0441\u043B\u0438 \u0432\u044B\u0439\u0434\u0435\u0448\u044C, \u0438\u0433\u0440\u0430 \u043D\u0430\u0447\u043D\u0451\u0442\u0441\u044F \u0441\u043D\u0430\u0447\u0430\u043B\u0430.'), tr('Play time does not run in this game.', 'W tej grze czas gry si\u0119 nie zmniejsza.', 'En este juego no se gasta el tiempo de juego.', 'In questo gioco il tempo di gioco non scorre.', "Dans ce jeu, le temps de jeu ne s'\xE9coule pas.", '\xCEn acest joc timpul de joac\u0103 nu scade.', 'V tejto hre sa \u010Das hry neminie.', '\u0423 \u0446\u0456\u0439 \u0433\u0440\u0456 \u0447\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435 \u0441\u043F\u043B\u0438\u0432\u0430\u0454.', '\u0412 \u044D\u0442\u043E\u0439 \u0438\u0433\u0440\u0435 \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435 \u0440\u0430\u0441\u0445\u043E\u0434\u0443\u0435\u0442\u0441\u044F.'), tr('Grown-up', 'Doros\u0142y', 'Adulto', 'Adulto', 'Adulte', 'Adult', 'Dospel\xFD', '\u0414\u043E\u0440\u043E\u0441\u043B\u0438\u0439', '\u0412\u0437\u0440\u043E\u0441\u043B\u044B\u0439'), tr('The grown-up token plays along but gets no stars or stickers.', 'Pionek doros\u0142ego gra razem, ale nie dostaje gwiazdek ani naklejek.', 'La ficha del adulto juega tambi\xE9n, pero no recibe estrellas ni pegatinas.', "La pedina dell'adulto gioca insieme, ma non riceve stelle n\xE9 adesivi.", "Le pion de l'adulte joue aussi, mais ne re\xE7oit ni \xE9toiles ni autocollants.", 'Pionul adultului joac\u0103 \u0219i el, dar nu prime\u0219te stele sau ab\u021Bibilduri.', 'Fig\xFArka dospel\xE9ho hr\xE1 spolu, ale nedost\xE1va hviezdy ani n\xE1lepky.', '\u0424\u0456\u0448\u043A\u0430 \u0434\u043E\u0440\u043E\u0441\u043B\u043E\u0433\u043E \u0433\u0440\u0430\u0454 \u0440\u0430\u0437\u043E\u043C, \u0430\u043B\u0435 \u043D\u0435 \u043E\u0442\u0440\u0438\u043C\u0443\u0454 \u0437\u0456\u0440\u043E\u043A \u0456 \u043D\u0430\u043B\u0456\u043F\u043E\u043A.', '\u0424\u0438\u0448\u043A\u0430 \u0432\u0437\u0440\u043E\u0441\u043B\u043E\u0433\u043E \u0438\u0433\u0440\u0430\u0435\u0442 \u0432\u043C\u0435\u0441\u0442\u0435, \u043D\u043E \u043D\u0435 \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442 \u0437\u0432\u0451\u0437\u0434 \u0438 \u043D\u0430\u043A\u043B\u0435\u0435\u043A.'), tr('You can roll again!', 'Mo\u017Cesz rzuci\u0107 jeszcze raz!', '\xA1Puedes tirar otra vez!', 'Puoi tirare di nuovo!', 'Tu peux relancer le d\xE9 !', 'Po\u021Bi arunca \xEEnc\u0103 o dat\u0103!', 'M\xF4\u017Ee\u0161 hodi\u0165 e\u0161te raz!', '\u041C\u043E\u0436\u0435\u0448 \u043A\u0438\u043D\u0443\u0442\u0438 \u0449\u0435 \u0440\u0430\u0437!', '\u041C\u043E\u0436\u0435\u0448\u044C \u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Move forward two squares!', 'Id\u017A dwa pola do przodu!', '\xA1Avanza dos casillas!', 'Vai avanti di due caselle!', 'Avance de deux cases !', 'Mergi dou\u0103 c\u0103su\u021Be \xEEnainte!', 'Cho\u010F o dve pol\xED\u010Dka dopredu!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0434\u0432\u0456 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u0432\u043F\u0435\u0440\u0435\u0434!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0434\u0432\u0435 \u043A\u043B\u0435\u0442\u043A\u0438 \u0432\u043F\u0435\u0440\u0451\u0434!'), tr('Move forward three squares!', 'Id\u017A trzy pola do przodu!', '\xA1Avanza tres casillas!', 'Vai avanti di tre caselle!', 'Avance de trois cases !', 'Mergi trei c\u0103su\u021Be \xEEnainte!', 'Cho\u010F o tri pol\xED\u010Dka dopredu!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0442\u0440\u0438 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u0432\u043F\u0435\u0440\u0435\u0434!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0442\u0440\u0438 \u043A\u043B\u0435\u0442\u043A\u0438 \u0432\u043F\u0435\u0440\u0451\u0434!'), tr('Move back two squares!', 'Cofnij si\u0119 o dwa pola!', '\xA1Retrocede dos casillas!', 'Torna indietro di due caselle!', 'Recule de deux cases !', 'Mergi dou\u0103 c\u0103su\u021Be \xEEnapoi!', 'Vr\xE1\u0165 sa o dve pol\xED\u010Dka sp\xE4\u0165!', '\u041F\u043E\u0432\u0435\u0440\u043D\u0438\u0441\u044F \u043D\u0430 \u0434\u0432\u0456 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!', '\u0412\u0435\u0440\u043D\u0438\u0441\u044C \u043D\u0430 \u0434\u0432\u0435 \u043A\u043B\u0435\u0442\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!'), tr('Move back three squares!', 'Cofnij si\u0119 o trzy pola!', '\xA1Retrocede tres casillas!', 'Torna indietro di tre caselle!', 'Recule de trois cases !', 'Mergi trei c\u0103su\u021Be \xEEnapoi!', 'Vr\xE1\u0165 sa o tri pol\xED\u010Dka sp\xE4\u0165!', '\u041F\u043E\u0432\u0435\u0440\u043D\u0438\u0441\u044F \u043D\u0430 \u0442\u0440\u0438 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!', '\u0412\u0435\u0440\u043D\u0438\u0441\u044C \u043D\u0430 \u0442\u0440\u0438 \u043A\u043B\u0435\u0442\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!'), tr('Maze', 'Labirynt', 'Laberinto', 'Labirinto', 'Labyrinthe', 'Labirint', 'Labyrint', '\u041B\u0430\u0431\u0456\u0440\u0438\u043D\u0442', '\u041B\u0430\u0431\u0438\u0440\u0438\u043D\u0442'), tr('Lead your character home! Drag your finger along the path.', 'Zaprowad\u017A swoj\u0105 posta\u0107 do domu! Przesuwaj palec po \u015Bcie\u017Cce.', '\xA1Lleva a tu personaje a casa! Desliza el dedo por el camino.', 'Porta il tuo personaggio a casa! Trascina il dito lungo il sentiero.', 'Ram\xE8ne ton personnage \xE0 la maison ! Fais glisser ton doigt le long du chemin.', 'Du-\u021Bi personajul acas\u0103! Trage cu degetul de-a lungul drumului.', 'Dove\u010F svoju postavi\u010Dku domov! \u0164ahaj prstom po cesti\u010Dke.', '\u0412\u0456\u0434\u0432\u0435\u0434\u0438 \u0441\u0432\u043E\u0433\u043E \u0433\u0435\u0440\u043E\u044F \u0434\u043E\u0434\u043E\u043C\u0443! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u0456\u0436\u0446\u0456.', '\u041E\u0442\u0432\u0435\u0434\u0438 \u0441\u0432\u043E\u0435\u0433\u043E \u0433\u0435\u0440\u043E\u044F \u0434\u043E\u043C\u043E\u0439! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u043E\u0436\u043A\u0435.'), tr('Recycling', 'Segregacja', 'Reciclaje', 'Raccolta differenziata', 'Tri des d\xE9chets', 'Reciclare', 'Triedenie odpadu', '\u0421\u043E\u0440\u0442\u0443\u0432\u0430\u043D\u043D\u044F', '\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430'), tr('Which bin does it go in?', 'Do kt\xF3rego pojemnika to pasuje?', '\xBFEn qu\xE9 contenedor va?', 'In quale bidone va?', 'Dans quelle poubelle \xE7a va ?', '\xCEn ce pubel\u0103 se pune?', 'Do ktorej n\xE1doby to patr\xED?', '\u0423 \u044F\u043A\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0446\u0435 \u0432\u0438\u043A\u0438\u043D\u0443\u0442\u0438?', '\u0412 \u043A\u0430\u043A\u043E\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u044D\u0442\u043E \u0432\u044B\u0431\u0440\u043E\u0441\u0438\u0442\u044C?'), tr('Paper', 'Papier', 'Papel', 'Carta', 'Papier', 'H\xE2rtie', 'Papier', '\u041F\u0430\u043F\u0456\u0440', '\u0411\u0443\u043C\u0430\u0433\u0430'), tr('Packaging', 'Plastik i metal', 'Envases', 'Plastica e metallo', 'Emballages', 'Plastic \u0219i metal', 'Plasty a kovy', '\u041F\u043B\u0430\u0441\u0442\u0438\u043A \u0456 \u043C\u0435\u0442\u0430\u043B', '\u041F\u043B\u0430\u0441\u0442\u0438\u043A \u0438 \u043C\u0435\u0442\u0430\u043B\u043B'), tr('Organic', 'Bio', 'Org\xE1nico', 'Organico', 'Biod\xE9chets', 'Bio', 'Bio', '\u041E\u0440\u0433\u0430\u043D\u0456\u043A\u0430', '\u041E\u0440\u0433\u0430\u043D\u0438\u043A\u0430'), tr('General waste', 'Zmieszane', 'Resto', 'Indifferenziato', 'Ordures', 'Menajer', 'Zmesov\xFD', '\u0417\u043C\u0456\u0448\u0430\u043D\u0456', '\u0421\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0435'), tr('Glass', 'Szk\u0142o', 'Vidrio', 'Vetro', 'Verre', 'Sticl\u0103', 'Sklo', '\u0421\u043A\u043B\u043E', '\u0421\u0442\u0435\u043A\u043B\u043E'), tr('Old paper becomes new paper!', 'Ze starego papieru powstaje nowy papier!', '\xA1El papel viejo se convierte en papel nuevo!', 'La carta vecchia diventa carta nuova!', 'Le vieux papier devient du papier neuf !', 'Din h\xE2rtia veche se face h\xE2rtie nou\u0103!', 'Zo star\xE9ho papiera vznikne nov\xFD papier!', '\u0417\u0456 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u043F\u0430\u043F\u0435\u0440\u0443 \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u043F\u0456\u0440!', '\u0418\u0437 \u0441\u0442\u0430\u0440\u043E\u0439 \u0431\u0443\u043C\u0430\u0433\u0438 \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u0443\u044E \u0431\u0443\u043C\u0430\u0433\u0443!'), tr('This becomes new bottles and tins!', 'Powstan\u0105 z tego nowe butelki i puszki!', '\xA1Con esto se hacen botellas y latas nuevas!', 'Da qui nascono nuove bottiglie e lattine!', 'On en fait de nouvelles bouteilles et bo\xEEtes !', 'Din asta se fac sticle \u0219i cutii noi!', 'Vznikn\xFA z toho nov\xE9 f\u013Ea\u0161e a plechovky!', '\u0417 \u0446\u044C\u043E\u0433\u043E \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0456 \u043F\u043B\u044F\u0448\u043A\u0438 \u0439 \u0431\u043B\u044F\u0448\u0430\u043D\u043A\u0438!', '\u0418\u0437 \u044D\u0442\u043E\u0433\u043E \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u044B\u0435 \u0431\u0443\u0442\u044B\u043B\u043A\u0438 \u0438 \u0431\u0430\u043D\u043A\u0438!'), tr('This becomes compost that feeds the flowers!', 'Powstanie z tego kompost, kt\xF3ry karmi kwiaty!', '\xA1Esto se convierte en compost que alimenta las flores!', 'Diventa compost che nutre i fiori!', '\xC7a devient du compost qui nourrit les fleurs !', 'Din asta se face compost, hran\u0103 pentru flori!', 'Vznikne z toho kompost, ktor\xFD k\u0155mi kvety!', '\u0417 \u0446\u044C\u043E\u0433\u043E \u0431\u0443\u0434\u0435 \u043A\u043E\u043C\u043F\u043E\u0441\u0442, \u044F\u043A\u0438\u0439 \u0436\u0438\u0432\u0438\u0442\u044C \u043A\u0432\u0456\u0442\u0438!', '\u0418\u0437 \u044D\u0442\u043E\u0433\u043E \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u0441\u044F \u043A\u043E\u043C\u043F\u043E\u0441\u0442, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u043A\u043E\u0440\u043C\u0438\u0442 \u0446\u0432\u0435\u0442\u044B!'), tr("This can't be recycled, so it goes in the general waste.", 'Tego nie da si\u0119 przetworzy\u0107, wi\u0119c trafia do zmieszanych.', 'Esto no se puede reciclar, por eso va al resto.', "Questo non si pu\xF2 riciclare, quindi va nell'indifferenziato.", '\xC7a ne se recycle pas, donc \xE7a va aux ordures.', 'Asta nu se poate recicla, de aceea merge la menajer.', 'Toto sa ned\xE1 recyklova\u0165, preto ide do zmesov\xE9ho odpadu.', '\u0426\u0435 \u043D\u0435 \u043C\u043E\u0436\u043D\u0430 \u043F\u0435\u0440\u0435\u0440\u043E\u0431\u0438\u0442\u0438, \u0442\u043E\u043C\u0443 \u0432\u043E\u043D\u043E \u0439\u0434\u0435 \u0434\u043E \u0437\u043C\u0456\u0448\u0430\u043D\u0438\u0445 \u0432\u0456\u0434\u0445\u043E\u0434\u0456\u0432.', '\u042D\u0442\u043E \u043D\u0435\u043B\u044C\u0437\u044F \u043F\u0435\u0440\u0435\u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043E\u043D\u043E \u0438\u0434\u0451\u0442 \u0432 \u0441\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0435 \u043E\u0442\u0445\u043E\u0434\u044B.'), tr('Old glass becomes new glass again and again!', 'Ze starego szk\u0142a wci\u0105\u017C powstaje nowe szk\u0142o!', '\xA1El vidrio viejo se convierte una y otra vez en vidrio nuevo!', 'Il vetro vecchio diventa sempre di nuovo vetro nuovo!', 'Le vieux verre redevient du verre neuf, encore et encore !', 'Din sticla veche se face mereu sticl\u0103 nou\u0103!', 'Zo star\xE9ho skla vznik\xE1 st\xE1le nov\xE9 sklo!', '\u0417\u0456 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u0441\u043A\u043B\u0430 \u0437\u043D\u043E\u0432\u0443 \u0439 \u0437\u043D\u043E\u0432\u0443 \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0435 \u0441\u043A\u043B\u043E!', '\u0418\u0437 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u0441\u0442\u0435\u043A\u043B\u0430 \u0441\u043D\u043E\u0432\u0430 \u0438 \u0441\u043D\u043E\u0432\u0430 \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u043E\u0435 \u0441\u0442\u0435\u043A\u043B\u043E!'), tr('This goes in the blue bin with the paper.', 'To wrzucamy do niebieskiego pojemnika na papier.', 'Esto va al contenedor azul, con el papel.', 'Questo va nel bidone blu, con la carta.', '\xC7a va dans la poubelle bleue, avec le papier.', 'Asta merge \xEEn pubela albastr\u0103, la h\xE2rtie.', 'Toto patr\xED do modrej n\xE1doby na papier.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0441\u0438\u043D\u0456\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u0430\u043F\u0435\u0440\u0443.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0441\u0438\u043D\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0431\u0443\u043C\u0430\u0433\u0438.'), tr('This goes in the yellow bin with the packaging.', 'To wrzucamy do \u017C\xF3\u0142tego pojemnika na plastik i metal.', 'Esto va al contenedor amarillo, con los envases.', 'Questo va nel bidone giallo, con plastica e metallo.', '\xC7a va dans la poubelle jaune, avec les emballages.', 'Asta merge \xEEn pubela galben\u0103, la plastic \u0219i metal.', 'Toto patr\xED do \u017Eltej n\xE1doby na plasty a kovy.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0436\u043E\u0432\u0442\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043A\u0443 \u0439 \u043C\u0435\u0442\u0430\u043B\u0443.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0436\u0451\u043B\u0442\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043A\u0430 \u0438 \u043C\u0435\u0442\u0430\u043B\u043B\u0430.'), tr('This goes in the brown bin for food and garden waste.', 'To wrzucamy do br\u0105zowego pojemnika na bioodpady.', 'Esto va al contenedor marr\xF3n, con lo org\xE1nico.', "Questo va nel bidone marrone, con l'organico.", '\xC7a va dans la poubelle marron, avec les biod\xE9chets.', 'Asta merge \xEEn pubela maro, la de\u0219eurile bio.', 'Toto patr\xED do hnedej n\xE1doby na bioodpad.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043E\u0440\u0433\u0430\u043D\u0456\u043A\u0438.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043E\u0440\u0433\u0430\u043D\u0438\u043A\u0438.'), tr('This goes in the black bin for general waste.', 'To wrzucamy do czarnego pojemnika na odpady zmieszane.', 'Esto va al contenedor gris, con el resto.', "Questo va nel bidone nero, con l'indifferenziato.", '\xC7a va dans la poubelle noire, avec les ordures.', 'Asta merge \xEEn pubela neagr\u0103, la de\u0219eul menajer.', 'Toto patr\xED do \u010Diernej n\xE1doby na zmesov\xFD odpad.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0447\u043E\u0440\u043D\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0437\u043C\u0456\u0448\u0430\u043D\u0438\u0445 \u0432\u0456\u0434\u0445\u043E\u0434\u0456\u0432.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0447\u0451\u0440\u043D\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0445 \u043E\u0442\u0445\u043E\u0434\u043E\u0432.'), tr('This goes in the glass container.', 'To wrzucamy do pojemnika na szk\u0142o.', 'Esto va al contenedor de vidrio.', 'Questo va nella campana del vetro.', '\xC7a va dans le conteneur \xE0 verre.', 'Asta merge \xEEn containerul pentru sticl\u0103.', 'Toto patr\xED do n\xE1doby na sklo.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u043A\u043B\u0430.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0435\u043A\u043B\u0430.'), tr('newspaper', 'gazeta', 'peri\xF3dico', 'giornale', 'journal', 'ziar', 'noviny', '\u0433\u0430\u0437\u0435\u0442\u0430', '\u0433\u0430\u0437\u0435\u0442\u0430'), tr('cardboard box', 'karton', 'caja de cart\xF3n', 'scatola di cartone', 'carton', 'cutie de carton', 'kart\xF3nov\xE1 krabica', '\u043A\u0430\u0440\u0442\u043E\u043D\u043D\u0430 \u043A\u043E\u0440\u043E\u0431\u043A\u0430', '\u043A\u0430\u0440\u0442\u043E\u043D\u043D\u0430\u044F \u043A\u043E\u0440\u043E\u0431\u043A\u0430'), tr('notebook', 'zeszyt', 'cuaderno', 'quaderno', 'cahier', 'caiet', 'zo\u0161it', '\u0437\u043E\u0448\u0438\u0442', '\u0442\u0435\u0442\u0440\u0430\u0434\u044C'), tr('envelope', 'koperta', 'sobre', 'busta', 'enveloppe', 'plic', 'ob\xE1lka', '\u043A\u043E\u043D\u0432\u0435\u0440\u0442', '\u043A\u043E\u043D\u0432\u0435\u0440\u0442'), tr('tin can', 'puszka po konserwie', 'lata de conserva', 'lattina', 'bo\xEEte de conserve', 'cutie de conserv\u0103', 'plechovka od konzervy', '\u043A\u043E\u043D\u0441\u0435\u0440\u0432\u043D\u0430 \u0431\u043B\u044F\u0448\u0430\u043D\u043A\u0430', '\u043A\u043E\u043D\u0441\u0435\u0440\u0432\u043D\u0430\u044F \u0431\u0430\u043D\u043A\u0430'), tr('shampoo bottle', 'butelka po szamponie', 'bote de champ\xFA', 'flacone dello shampoo', 'flacon de shampooing', 'flacon de \u0219ampon', 'f\u013Ea\u0161a od \u0161amp\xF3nu', '\u043F\u043B\u044F\u0448\u0435\u0447\u043A\u0430 \u0437-\u043F\u0456\u0434 \u0448\u0430\u043C\u043F\u0443\u043D\u044E', '\u0444\u043B\u0430\u043A\u043E\u043D \u043E\u0442 \u0448\u0430\u043C\u043F\u0443\u043D\u044F'), tr('juice carton', 'karton po soku', 'brik de zumo', 'cartone del succo', 'brique de jus', 'cutie de suc', 'krabica od d\u017E\xFAsu', '\u043F\u0430\u043A\u0435\u0442 \u0437-\u043F\u0456\u0434 \u0441\u043E\u043A\u0443', '\u043F\u0430\u043A\u0435\u0442 \u0438\u0437-\u043F\u043E\u0434 \u0441\u043E\u043A\u0430'), tr('banana peel', 'sk\xF3rka od banana', 'piel de pl\xE1tano', 'buccia di banana', 'peau de banane', 'coaj\u0103 de banan\u0103', '\u0161upka z ban\xE1nu', '\u0431\u0430\u043D\u0430\u043D\u043E\u0432\u0430 \u0448\u043A\u0456\u0440\u043A\u0430', '\u0431\u0430\u043D\u0430\u043D\u043E\u0432\u0430\u044F \u043A\u043E\u0436\u0443\u0440\u0430'), tr('apple core', 'ogryzek', 'coraz\xF3n de manzana', 'torsolo di mela', 'trognon de pomme', 'cotor de m\u0103r', 'ohryzok', '\u043D\u0435\u0434\u043E\u0433\u0440\u0438\u0437\u043E\u043A \u044F\u0431\u043B\u0443\u043A\u0430', '\u043E\u0433\u0440\u044B\u0437\u043E\u043A \u044F\u0431\u043B\u043E\u043A\u0430'), tr('eggshell', 'skorupka jajka', 'c\xE1scara de huevo', "guscio d'uovo", "coquille d'\u0153uf", 'coaj\u0103 de ou', '\u0161krupina z vaj\xED\u010Dka', '\u044F\u0454\u0447\u043D\u0430 \u0448\u043A\u0430\u0440\u0430\u043B\u0443\u043F\u0430', '\u044F\u0438\u0447\u043D\u0430\u044F \u0441\u043A\u043E\u0440\u043B\u0443\u043F\u0430'), tr('autumn leaves', 'jesienne li\u015Bcie', 'hojas secas', 'foglie secche', 'feuilles mortes', 'frunze uscate', 'jesenn\xE9 l\xEDstie', '\u043E\u0441\u0456\u043D\u043D\u0454 \u043B\u0438\u0441\u0442\u044F', '\u043E\u0441\u0435\u043D\u043D\u0438\u0435 \u043B\u0438\u0441\u0442\u044C\u044F'), tr('potato peel', 'obierki z ziemniak\xF3w', 'piel de patata', 'buccia di patata', '\xE9pluchure de pomme de terre', 'coaj\u0103 de cartof', '\u0161upka zo zemiaka', '\u043A\u0430\u0440\u0442\u043E\u043F\u043B\u044F\u043D\u0435 \u043B\u0443\u0448\u043F\u0438\u043D\u043D\u044F', '\u043A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C\u043D\u044B\u0435 \u043E\u0447\u0438\u0441\u0442\u043A\u0438'), tr('melon rind', 'sk\xF3rka od arbuza', 'c\xE1scara de sand\xEDa', 'buccia di anguria', '\xE9corce de past\xE8que', 'coaj\u0103 de pepene', '\u0161upka z mel\xF3na', '\u043A\u0430\u0432\u0443\u043D\u043E\u0432\u0430 \u0448\u043A\u0456\u0440\u043A\u0430', '\u0430\u0440\u0431\u0443\u0437\u043D\u0430\u044F \u043A\u043E\u0440\u043A\u0430'), tr('old toothbrush', 'stara szczoteczka do z\u0119b\xF3w', 'cepillo de dientes viejo', 'spazzolino vecchio', 'vieille brosse \xE0 dents', 'periu\u021B\u0103 de din\u021Bi veche', 'star\xE1 zubn\xE1 kefka', '\u0441\u0442\u0430\u0440\u0430 \u0437\u0443\u0431\u043D\u0430 \u0449\u0456\u0442\u043A\u0430', '\u0441\u0442\u0430\u0440\u0430\u044F \u0437\u0443\u0431\u043D\u0430\u044F \u0449\u0451\u0442\u043A\u0430'), tr('used plaster', 'zu\u017Cyty plaster', 'tirita usada', 'cerotto usato', 'pansement usag\xE9', 'plasture folosit', 'pou\u017Eit\xE1 n\xE1plas\u0165', '\u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u0430\u043D\u0438\u0439 \u043F\u043B\u0430\u0441\u0442\u0438\u0440', '\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u043D\u044B\u0439 \u043F\u043B\u0430\u0441\u0442\u044B\u0440\u044C'), tr('old sponge', 'stara g\u0105bka', 'esponja vieja', 'spugna vecchia', 'vieille \xE9ponge', 'burete vechi', 'star\xE1 \u0161pongia', '\u0441\u0442\u0430\u0440\u0430 \u0433\u0443\u0431\u043A\u0430', '\u0441\u0442\u0430\u0440\u0430\u044F \u0433\u0443\u0431\u043A\u0430'), tr('empty pen', 'wypisany d\u0142ugopis', 'bol\xEDgrafo gastado', 'penna scarica', 'stylo vide', 'pix gol', 'vyp\xEDsan\xE9 pero', '\u0441\u043F\u0438\u0441\u0430\u043D\u0430 \u0440\u0443\u0447\u043A\u0430', '\u043F\u0443\u0441\u0442\u0430\u044F \u0440\u0443\u0447\u043A\u0430'), tr('empty honey jar', 'pusty s\u0142oik po miodzie', 'tarro de miel vac\xEDo', 'barattolo di miele vuoto', 'pot de miel vide', 'borcan gol de miere', 'pr\xE1zdny poh\xE1r od medu', '\u043F\u043E\u0440\u043E\u0436\u043D\u044F \u0431\u0430\u043D\u043A\u0430 \u0437-\u043F\u0456\u0434 \u043C\u0435\u0434\u0443', '\u043F\u0443\u0441\u0442\u0430\u044F \u0431\u0430\u043D\u043A\u0430 \u0438\u0437-\u043F\u043E\u0434 \u043C\u0451\u0434\u0430'), tr('empty glass bottle', 'pusta szklana butelka', 'botella de vidrio vac\xEDa', 'bottiglia di vetro vuota', 'bouteille en verre vide', 'sticl\u0103 goal\u0103', 'pr\xE1zdna sklenen\xE1 f\u013Ea\u0161a', '\u043F\u043E\u0440\u043E\u0436\u043D\u044F \u0441\u043A\u043B\u044F\u043D\u0430 \u043F\u043B\u044F\u0448\u043A\u0430', '\u043F\u0443\u0441\u0442\u0430\u044F \u0441\u0442\u0435\u043A\u043B\u044F\u043D\u043D\u0430\u044F \u0431\u0443\u0442\u044B\u043B\u043A\u0430'), tr('How hard should the maze be?', 'Jak trudny ma by\u0107 labirynt?', '\xBFQu\xE9 tan dif\xEDcil quieres el laberinto?', 'Quanto deve essere difficile il labirinto?', 'Quelle difficult\xE9 pour le labyrinthe ?', 'C\xE2t de greu s\u0103 fie labirintul?', 'Ak\xFD \u0165a\u017Ek\xFD m\xE1 by\u0165 labyrint?', '\u041D\u0430\u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u0438\u043C \u0431\u0443\u0434\u0435 \u043B\u0430\u0431\u0456\u0440\u0438\u043D\u0442?', '\u041D\u0430\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u043B\u043E\u0436\u043D\u044B\u043C \u0431\u0443\u0434\u0435\u0442 \u043B\u0430\u0431\u0438\u0440\u0438\u043D\u0442?'), tr('Easy', '\u0141atwy', 'F\xE1cil', 'Facile', 'Facile', 'U\u0219or', '\u013Dahk\xFD', '\u041B\u0435\u0433\u043A\u0438\u0439', '\u041B\u0451\u0433\u043A\u0438\u0439'), tr('Medium', '\u015Aredni', 'Medio', 'Medio', 'Moyen', 'Mediu', 'Stredn\xFD', '\u0421\u0435\u0440\u0435\u0434\u043D\u0456\u0439', '\u0421\u0440\u0435\u0434\u043D\u0438\u0439'), tr('Hard', 'Trudny', 'Dif\xEDcil', 'Difficile', 'Difficile', 'Greu', '\u0164a\u017Ek\xFD', '\u0421\u043A\u043B\u0430\u0434\u043D\u0438\u0439', '\u0421\u043B\u043E\u0436\u043D\u044B\u0439'), tr('How hard should it be?', 'Jak trudne ma by\u0107?', '\xBFQu\xE9 tan dif\xEDcil lo quieres?', 'Quanto deve essere difficile?', 'Quelle difficult\xE9 veux-tu ?', 'C\xE2t de greu s\u0103 fie?', 'Ak\xE9 \u0165a\u017Ek\xE9 to m\xE1 by\u0165?', '\u041D\u0430\u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u043E \u043C\u0430\u0454 \u0431\u0443\u0442\u0438?', '\u041D\u0430\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u043B\u043E\u0436\u043D\u043E \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C?'), tr('Find all {0} differences!', 'Znajd\u017A wszystkie {0} r\xF3\u017Cnice!', '\xA1Encuentra las {0} diferencias!', 'Trova tutte le {0} differenze!', 'Trouve les {0} diff\xE9rences !', 'G\u0103se\u0219te toate cele {0} diferen\u021Be!', 'N\xE1jdi v\u0161etky {0} rozdiely!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0432\u0441\u0456 {0} \u0432\u0456\u0434\u043C\u0456\u043D\u043D\u043E\u0441\u0442\u0456!', '\u041D\u0430\u0439\u0434\u0438 \u0432\u0441\u0435 {0} \u043E\u0442\u043B\u0438\u0447\u0438\u044F!'), tr('Two things are missing. Which ones?', 'Brakuje dw\xF3ch rzeczy. Kt\xF3rych?', 'Faltan dos cosas. \xBFCu\xE1les?', 'Mancano due cose. Quali?', 'Il manque deux choses. Lesquelles ?', 'Lipsesc dou\u0103 lucruri. Care?', 'Ch\xFDbaj\xFA dve veci. Ktor\xE9?', '\u0411\u0440\u0430\u043A\u0443\u0454 \u0434\u0432\u043E\u0445 \u0440\u0435\u0447\u0435\u0439. \u042F\u043A\u0438\u0445?', '\u041D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 \u0434\u0432\u0443\u0445 \u0432\u0435\u0449\u0435\u0439. \u041A\u0430\u043A\u0438\u0445?'), tr('Find the groups of three!', 'Znajd\u017A tr\xF3jki!', '\xA1Encuentra los tr\xEDos!', 'Trova i tris!', 'Trouve les trios !', 'G\u0103se\u0219te grupurile de c\xE2te trei!', 'N\xE1jdi trojice!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0442\u0440\u0456\u0439\u043A\u0438!', '\u041D\u0430\u0439\u0434\u0438 \u0442\u0440\u043E\u0439\u043A\u0438!'), tr('Tracing', 'Rysowanie po \u015Bladzie', 'Repasar', 'Ricalca', 'Suivre le trac\xE9', 'Traseaz\u0103', 'Ob\u0165ahovanie', '\u041E\u0431\u0432\u0435\u0434\u0438', '\u041E\u0431\u0432\u0435\u0434\u0438'), tr('Little robot', 'Ma\u0142y robot', 'Peque\xF1o robot', 'Piccolo robot', 'Petit robot', 'Micul robot', 'Mal\xFD robot', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u0440\u043E\u0431\u043E\u0442', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u0440\u043E\u0431\u043E\u0442'), tr('What came first?', 'Co by\u0142o najpierw?', '\xBFQu\xE9 pas\xF3 primero?', 'Cosa \xE8 successo prima?', "Qu'est-ce qui vient d'abord ?", 'Ce a fost mai \xEEnt\xE2i?', '\u010Co bolo sk\xF4r?', '\u0429\u043E \u0431\u0443\u043B\u043E \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443?', '\u0427\u0442\u043E \u0431\u044B\u043B\u043E \u0441\u043D\u0430\u0447\u0430\u043B\u0430?'), tr('Ice cream shop', 'Lodziarnia', 'Helader\xEDa', 'Gelateria', 'Glacier', 'Gelaterie', 'Zmrzlin\xE1re\u0148', '\u041A\u0430\u0444\u0435-\u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E', '\u041A\u0430\u0444\u0435-\u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435'), tr('Trace it! Start at the green dot and move your finger the way the arrow points.', 'Narysuj! Zacznij od zielonej kropki i prowad\u017A palec w stron\u0119 strza\u0142ki.', '\xA1Rep\xE1salo! Empieza en el punto verde y mueve el dedo hacia donde apunta la flecha.', 'Ricalcalo! Parti dal punto verde e muovi il dito nella direzione della freccia.', 'Repasse dessus ! Commence au point vert et d\xE9place ton doigt dans le sens de la fl\xE8che.', 'Traseaz\u0103! \xCEncepe de la punctul verde \u0219i mi\u0219c\u0103 degetul \xEEn direc\u021Bia s\u0103ge\u021Bii.', 'Ob\u0165ahuj! Za\u010Dni pri zelenej bodke a \u0165ahaj prst v smere \u0161\xEDpky.', '\u041E\u0431\u0432\u0435\u0434\u0438! \u041F\u043E\u0447\u043D\u0438 \u0456\u0437 \u0437\u0435\u043B\u0435\u043D\u043E\u0457 \u043A\u0440\u0430\u043F\u043A\u0438 \u0439 \u0432\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u0442\u0443\u0434\u0438, \u043A\u0443\u0434\u0438 \u043F\u043E\u043A\u0430\u0437\u0443\u0454 \u0441\u0442\u0440\u0456\u043B\u043A\u0430.', '\u041E\u0431\u0432\u0435\u0434\u0438! \u041D\u0430\u0447\u043D\u0438 \u0441 \u0437\u0435\u043B\u0451\u043D\u043E\u0439 \u0442\u043E\u0447\u043A\u0438 \u0438 \u0432\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u0442\u0443\u0434\u0430, \u043A\u0443\u0434\u0430 \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0441\u0442\u0440\u0435\u043B\u043A\u0430.'), tr('Help it get there! Drag your finger along the path from the green dot.', 'Pom\xF3\u017C dotrze\u0107 do celu! Prowad\u017A palec po drodze od zielonej kropki.', '\xA1Ay\xFAdale a llegar! Desliza el dedo por el camino desde el punto verde.', 'Aiutalo ad arrivare! Fai scorrere il dito lungo il sentiero dal punto verde.', 'Aide-le \xE0 arriver ! Fais glisser ton doigt sur le chemin depuis le point vert.', 'Ajut\u0103-l s\u0103 ajung\u0103! Trage degetul pe drum de la punctul verde.', 'Pom\xF4\u017E mu dosta\u0165 sa do cie\u013Ea! \u0164ahaj prst po cesti\u010Dke od zelenej bodky.', '\u0414\u043E\u043F\u043E\u043C\u043E\u0436\u0438 \u0434\u0456\u0441\u0442\u0430\u0442\u0438\u0441\u044F! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u0456\u0436\u0446\u0456 \u0432\u0456\u0434 \u0437\u0435\u043B\u0435\u043D\u043E\u0457 \u043A\u0440\u0430\u043F\u043A\u0438.', '\u041F\u043E\u043C\u043E\u0433\u0438 \u0434\u043E\u0431\u0440\u0430\u0442\u044C\u0441\u044F! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u043E\u0436\u043A\u0435 \u043E\u0442 \u0437\u0435\u043B\u0451\u043D\u043E\u0439 \u0442\u043E\u0447\u043A\u0438.'), tr('Hooray, it got there!', 'Hurra, uda\u0142o si\u0119 dotrze\u0107!', '\xA1Hurra, ha llegado!', "Evviva, ce l'ha fatta!", "Hourra, c'est gagn\xE9 !", 'Ura, a ajuns!', 'Hur\xE1, je v cieli!', '\u0423\u0440\u0430, \u0434\u0456\u0441\u0442\u0430\u043B\u0438\u0441\u044F!', '\u0423\u0440\u0430, \u0434\u043E\u0431\u0440\u0430\u043B\u0438\u0441\u044C!'), tr('Get the robot to the treasure! Put the arrows in order, then press Go!', 'Doprowad\u017A robota do skarbu! U\u0142\xF3\u017C strza\u0142ki po kolei, a potem naci\u015Bnij Start!', '\xA1Lleva al robot hasta el tesoro! Pon las flechas en orden y luego pulsa \xA1Vamos!', 'Porta il robot al tesoro! Metti le frecce in ordine, poi premi Via!', "Am\xE8ne le robot jusqu'au tr\xE9sor ! Place les fl\xE8ches dans l'ordre, puis appuie sur En route !", 'Du robotul la comoar\u0103! Pune s\u0103ge\u021Bile \xEEn ordine, apoi apas\u0103 Start!', 'Dove\u010F robota k pokladu! Polo\u017E \u0161\xEDpky za sebou a potom stla\u010D \u0160tart!', '\u0414\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043A\u0430\u0440\u0431\u0443! \u0421\u043A\u043B\u0430\u0434\u0438 \u0441\u0442\u0440\u0456\u043B\u043A\u0438 \u043F\u043E \u0447\u0435\u0440\u0437\u0456, \u0430 \u043F\u043E\u0442\u0456\u043C \u043D\u0430\u0442\u0438\u0441\u043D\u0438 \u0412\u043F\u0435\u0440\u0435\u0434!', '\u0414\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043E\u043A\u0440\u043E\u0432\u0438\u0449\u0430! \u0412\u044B\u043B\u043E\u0436\u0438 \u0441\u0442\u0440\u0435\u043B\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443, \u0430 \u043F\u043E\u0442\u043E\u043C \u043D\u0430\u0436\u043C\u0438 \u0412\u043F\u0435\u0440\u0451\u0434!'), tr('Go!', 'Start!', '\xA1Vamos!', 'Via!', 'En route !', 'Start!', '\u0160tart!', '\u0412\u043F\u0435\u0440\u0435\u0434!', '\u0412\u043F\u0435\u0440\u0451\u0434!'), tr('First collect the star, then take the robot to the treasure!', 'Najpierw zbierz gwiazdk\u0119, a potem zaprowad\u017A robota do skarbu!', '\xA1Primero recoge la estrella y luego lleva al robot hasta el tesoro!', 'Prima prendi la stella, poi porta il robot al tesoro!', "Ramasse d'abord l'\xE9toile, puis am\xE8ne le robot jusqu'au tr\xE9sor !", 'Mai \xEEnt\xE2i adun\u0103 steaua, apoi du robotul la comoar\u0103!', 'Najprv zober hviezdi\u010Dku a potom dove\u010F robota k pokladu!', '\u0421\u043F\u0435\u0440\u0448\u0443 \u0437\u0431\u0435\u0440\u0438 \u0437\u0456\u0440\u043E\u0447\u043A\u0443, \u0430 \u043F\u043E\u0442\u0456\u043C \u0434\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043A\u0430\u0440\u0431\u0443!', '\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0441\u043E\u0431\u0435\u0440\u0438 \u0437\u0432\u0451\u0437\u0434\u043E\u0447\u043A\u0443, \u0430 \u043F\u043E\u0442\u043E\u043C \u0434\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043E\u043A\u0440\u043E\u0432\u0438\u0449\u0430!'), tr('Put down some arrows first!', 'Najpierw po\u0142\xF3\u017C strza\u0142ki!', '\xA1Primero pon algunas flechas!', 'Prima metti qualche freccia!', "Place d'abord des fl\xE8ches !", 'Mai \xEEnt\xE2i pune ni\u0219te s\u0103ge\u021Bi!', 'Najprv polo\u017E \u0161\xEDpky!', '\u0421\u043F\u0435\u0440\u0448\u0443 \u043F\u043E\u043A\u043B\u0430\u0434\u0438 \u0441\u0442\u0440\u0456\u043B\u043A\u0438!', '\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u043E\u043B\u043E\u0436\u0438 \u0441\u0442\u0440\u0435\u043B\u043A\u0438!'), tr("Almost! Let's fix the program!", 'Prawie! Poprawmy program!', '\xA1Casi! \xA1Arreglemos el programa!', 'Quasi! Sistemiamo il programma!', 'Presque ! Corrigeons le programme !', 'Aproape! Hai s\u0103 repar\u0103m programul!', 'Takmer! Opravme program!', '\u041C\u0430\u0439\u0436\u0435! \u0412\u0438\u043F\u0440\u0430\u0432\u043C\u043E \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u0443!', '\u041F\u043E\u0447\u0442\u0438! \u0414\u0430\u0432\u0430\u0439 \u0438\u0441\u043F\u0440\u0430\u0432\u0438\u043C \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0443!'), tr('What happened first? Put the pictures in order!', 'Co by\u0142o najpierw? U\u0142\xF3\u017C obrazki po kolei!', '\xBFQu\xE9 pas\xF3 primero? \xA1Ordena las im\xE1genes!', 'Cosa \xE8 successo prima? Metti le immagini in ordine!', "Qu'est-ce qui s'est pass\xE9 d'abord ? Mets les images dans l'ordre !", 'Ce s-a \xEEnt\xE2mplat mai \xEEnt\xE2i? Pune imaginile \xEEn ordine!', '\u010Co sa stalo sk\xF4r? Usporiadaj obr\xE1zky!', '\u0429\u043E \u0441\u0442\u0430\u043B\u043E\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443? \u0421\u043A\u043B\u0430\u0434\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443!', '\u0427\u0442\u043E \u0441\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C \u0441\u043D\u0430\u0447\u0430\u043B\u0430? \u0420\u0430\u0437\u043B\u043E\u0436\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443!'), tr('Not this one yet. What comes before?', 'To jeszcze nie ten. Co jest wcze\u015Bniej?', 'Todav\xEDa no es esta. \xBFQu\xE9 va antes?', 'Non \xE8 ancora questa. Cosa viene prima?', "Pas encore celle-ci. Qu'est-ce qui vient avant ?", '\xCEnc\u0103 nu aceasta. Ce vine \xEEnainte?', 'E\u0161te nie tento. \u010Co je sk\xF4r?', '\u0429\u0435 \u043D\u0435 \u0446\u044F. \u0429\u043E \u0431\u0443\u0434\u0435 \u0440\u0430\u043D\u0456\u0448\u0435?', '\u0415\u0449\u0451 \u043D\u0435 \u044D\u0442\u0430. \u0427\u0442\u043E \u0431\u044B\u043B\u043E \u0440\u0430\u043D\u044C\u0448\u0435?'), tr('Make the ice cream that is ordered! Then press Here you are!', 'Zr\xF3b zam\xF3wionego loda! Potem naci\u015Bnij Prosz\u0119!', '\xA1Prepara el helado que te piden! Luego pulsa \xA1Aqu\xED tienes!', 'Prepara il gelato ordinato! Poi premi Ecco a te!', 'Pr\xE9pare la glace command\xE9e ! Puis appuie sur Voil\xE0 !', 'F\u0103 \xEEnghe\u021Bata comandat\u0103! Apoi apas\u0103 Poftim!', 'Priprav objednan\xFA zmrzlinu! Potom stla\u010D Nech sa p\xE1\u010Di!', '\u041F\u0440\u0438\u0433\u043E\u0442\u0443\u0439 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u0435 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E! \u041F\u043E\u0442\u0456\u043C \u043D\u0430\u0442\u0438\u0441\u043D\u0438 \u041F\u0440\u043E\u0448\u0443!', '\u041F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u044C \u0437\u0430\u043A\u0430\u0437\u0430\u043D\u043D\u043E\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435! \u041F\u043E\u0442\u043E\u043C \u043D\u0430\u0436\u043C\u0438 \u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430!'), tr('Here you are!', 'Prosz\u0119!', '\xA1Aqu\xED tienes!', 'Ecco a te!', 'Voil\xE0 !', 'Poftim!', 'Nech sa p\xE1\u010Di!', '\u041F\u0440\u043E\u0448\u0443!', '\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430!'), tr('I would like an ice cream, please:', 'Poprosz\u0119 loda:', 'Quiero un helado, por favor:', 'Vorrei un gelato, per favore:', "Je voudrais une glace, s'il te pla\xEEt :", 'A\u0219 vrea o \xEEnghe\u021Bat\u0103, te rog:', 'Pros\xEDm si zmrzlinu:', '\u041C\u043E\u0436\u043D\u0430 \u043C\u0435\u043D\u0456 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E:', '\u041C\u043E\u0436\u043D\u043E \u043C\u043D\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435:'), tr('Yum yum! The unicorn is very happy!', 'Mniam, mniam! Jednoro\u017Cec jest bardzo szcz\u0119\u015Bliwy!', '\xA1\xD1am, \xF1am! \xA1El unicornio est\xE1 muy contento!', "Gnam gnam! L'unicorno \xE8 felicissimo!", 'Miam miam ! La licorne est tr\xE8s contente !', 'Mmm! Unicornul este foarte fericit!', 'M\u0148am, m\u0148am! Jednoro\u017Eec je ve\u013Emi \u0161\u0165astn\xFD!', '\u041D\u044F\u043C-\u043D\u044F\u043C! \u0404\u0434\u0438\u043D\u043E\u0440\u0456\u0433 \u0434\u0443\u0436\u0435 \u0449\u0430\u0441\u043B\u0438\u0432\u0438\u0439!', '\u041D\u044F\u043C-\u043D\u044F\u043C! \u0415\u0434\u0438\u043D\u043E\u0440\u043E\u0433 \u043E\u0447\u0435\u043D\u044C \u0441\u0447\u0430\u0441\u0442\u043B\u0438\u0432!'), tr('Yum yum, thank you!', 'Mniam, mniam, dzi\u0119kuj\u0119!', '\xA1\xD1am, \xF1am, gracias!', 'Gnam gnam, grazie!', 'Miam miam, merci !', 'Mmm, mul\u021Bumesc!', 'M\u0148am, m\u0148am, \u010Fakujem!', '\u041D\u044F\u043C-\u043D\u044F\u043C, \u0434\u044F\u043A\u0443\u044E!', '\u041D\u044F\u043C-\u043D\u044F\u043C, \u0441\u043F\u0430\u0441\u0438\u0431\u043E!'), tr('Hmm, yummy! But I asked for a cone.', 'Mmm, pyszne! Ale ja chc\u0119 w wafelku.', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED cucurucho.', 'Mmm, buono! Ma io volevo il cono.', 'Mmm, d\xE9licieux ! Mais moi, je voulais un cornet.', 'Mmm, ce bun\u0103! Dar eu am cerut cornet.', 'Mmm, v\xFDborn\xE9! Ale ja chcem korn\xFAtok.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0432 \u0440\u0456\u0436\u043A\u0443.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0432 \u0440\u043E\u0436\u043A\u0435.'), tr('Hmm, yummy! But I asked for a cup.', 'Mmm, pyszne! Ale ja chc\u0119 w kubeczku.', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED tarrina.', 'Mmm, buono! Ma io volevo la coppetta.', 'Mmm, d\xE9licieux ! Mais moi, je voulais un pot.', 'Mmm, ce bun\u0103! Dar eu am cerut pahar.', 'Mmm, v\xFDborn\xE9! Ale ja chcem poh\xE1rik.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0432 \u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A\u0443.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0432 \u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A\u0435.'), tr('Hmm, yummy! But I asked for other scoops. Look again!', 'Mmm, pyszne! Ale ja chc\u0119 inne ga\u0142ki. Sp\xF3jrz jeszcze raz!', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED otras bolas. \xA1Mira otra vez!', 'Mmm, buono! Ma io volevo altre palline. Guarda di nuovo!', "Mmm, d\xE9licieux ! Mais moi, je voulais d'autres boules. Regarde encore !", 'Mmm, ce bun\u0103! Dar eu am cerut alte cupe. Mai uit\u0103-te o dat\u0103!', 'Mmm, v\xFDborn\xE9! Ale ja chcem in\xE9 kop\u010Deky. Pozri sa e\u0161te raz!', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0456\u043D\u0448\u0456 \u043A\u0443\u043B\u044C\u043A\u0438. \u041F\u043E\u0434\u0438\u0432\u0438\u0441\u044C \u0449\u0435 \u0440\u0430\u0437!', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0434\u0440\u0443\u0433\u0438\u0435 \u0448\u0430\u0440\u0438\u043A\u0438. \u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438 \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Hmm, yummy! But I wanted something else on top.', 'Mmm, pyszne! Ale na g\xF3r\u0119 chc\u0119 co\u015B innego.', '\xA1Mmm, qu\xE9 rico! Pero encima quer\xEDa otra cosa.', "Mmm, buono! Ma sopra volevo un'altra cosa.", 'Mmm, d\xE9licieux ! Mais dessus, je voulais autre chose.', 'Mmm, ce bun\u0103! Dar deasupra voiam altceva.', 'Mmm, v\xFDborn\xE9! Ale navrch chcem nie\u010Do in\xE9.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u0437\u0432\u0435\u0440\u0445\u0443 \u044F \u0445\u043E\u0447\u0443 \u0449\u043E\u0441\u044C \u0456\u043D\u0448\u0435.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u0441\u0432\u0435\u0440\u0445\u0443 \u044F \u0445\u043E\u0447\u0443 \u0447\u0442\u043E-\u0442\u043E \u0434\u0440\u0443\u0433\u043E\u0435.'), tr('Do you remember?', 'Pami\u0119tasz?', '\xBFTe acuerdas?', 'Ti ricordi?', 'Tu te souviens ?', '\xCE\u021Bi aminte\u0219ti?', 'Pam\xE4t\xE1\u0161 sa?', "\u041F\u0430\u043C'\u044F\u0442\u0430\u0454\u0448?", '\u041F\u043E\u043C\u043D\u0438\u0448\u044C?'), tr('Free play: make any ice cream you like for the unicorn!', 'Swobodna zabawa: zr\xF3b jednoro\u017Ccowi dowolnego loda!', 'Juego libre: \xA1haz el helado que quieras para el unicornio!', "Gioco libero: prepara il gelato che vuoi per l'unicorno!", 'Jeu libre : pr\xE9pare la glace que tu veux pour la licorne !', 'Joc liber: f\u0103 ce \xEEnghe\u021Bat\u0103 vrei pentru unicorn!', 'Vo\u013En\xE1 hra: priprav jednoro\u017Ecovi ak\xFAko\u013Evek zmrzlinu!', '\u0412\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430: \u043F\u0440\u0438\u0433\u043E\u0442\u0443\u0439 \u0454\u0434\u0438\u043D\u043E\u0440\u043E\u0433\u043E\u0432\u0456 \u044F\u043A\u0435 \u0445\u043E\u0447\u0435\u0448 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E!', '\u0421\u0432\u043E\u0431\u043E\u0434\u043D\u0430\u044F \u0438\u0433\u0440\u0430: \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u044C \u0435\u0434\u0438\u043D\u043E\u0440\u043E\u0433\u0443 \u043B\u044E\u0431\u043E\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435!'), tr('Customers', 'Go\u015Bcie', 'Clientes', 'Clienti', 'Clients', 'Clien\u021Bi', 'Hostia', '\u0413\u043E\u0441\u0442\u0456', '\u0413\u043E\u0441\u0442\u0438'), tr('Free play', 'Swobodna zabawa', 'Juego libre', 'Gioco libero', 'Jeu libre', 'Joc liber', 'Vo\u013En\xE1 hra', '\u0412\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430', '\u0421\u0432\u043E\u0431\u043E\u0434\u043D\u0430\u044F \u0438\u0433\u0440\u0430')]);
+      ANIMAL_SOUNDS_X = mapOf([to('\uD83D\uDC36', mapOf([to(Lang_PL_getInstance(), 'hau hau'), to(Lang_ES_getInstance(), 'guau guau'), to(Lang_IT_getInstance(), 'bau bau'), to(Lang_FR_getInstance(), 'ouaf ouaf'), to(Lang_RO_getInstance(), 'ham ham')])), to('\uD83D\uDC31', mapOf([to(Lang_PL_getInstance(), 'miau'), to(Lang_ES_getInstance(), 'miau'), to(Lang_IT_getInstance(), 'miao'), to(Lang_FR_getInstance(), 'miaou'), to(Lang_RO_getInstance(), 'miau')])), to('\uD83D\uDC2E', mapOf([to(Lang_PL_getInstance(), 'muu'), to(Lang_ES_getInstance(), 'muu'), to(Lang_IT_getInstance(), 'muu'), to(Lang_FR_getInstance(), 'meuh'), to(Lang_RO_getInstance(), 'muu')])), to('\uD83D\uDC13', mapOf([to(Lang_PL_getInstance(), 'kukuryku'), to(Lang_ES_getInstance(), 'quiquiriqu\xED'), to(Lang_IT_getInstance(), 'chicchirich\xEC'), to(Lang_FR_getInstance(), 'cocorico'), to(Lang_RO_getInstance(), 'cucurigu')])), to('\uD83E\uDD86', mapOf([to(Lang_PL_getInstance(), 'kwa kwa'), to(Lang_ES_getInstance(), 'cuac cuac'), to(Lang_IT_getInstance(), 'qua qua'), to(Lang_FR_getInstance(), 'coin-coin'), to(Lang_RO_getInstance(), 'mac mac')])), to('\uD83D\uDC37', mapOf([to(Lang_PL_getInstance(), 'chrum chrum'), to(Lang_ES_getInstance(), 'oink oink'), to(Lang_IT_getInstance(), 'oink oink'), to(Lang_FR_getInstance(), 'groin groin'), to(Lang_RO_getInstance(), 'gui\u021B gui\u021B')])), to('\uD83D\uDC11', mapOf([to(Lang_PL_getInstance(), 'bee'), to(Lang_ES_getInstance(), 'bee'), to(Lang_IT_getInstance(), 'bee'), to(Lang_FR_getInstance(), 'b\xEA\xEA'), to(Lang_RO_getInstance(), 'bee')])), to('\uD83D\uDC38', mapOf([to(Lang_PL_getInstance(), 'kum kum'), to(Lang_ES_getInstance(), 'croac croac'), to(Lang_IT_getInstance(), 'cra cra'), to(Lang_FR_getInstance(), 'cro\xE2 cro\xE2'), to(Lang_RO_getInstance(), 'oac oac')]))]);
+      WORDS_X = mapOf([to(Lang_PL_getInstance(), listOf_0([new Word('\uD83C\uDF49', 'arbuz'), new Word('\uD83D\uDE97', 'auto'), new Word('\uD83C\uDF4C', 'banan'), new Word('\uD83C\uDF88', 'balon'), new Word('\uD83C\uDF4B', 'cytryna'), new Word('\uD83C\uDFE0', 'dom'), new Word('\uD83D\uDC2C', 'delfin'), new Word('\uD83C\uDFB8', 'gitara'), new Word('\uD83C\uDF50', 'gruszka'), new Word('\uD83E\uDD9B', 'hipopotam'), new Word('\uD83C\uDF4E', 'jab\u0142ko'), new Word('\uD83E\uDD5A', 'jajko'), new Word('\uD83D\uDC31', 'kot'), new Word('\uD83D\uDC34', 'ko\u0144'), new Word('\uD83E\uDD86', 'kaczka'), new Word('\uD83E\uDD81', 'lew'), new Word('\uD83E\uDD8A', 'lis'), new Word('\uD83C\uDF66', 'lody'), new Word('\uD83D\uDC2D', 'mysz'), new Word('\uD83D\uDC12', 'ma\u0142pa'), new Word('\uD83E\uDDF8', 'mi\u015B'), new Word('\uD83D\uDC43', 'nos'), new Word('\uD83D\uDC36', 'pies'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC27', 'pingwin'), new Word('\uD83D\uDE80', 'rakieta'), new Word('\uD83D\uDC1F', 'ryba'), new Word('\uD83D\uDC18', 's\u0142o\u0144'), new Word('\u2600\uFE0F', 's\u0142o\u0144ce'), new Word('\uD83E\uDDC0', 'ser'), new Word('\uD83D\uDC2F', 'tygrys'), new Word('\uD83C\uDF82', 'tort'), new Word('\uD83D\uDC0D', 'w\u0105\u017C'), new Word('\uD83D\uDC33', 'wieloryb'), new Word('\uD83E\uDD93', 'zebra'), new Word('\uD83C\uDFF0', 'zamek')])), to(Lang_ES_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avi\xF3n'), new Word('\uD83D\uDC1D', 'abeja'), new Word('\u26F5', 'barco'), new Word('\uD83D\uDC33', 'ballena'), new Word('\u26BD', 'bal\xF3n'), new Word('\uD83C\uDFE0', 'casa'), new Word('\uD83D\uDC2C', 'delf\xEDn'), new Word('\uD83C\uDFB2', 'dado'), new Word('\uD83D\uDC18', 'elefante'), new Word('\u2B50', 'estrella'), new Word('\uD83C\uDF53', 'fresa'), new Word('\uD83C\uDF38', 'flor'), new Word('\uD83D\uDC31', 'gato'), new Word('\uD83E\uDD81', 'le\xF3n'), new Word('\uD83C\uDF19', 'luna'), new Word('\uD83D\uDC12', 'mono'), new Word('\uD83C\uDF4E', 'manzana'), new Word('\uD83D\uDC43', 'nariz'), new Word('\uD83D\uDC3B', 'oso'), new Word('\uD83D\uDC11', 'oveja'), new Word('\uD83D\uDC36', 'perro'), new Word('\uD83D\uDC1F', 'pez'), new Word('\uD83E\uDD86', 'pato'), new Word('\uD83D\uDC2D', 'rat\xF3n'), new Word('\uD83D\uDC38', 'rana'), new Word('\u2600\uFE0F', 'sol'), new Word('\uD83D\uDC0D', 'serpiente'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'tren'), new Word('\uD83C\uDF45', 'tomate'), new Word('\uD83C\uDF47', 'uvas'), new Word('\uD83D\uDC2E', 'vaca'), new Word('\uD83E\uDD55', 'zanahoria')])), to(Lang_IT_getInstance(), listOf_0([new Word('\uD83D\uDC1D', 'ape'), new Word('\uD83E\uDD86', 'anatra'), new Word('\uD83C\uDF33', 'albero'), new Word('\uD83C\uDF4C', 'banana'), new Word('\u26F5', 'barca'), new Word('\uD83D\uDC36', 'cane'), new Word('\uD83C\uDFE0', 'casa'), new Word('\uD83D\uDC2C', 'delfino'), new Word('\uD83D\uDC18', 'elefante'), new Word('\uD83C\uDF53', 'fragola'), new Word('\uD83C\uDF38', 'fiore'), new Word('\uD83D\uDC31', 'gatto'), new Word('\uD83E\uDD81', 'leone'), new Word('\uD83C\uDF19', 'luna'), new Word('\uD83C\uDF4E', 'mela'), new Word('\uD83D\uDC2E', 'mucca'), new Word('\uD83D\uDC43', 'naso'), new Word('\uD83D\uDC3B', 'orso'), new Word('\uD83D\uDC1F', 'pesce'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83D\uDC38', 'rana'), new Word('\uD83D\uDE80', 'razzo'), new Word('\u2600\uFE0F', 'sole'), new Word('\uD83D\uDC0D', 'serpente'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'treno'), new Word('\uD83C\uDF82', 'torta'), new Word('\uD83C\uDF47', 'uva'), new Word('\uD83E\uDD5A', 'uovo'), new Word('\uD83E\uDD8A', 'volpe'), new Word('\uD83E\uDD93', 'zebra')])), to(Lang_FR_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avion'), new Word('\uD83D\uDC1D', 'abeille'), new Word('\uD83C\uDF33', 'arbre'), new Word('\uD83C\uDF4C', 'banane'), new Word('\u26BD', 'ballon'), new Word('\u26F5', 'bateau'), new Word('\uD83E\uDD86', 'canard'), new Word('\uD83E\uDD55', 'carotte'), new Word('\uD83D\uDC2C', 'dauphin'), new Word('\uD83C\uDF53', 'fraise'), new Word('\uD83C\uDF38', 'fleur'), new Word('\uD83C\uDF82', 'g\xE2teau'), new Word('\uD83E\uDD81', 'lion'), new Word('\uD83C\uDF19', 'lune'), new Word('\uD83D\uDC30', 'lapin'), new Word('\uD83C\uDFE0', 'maison'), new Word('\uD83D\uDC11', 'mouton'), new Word('\uD83D\uDC43', 'nez'), new Word('\uD83C\uDF4A', 'orange'), new Word('\uD83C\uDF4E', 'pomme'), new Word('\uD83D\uDC1F', 'poisson'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83E\uDD8A', 'renard'), new Word('\u2600\uFE0F', 'soleil'), new Word('\uD83D\uDC0D', 'serpent'), new Word('\uD83D\uDC12', 'singe'), new Word('\uD83D\uDC2F', 'tigre'), new Word('\uD83D\uDE82', 'train'), new Word('\uD83C\uDF45', 'tomate'), new Word('\uD83D\uDC2E', 'vache'), new Word('\uD83D\uDE97', 'voiture'), new Word('\uD83E\uDD93', 'z\xE8bre')])), to(Lang_RO_getInstance(), listOf_0([new Word('\u2708\uFE0F', 'avion'), new Word('\uD83D\uDC1D', 'albin\u0103'), new Word('\uD83C\uDF4C', 'banan\u0103'), new Word('\uD83C\uDF88', 'balon'), new Word('\uD83C\uDFE0', 'cas\u0103'), new Word('\uD83D\uDC34', 'cal'), new Word('\uD83D\uDC2C', 'delfin'), new Word('\uD83D\uDC18', 'elefant'), new Word('\uD83C\uDF38', 'floare'), new Word('\uD83E\uDD8B', 'fluture'), new Word('\uD83E\uDD81', 'leu'), new Word('\uD83C\uDF19', 'lun\u0103'), new Word('\uD83E\uDD5B', 'lapte'), new Word('\uD83C\uDF4E', 'm\u0103r'), new Word('\uD83D\uDC12', 'maimu\u021B\u0103'), new Word('\uD83D\uDC43', 'nas'), new Word('\uD83D\uDC11', 'oaie'), new Word('\uD83E\uDD5A', 'ou'), new Word('\uD83D\uDC1F', 'pe\u0219te'), new Word('\uD83D\uDC31', 'pisic\u0103'), new Word('\uD83C\uDF55', 'pizza'), new Word('\uD83E\uDD86', 'ra\u021B\u0103'), new Word('\uD83D\uDE80', 'rachet\u0103'), new Word('\u2600\uFE0F', 'soare'), new Word('\uD83C\uDF47', 'struguri'), new Word('\uD83D\uDC2F', 'tigru'), new Word('\uD83D\uDE82', 'tren'), new Word('\uD83C\uDF82', 'tort'), new Word('\uD83D\uDC3B', 'urs'), new Word('\uD83D\uDC2E', 'vac\u0103'), new Word('\uD83E\uDD8A', 'vulpe'), new Word('\uD83E\uDD93', 'zebr\u0103')]))]);
+      TABLE = mapOf([tr('Hi! What shall we play?', 'Cze\u015B\u0107! W co si\u0119 pobawimy?', '\xA1Hola! \xBFA qu\xE9 jugamos?', 'Ciao! A cosa giochiamo?', 'Salut ! \xC0 quoi on joue ?', 'Bun\u0103! Ce ne juc\u0103m?', 'Ahoj! \u010Co sa budeme hra\u0165?', '\u041F\u0440\u0438\u0432\u0456\u0442! \u0423 \u0449\u043E \u043F\u043E\u0433\u0440\u0430\u0454\u043C\u043E?', '\u041F\u0440\u0438\u0432\u0435\u0442! \u0412\u043E \u0447\u0442\u043E \u043F\u043E\u0438\u0433\u0440\u0430\u0435\u043C?'), tr('Hi {0}! What shall we play?', 'Cze\u015B\u0107, {0}! W co si\u0119 pobawimy?', '\xA1Hola, {0}! \xBFA qu\xE9 jugamos?', 'Ciao {0}! A cosa giochiamo?', 'Salut {0} ! \xC0 quoi on joue ?', 'Bun\u0103, {0}! Ce ne juc\u0103m?', 'Ahoj, {0}! \u010Co sa budeme hra\u0165?', '\u041F\u0440\u0438\u0432\u0456\u0442, {0}! \u0423 \u0449\u043E \u043F\u043E\u0433\u0440\u0430\u0454\u043C\u043E?', '\u041F\u0440\u0438\u0432\u0435\u0442, {0}! \u0412\u043E \u0447\u0442\u043E \u043F\u043E\u0438\u0433\u0440\u0430\u0435\u043C?'), tr('Well done!', 'Dobra robota!', '\xA1Muy bien!', 'Bravissimo!', 'Bien jou\xE9 !', 'Foarte bine!', 'V\xFDborne!', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C!', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446!'), tr('Super!', 'Super!', '\xA1S\xFAper!', 'Super!', 'Super !', 'Super!', 'Super!', '\u0421\u0443\u043F\u0435\u0440!', '\u0421\u0443\u043F\u0435\u0440!'), tr('Great job!', '\u015Awietnie!', '\xA1Genial!', 'Ottimo lavoro!', 'G\xE9nial !', 'Grozav!', 'Skvel\xE9!', '\u0427\u0443\u0434\u043E\u0432\u043E!', '\u041E\u0442\u043B\u0438\u0447\u043D\u043E!'), tr('Hooray!', 'Hurra!', '\xA1Hurra!', 'Evviva!', 'Hourra !', 'Ura!', 'Hur\xE1!', '\u0423\u0440\u0430!', '\u0423\u0440\u0430!'), tr("That's it!", 'W\u0142a\u015Bnie tak!', '\xA1Eso es!', 'Esatto!', "C'est \xE7a !", 'Exact!', 'Presne tak!', '\u0421\u0430\u043C\u0435 \u0442\u0430\u043A!', '\u0418\u043C\u0435\u043D\u043D\u043E \u0442\u0430\u043A!'), tr('Bravo!', 'Brawo!', '\xA1Bravo!', 'Bravo!', 'Bravo !', 'Bravo!', 'Bravo!', '\u0411\u0440\u0430\u0432\u043E!', '\u0411\u0440\u0430\u0432\u043E!'), tr('Try again!', 'Spr\xF3buj jeszcze raz!', '\xA1Int\xE9ntalo otra vez!', 'Riprova!', 'Essaie encore !', 'Mai \xEEncearc\u0103!', 'Sk\xFAs to znova!', '\u0421\u043F\u0440\u043E\u0431\u0443\u0439 \u0449\u0435 \u0440\u0430\u0437!', '\u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439 \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Almost! One more time!', 'Prawie! Jeszcze raz!', '\xA1Casi! \xA1Otra vez!', 'Quasi! Ancora una volta!', 'Presque ! Encore une fois !', 'Aproape! \xCEnc\u0103 o dat\u0103!', 'Skoro! E\u0161te raz!', '\u041C\u0430\u0439\u0436\u0435! \u0429\u0435 \u0440\u0430\u0437!', '\u041F\u043E\u0447\u0442\u0438! \u0415\u0449\u0451 \u0440\u0430\u0437!'), tr('You have five stars! Well done!', 'Masz pi\u0119\u0107 gwiazdek! Dobra robota!', '\xA1Tienes cinco estrellas! \xA1Muy bien!', 'Hai cinque stelle! Bravissimo!', 'Tu as cinq \xE9toiles ! Bien jou\xE9 !', 'Ai cinci stele! Foarte bine!', 'M\xE1\u0161 p\xE4\u0165 hviezd! V\xFDborne!', "\u0423 \u0442\u0435\u0431\u0435 \u043F'\u044F\u0442\u044C \u0437\u0456\u0440\u043E\u043A! \u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C!", '\u0423 \u0442\u0435\u0431\u044F \u043F\u044F\u0442\u044C \u0437\u0432\u0451\u0437\u0434! \u041C\u043E\u043B\u043E\u0434\u0435\u0446!'), tr('You got a new sticker!', 'Masz now\u0105 naklejk\u0119!', '\xA1Tienes una pegatina nueva!', 'Hai un nuovo adesivo!', 'Tu as un nouvel autocollant !', 'Ai un ab\u021Bibild nou!', 'M\xE1\u0161 nov\xFA n\xE1lepku!', '\u0423 \u0442\u0435\u0431\u0435 \u043D\u043E\u0432\u0430 \u043D\u0430\u043B\u0456\u043F\u043A\u0430!', '\u0423 \u0442\u0435\u0431\u044F \u043D\u043E\u0432\u0430\u044F \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0430!'), tr('My stickers', 'Moje naklejki', 'Mis pegatinas', 'I miei adesivi', 'Mes autocollants', 'Ab\u021Bibildurile mele', 'Moje n\xE1lepky', '\u041C\u043E\u0457 \u043D\u0430\u043B\u0456\u043F\u043A\u0438', '\u041C\u043E\u0438 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438'), tr('Harder level', 'Trudniejszy poziom', 'Nivel m\xE1s dif\xEDcil', 'Livello pi\xF9 difficile', 'Niveau plus difficile', 'Nivel mai greu', '\u0164a\u017E\u0161ia \xFArove\u0148', '\u0421\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C', '\u0423\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043B\u043E\u0436\u043D\u0435\u0435'), tr('This is the hardest level! \uD83C\uDFC6', 'To najtrudniejszy poziom! \uD83C\uDFC6', '\xA1Es el nivel m\xE1s dif\xEDcil! \uD83C\uDFC6', '\xC8 il livello pi\xF9 difficile! \uD83C\uDFC6', "C'est le niveau le plus difficile ! \uD83C\uDFC6", 'Este cel mai greu nivel! \uD83C\uDFC6', 'Toto je naj\u0165a\u017E\u0161ia \xFArove\u0148! \uD83C\uDFC6', '\u0426\u0435 \u043D\u0430\u0439\u0441\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C! \uD83C\uDFC6', '\u042D\u0442\u043E \u0441\u0430\u043C\u044B\u0439 \u0441\u043B\u043E\u0436\u043D\u044B\u0439 \u0443\u0440\u043E\u0432\u0435\u043D\u044C! \uD83C\uDFC6'), tr('Which language shall we practise?', 'Jaki j\u0119zyk \u0107wiczymy?', '\xBFQu\xE9 idioma practicamos?', 'Quale lingua esercitiamo?', 'Quelle langue on pratique ?', 'Ce limb\u0103 exers\u0103m?', 'Ktor\xFD jazyk budeme cvi\u010Di\u0165?', '\u042F\u043A\u0443 \u043C\u043E\u0432\u0443 \u0431\u0443\u0434\u0435\u043C\u043E \u0432\u0447\u0438\u0442\u0438?', '\u041A\u0430\u043A\u043E\u0439 \u044F\u0437\u044B\u043A \u0431\u0443\u0434\u0435\u043C \u0443\u0447\u0438\u0442\u044C?'), tr('One more round!', 'Jeszcze raz!', '\xA1Otra ronda!', 'Un altro giro!', 'Encore une partie !', '\xCEnc\u0103 o rund\u0103!', 'E\u0161te jedno kolo!', '\u0429\u0435 \u0440\u0430\u0437!', '\u0415\u0449\u0451 \u0440\u0430\u0443\u043D\u0434!'), tr('One more minute!', 'Jeszcze jedna minuta!', '\xA1Queda un minuto!', 'Ancora un minuto!', 'Encore une minute !', '\xCEnc\u0103 un minut!', 'E\u0161te jedna min\xFAta!', '\u0429\u0435 \u043E\u0434\u043D\u0430 \u0445\u0432\u0438\u043B\u0438\u043D\u0430!', '\u0415\u0449\u0451 \u043E\u0434\u043D\u0430 \u043C\u0438\u043D\u0443\u0442\u0430!'), tr("That's all for this morning! We'll play again in the afternoon.", 'Na dzi\u015B rano to wszystko! Pobawimy si\u0119 znowu po po\u0142udniu.', '\xA1Esto es todo por esta ma\xF1ana! Jugaremos otra vez por la tarde.', 'Per stamattina basta cos\xEC! Giocheremo di nuovo nel pomeriggio.', "C'est fini pour ce matin ! On rejouera cet apr\xE8s-midi.", 'Gata pentru diminea\u021Ba asta! Ne juc\u0103m din nou dup\u0103-amiaz\u0103.', 'Na dne\u0161n\xE9 r\xE1no je to v\u0161etko! Popoludn\xED sa budeme hra\u0165 znova.', '\u041D\u0430 \u0440\u0430\u043D\u043E\u043A \u0434\u043E\u0441\u0438\u0442\u044C! \u041F\u043E\u0433\u0440\u0430\u0454\u043C\u043E \u0449\u0435 \u043F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443.', '\u041D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F\u0448\u043D\u0435\u0435 \u0443\u0442\u0440\u043E \u0432\u0441\u0451! \u041F\u043E\u0438\u0433\u0440\u0430\u0435\u043C \u0441\u043D\u043E\u0432\u0430 \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430.'), tr("That's all for today! See you tomorrow morning.", 'Na dzi\u015B to wszystko! Do jutra rana.', '\xA1Esto es todo por hoy! Hasta ma\xF1ana por la ma\xF1ana.', 'Per oggi basta cos\xEC! A domani mattina.', "C'est fini pour aujourd'hui ! \xC0 demain matin.", 'Gata pentru azi! Ne vedem m\xE2ine diminea\u021B\u0103.', 'Na dnes je to v\u0161etko! Uvid\xEDme sa zajtra r\xE1no.', '\u041D\u0430 \u0441\u044C\u043E\u0433\u043E\u0434\u043D\u0456 \u0432\u0441\u0435! \u0414\u043E \u0437\u0430\u0432\u0442\u0440\u0430 \u0432\u0440\u0430\u043D\u0446\u0456.', '\u041D\u0430 \u0441\u0435\u0433\u043E\u0434\u043D\u044F \u0432\u0441\u0451! \u0414\u043E \u0437\u0430\u0432\u0442\u0440\u0430 \u0443\u0442\u0440\u043E\u043C.'), tr('Counting', 'Liczenie', 'Contar', 'Contare', 'Compter', 'Num\u0103rat', 'Po\u010D\xEDtanie', '\u041B\u0456\u0447\u0431\u0430', '\u0421\u0447\u0451\u0442'), tr('Letters', 'Litery', 'Letras', 'Lettere', 'Lettres', 'Litere', 'P\xEDsmen\xE1', '\u041B\u0456\u0442\u0435\u0440\u0438', '\u0411\u0443\u043A\u0432\u044B'), tr('Colors, shapes', 'Kolory, kszta\u0142ty', 'Colores, formas', 'Colori, forme', 'Couleurs, formes', 'Culori, forme', 'Farby, tvary', '\u041A\u043E\u043B\u044C\u043E\u0440\u0438, \u0444\u0456\u0433\u0443\u0440\u0438', '\u0426\u0432\u0435\u0442\u0430, \u0444\u0438\u0433\u0443\u0440\u044B'), tr('Thinking', 'My\u015Blenie', 'Pensar', 'Pensare', 'R\xE9fl\xE9chir', 'G\xE2ndire', 'Prem\xFD\u0161\u013Eanie', '\u041C\u0438\u0441\u043B\u0435\u043D\u043D\u044F', '\u041B\u043E\u0433\u0438\u043A\u0430'), tr('Other languages', 'Inne j\u0119zyki', 'Otros idiomas', 'Altre lingue', 'Autres langues', 'Alte limbi', 'In\xE9 jazyky', '\u0406\u043D\u0448\u0456 \u043C\u043E\u0432\u0438', '\u0414\u0440\u0443\u0433\u0438\u0435 \u044F\u0437\u044B\u043A\u0438'), tr('Our world', 'Nasz \u015Bwiat', 'Nuestro mundo', 'Il nostro mondo', 'Notre monde', 'Lumea noastr\u0103', 'N\xE1\u0161 svet', '\u041D\u0430\u0448 \u0441\u0432\u0456\u0442', '\u041D\u0430\u0448 \u043C\u0438\u0440'), tr('Feelings', 'Uczucia', 'Emociones', 'Emozioni', '\xC9motions', 'Emo\u021Bii', 'Pocity', '\u041F\u043E\u0447\u0443\u0442\u0442\u044F', '\u0427\u0443\u0432\u0441\u0442\u0432\u0430'), tr('Memory', 'Memory', 'Memoria', 'Memory', 'M\xE9moire', 'Memorie', 'Pexeso', "\u041F\u0430\u043C'\u044F\u0442\u044C", '\u041F\u0430\u043C\u044F\u0442\u044C'), tr("What's missing?", 'Czego brakuje?', '\xBFQu\xE9 falta?', 'Cosa manca?', "Qu'est-ce qui manque ?", 'Ce lipse\u0219te?', '\u010Co ch\xFDba?', '\u0427\u043E\u0433\u043E \u0431\u0440\u0430\u043A\u0443\u0454?', '\u0427\u0435\u0433\u043E \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442?'), tr('Spot it', 'Znajd\u017A r\xF3\u017Cnic\u0119', 'Busca la diferencia', 'Trova la differenza', 'Trouve la diff\xE9rence', 'G\u0103se\u0219te diferen\u021Ba', 'N\xE1jdi rozdiel', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0440\u0456\u0437\u043D\u0438\u0446\u044E', '\u041D\u0430\u0439\u0434\u0438 \u043E\u0442\u043B\u0438\u0447\u0438\u0435'), tr('Small \u2013 big', 'Ma\u0142y \u2013 du\u017Cy', 'Peque\xF1o \u2013 grande', 'Piccolo \u2013 grande', 'Petit \u2013 grand', 'Mic \u2013 mare', 'Mal\xFD \u2013 ve\u013Ek\xFD', '\u041C\u0430\u043B\u0438\u0439 \u2013 \u0432\u0435\u043B\u0438\u043A\u0438\u0439', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u2013 \u0431\u043E\u043B\u044C\u0448\u043E\u0439'), tr('Puzzle', 'Puzzle', 'Puzle', 'Puzzle', 'Puzzle', 'Puzzle', 'Puzzle', '\u041F\u0430\u0437\u043B', '\u041F\u0430\u0437\u043B'), tr('Coloring', 'Kolorowanie', 'Colorear', 'Colorare', 'Coloriage', 'Colorat', 'Vyfarbovanie', '\u0420\u043E\u0437\u043C\u0430\u043B\u044C\u043E\u0432\u043A\u0430', '\u0420\u0430\u0441\u043A\u0440\u0430\u0441\u043A\u0430'), tr('Which one starts with the letter {0}?', 'Co zaczyna si\u0119 na liter\u0119 {0}?', '\xBFQu\xE9 empieza por la letra {0}?', 'Cosa comincia con la lettera {0}?', "Qu'est-ce qui commence par la lettre {0} ?", 'Ce \xEEncepe cu litera {0}?', '\u010Co sa za\u010D\xEDna na p\xEDsmeno {0}?', '\u0429\u043E \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F \u043D\u0430 \u043B\u0456\u0442\u0435\u0440\u0443 {0}?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u043D\u0430 \u0431\u0443\u043A\u0432\u0443 {0}?'), tr('Which letter does {0} start with?', 'Na jak\u0105 liter\u0119 zaczyna si\u0119 {0}?', '\xBFPor qu\xE9 letra empieza {0}?', 'Con quale lettera comincia {0}?', 'Par quelle lettre commence {0} ?', 'Cu ce liter\u0103 \xEEncepe {0}?', 'Na ak\xE9 p\xEDsmeno sa za\u010D\xEDna {0}?', '\u041D\u0430 \u044F\u043A\u0443 \u043B\u0456\u0442\u0435\u0440\u0443 \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F {0}?', '\u041D\u0430 \u043A\u0430\u043A\u0443\u044E \u0431\u0443\u043A\u0432\u0443 \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F {0}?'), tr('Which one starts like {0}?', 'Co zaczyna si\u0119 tak samo jak {0}?', '\xBFQu\xE9 empieza igual que {0}?', 'Cosa comincia come {0}?', "Qu'est-ce qui commence comme {0} ?", 'Ce \xEEncepe la fel ca {0}?', '\u010Co sa za\u010D\xEDna rovnako ako {0}?', '\u0429\u043E \u043F\u043E\u0447\u0438\u043D\u0430\u0454\u0442\u044C\u0441\u044F \u0442\u0430\u043A \u0441\u0430\u043C\u043E, \u044F\u043A {0}?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u0442\u0430\u043A \u0436\u0435, \u043A\u0430\u043A {0}?'), tr('Who says {0}?', 'Kto robi {0}?', '\xBFQui\xE9n hace {0}?', 'Chi fa {0}?', 'Qui fait {0} ?', 'Cine face {0}?', 'Kto rob\xED {0}?', '\u0425\u0442\u043E \u043A\u0430\u0436\u0435 {0}?', '\u041A\u0442\u043E \u0433\u043E\u0432\u043E\u0440\u0438\u0442 {0}?'), tr('Which face is {0}?', 'Kt\xF3ra buzia jest {0}?', '\xBFQu\xE9 cara est\xE1 {0}?', 'Quale faccia \xE8 {0}?', 'Quel visage est {0} ?', 'Care fa\u021B\u0103 este {0}?', 'Ktor\xE1 tv\xE1r je {0}?', '\u042F\u043A\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F {0}?', '\u041A\u0430\u043A\u043E\u0435 \u043B\u0438\u0446\u043E {0}?'), tr("Which one doesn't belong?", 'Co tu nie pasuje?', '\xBFCu\xE1l no va con los dem\xE1s?', "Quale non c'entra?", "Qu'est-ce qui ne va pas avec les autres ?", 'Care nu se potrive\u0219te?', '\u010Co sem nepatr\xED?', '\u0429\u043E \u0442\u0443\u0442 \u0437\u0430\u0439\u0432\u0435?', '\u0427\u0442\u043E \u0437\u0434\u0435\u0441\u044C \u043B\u0438\u0448\u043D\u0435\u0435?'), tr('What comes next?', 'Co b\u0119dzie dalej?', '\xBFQu\xE9 viene despu\xE9s?', 'Cosa viene dopo?', "Qu'est-ce qui vient apr\xE8s ?", 'Ce urmeaz\u0103?', '\u010Co bude \u010Falej?', '\u0429\u043E \u0431\u0443\u0434\u0435 \u0434\u0430\u043B\u0456?', '\u0427\u0442\u043E \u0431\u0443\u0434\u0435\u0442 \u0434\u0430\u043B\u044C\u0448\u0435?'), tr('Whose shadow is this?', 'Czyj to cie\u0144?', '\xBFDe qui\xE9n es esta sombra?', "Di chi \xE8 quest'ombra?", '\xC0 qui est cette ombre ?', 'A cui e umbra asta?', '\u010C\xED je to tie\u0148?', '\u0427\u0438\u044F \u0446\u0435 \u0442\u0456\u043D\u044C?', '\u0427\u044C\u044F \u044D\u0442\u043E \u0442\u0435\u043D\u044C?'), tr('How do you feel?', 'Jak\u0105 masz min\u0119?', '\xBFQu\xE9 cara pones?', 'Che faccia fai?', 'Quelle t\xEAte fais-tu ?', 'Ce fa\u021B\u0103 faci?', 'Ak\xFA m\xE1\u0161 tv\xE1ri\u010Dku?', '\u042F\u043A\u0435 \u0432 \u0442\u0435\u0431\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F?', '\u041A\u0430\u043A\u043E\u0435 \u0443 \u0442\u0435\u0431\u044F \u043B\u0438\u0446\u043E?'), tr('Find the pairs!', 'Znajd\u017A pary!', '\xA1Encuentra las parejas!', 'Trova le coppie!', 'Trouve les paires !', 'G\u0103se\u0219te perechile!', 'N\xE1jdi dvojice!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u043F\u0430\u0440\u0438!', '\u041D\u0430\u0439\u0434\u0438 \u043F\u0430\u0440\u044B!'), tr('What is missing?', 'Czego brakuje?', '\xBFQu\xE9 falta?', 'Cosa manca?', "Qu'est-ce qui manque ?", 'Ce lipse\u0219te?', '\u010Co ch\xFDba?', '\u0427\u043E\u0433\u043E \u0431\u0440\u0430\u043A\u0443\u0454?', '\u0427\u0435\u0433\u043E \u043D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442?'), tr('Look at the pictures carefully!', 'Przyjrzyj si\u0119 dobrze obrazkom!', '\xA1Mira bien los dibujos!', 'Guarda bene le figure!', 'Regarde bien les images !', 'Uit\u0103-te bine la imagini!', 'Dobre si pozri obr\xE1zky!', '\u0414\u043E\u0431\u0440\u0435 \u0440\u043E\u0437\u0434\u0438\u0432\u0438\u0441\u044F \u043C\u0430\u043B\u044E\u043D\u043A\u0438!', '\u0412\u043D\u0438\u043C\u0430\u0442\u0435\u043B\u044C\u043D\u043E \u043F\u043E\u0441\u043C\u043E\u0442\u0440\u0438 \u043D\u0430 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438!'), tr('What is different? Tap it!', 'Co jest inne? Dotknij!', '\xBFQu\xE9 es diferente? \xA1T\xF3calo!', 'Cosa \xE8 diverso? Toccalo!', "Qu'est-ce qui est diff\xE9rent ? Touche-le !", 'Ce este diferit? Atinge!', '\u010Co je in\xE9? \u0164ukni na to!', '\u0429\u043E \u0432\u0456\u0434\u0440\u0456\u0437\u043D\u044F\u0454\u0442\u044C\u0441\u044F? \u0422\u043E\u0440\u043A\u043D\u0438\u0441\u044F!', '\u0427\u0442\u043E \u043E\u0442\u043B\u0438\u0447\u0430\u0435\u0442\u0441\u044F? \u041A\u043E\u0441\u043D\u0438\u0441\u044C!'), tr('Tap them from the smallest to the biggest!', 'Dotykaj od najmniejszego do najwi\u0119kszego!', '\xA1T\xF3calos del m\xE1s peque\xF1o al m\xE1s grande!', 'Toccali dal pi\xF9 piccolo al pi\xF9 grande!', 'Touche-les du plus petit au plus grand !', 'Atinge-le de la cel mai mic la cel mai mare!', '\u0164ukaj od najmen\u0161ieho po najv\xE4\u010D\u0161\xED!', '\u0422\u043E\u0440\u043A\u0430\u0439\u0441\u044F \u0432\u0456\u0434 \u043D\u0430\u0439\u043C\u0435\u043D\u0448\u043E\u0433\u043E \u0434\u043E \u043D\u0430\u0439\u0431\u0456\u043B\u044C\u0448\u043E\u0433\u043E!', '\u041D\u0430\u0436\u0438\u043C\u0430\u0439 \u043E\u0442 \u0441\u0430\u043C\u043E\u0433\u043E \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u043E\u0433\u043E \u0434\u043E \u0441\u0430\u043C\u043E\u0433\u043E \u0431\u043E\u043B\u044C\u0448\u043E\u0433\u043E!'), tr('Put the picture together! Tap two pieces to swap them.', 'U\u0142\xF3\u017C obrazek! Dotknij dw\xF3ch kawa\u0142k\xF3w, \u017Ceby je zamieni\u0107.', '\xA1Arma el dibujo! Toca dos piezas para cambiarlas.', 'Ricomponi il disegno! Tocca due pezzi per scambiarli.', "Reconstitue l'image ! Touche deux morceaux pour les \xE9changer.", 'Ref\u0103 imaginea! Atinge dou\u0103 buc\u0103\u021Bi ca s\u0103 le schimbi.', 'Poskladaj obr\xE1zok! \u0164ukni na dva k\xFAsky a vymenia sa.', '\u0421\u043A\u043B\u0430\u0434\u0438 \u043C\u0430\u043B\u044E\u043D\u043E\u043A! \u0422\u043E\u0440\u043A\u043D\u0438\u0441\u044F \u0434\u0432\u043E\u0445 \u0447\u0430\u0441\u0442\u0438\u043D\u043E\u043A, \u0449\u043E\u0431 \u043F\u043E\u043C\u0456\u043D\u044F\u0442\u0438 \u0457\u0445.', '\u0421\u043E\u0431\u0435\u0440\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443! \u041A\u043E\u0441\u043D\u0438\u0441\u044C \u0434\u0432\u0443\u0445 \u043A\u0443\u0441\u043E\u0447\u043A\u043E\u0432, \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u043C\u0435\u043D\u044F\u0442\u044C \u0438\u0445.'), tr('Color the picture! Pick a color, then tap the picture.', 'Pokoloruj obrazek! Wybierz kolor i dotknij obrazka.', '\xA1Colorea el dibujo! Elige un color y toca el dibujo.', 'Colora il disegno! Scegli un colore e tocca il disegno.', 'Colorie le dessin ! Choisis une couleur, puis touche le dessin.', 'Coloreaz\u0103 desenul! Alege o culoare, apoi atinge desenul.', 'Vyfarbi obr\xE1zok! Vyber farbu a \u0165ukni na obr\xE1zok.', '\u0420\u043E\u0437\u0444\u0430\u0440\u0431\u0443\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A! \u0412\u0438\u0431\u0435\u0440\u0438 \u043A\u043E\u043B\u0456\u0440 \u0456 \u0442\u043E\u0440\u043A\u043D\u0438\u0441\u044F \u043C\u0430\u043B\u044E\u043D\u043A\u0430.', '\u0420\u0430\u0441\u043A\u0440\u0430\u0441\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0443! \u0412\u044B\u0431\u0435\u0440\u0438 \u0446\u0432\u0435\u0442 \u0438 \u043A\u043E\u0441\u043D\u0438\u0441\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438.'), tr('happy', 'weso\u0142a', 'contenta', 'felice', 'content', 'vesel\u0103', 'vesel\xE1', '\u0432\u0435\u0441\u0435\u043B\u0435', '\u0432\u0435\u0441\u0451\u043B\u043E\u0435'), tr('sad', 'smutna', 'triste', 'triste', 'triste', 'trist\u0103', 'smutn\xE1', '\u0441\u0443\u043C\u043D\u0435', '\u0433\u0440\u0443\u0441\u0442\u043D\u043E\u0435'), tr('angry', 'z\u0142a', 'enfadada', 'arrabbiata', 'f\xE2ch\xE9', 'sup\u0103rat\u0103', 'nahnevan\xE1', '\u0441\u0435\u0440\u0434\u0438\u0442\u0435', '\u0441\u0435\u0440\u0434\u0438\u0442\u043E\u0435'), tr('scared', 'przestraszona', 'asustada', 'spaventata', 'effray\xE9', 'speriat\u0103', 'vystra\u0161en\xE1', '\u043D\u0430\u043B\u044F\u043A\u0430\u043D\u0435', '\u0438\u0441\u043F\u0443\u0433\u0430\u043D\u043D\u043E\u0435'), tr('surprised', 'zdziwiona', 'sorprendida', 'sorpresa', 'surpris', 'surprins\u0103', 'prekvapen\xE1', '\u0437\u0434\u0438\u0432\u043E\u0432\u0430\u043D\u0435', '\u0443\u0434\u0438\u0432\u043B\u0451\u043D\u043D\u043E\u0435'), tr('shy', 'nie\u015Bmia\u0142a', 't\xEDmida', 'timida', 'timide', 'timid\u0103', 'hanbliv\xE1', "\u0441\u043E\u0440\u043E\u043C'\u044F\u0437\u043B\u0438\u0432\u0435", '\u0437\u0430\u0441\u0442\u0435\u043D\u0447\u0438\u0432\u043E\u0435'), tr('calm', 'spokojna', 'tranquila', 'tranquilla', 'calme', 'calm\u0103', 'pokojn\xE1', '\u0441\u043F\u043E\u043A\u0456\u0439\u043D\u0435', '\u0441\u043F\u043E\u043A\u043E\u0439\u043D\u043E\u0435'), tr('tired', 'zm\u0119czona', 'cansada', 'stanca', 'fatigu\xE9', 'obosit\u0103', 'unaven\xE1', '\u0432\u0442\u043E\u043C\u043B\u0435\u043D\u0435', '\u0443\u0441\u0442\u0430\u043B\u043E\u0435'), tr('You get a present.', 'Dostajesz prezent.', 'Te dan un regalo.', 'Ricevi un regalo.', 'Tu re\xE7ois un cadeau.', 'Prime\u0219ti un cadou.', 'Dostane\u0161 dar\u010Dek.', '\u0422\u043E\u0431\u0456 \u0434\u0430\u0440\u0443\u044E\u0442\u044C \u043F\u043E\u0434\u0430\u0440\u0443\u043D\u043E\u043A.', '\u0422\u0435\u0431\u0435 \u0434\u0430\u0440\u044F\u0442 \u043F\u043E\u0434\u0430\u0440\u043E\u043A.'), tr('Today is your birthday.', 'Dzi\u015B s\u0105 twoje urodziny.', 'Hoy es tu cumplea\xF1os.', 'Oggi \xE8 il tuo compleanno.', "Aujourd'hui, c'est ton anniversaire.", 'Azi e ziua ta.', 'Dnes m\xE1\u0161 narodeniny.', '\u0421\u044C\u043E\u0433\u043E\u0434\u043D\u0456 \u0442\u0432\u0456\u0439 \u0434\u0435\u043D\u044C \u043D\u0430\u0440\u043E\u0434\u0436\u0435\u043D\u043D\u044F.', '\u0421\u0435\u0433\u043E\u0434\u043D\u044F \u0442\u0432\u043E\u0439 \u0434\u0435\u043D\u044C \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F.'), tr('Your best friend comes to visit.', 'Przychodzi do ciebie najlepszy przyjaciel.', 'Tu mejor amigo viene a visitarte.', 'Il tuo migliore amico viene a trovarti.', 'Ton meilleur ami vient te voir.', 'Cel mai bun prieten vine \xEEn vizit\u0103.', 'Pri\u0161iel \u0165a nav\u0161t\xEDvi\u0165 najlep\u0161\xED kamar\xE1t.', '\u0414\u043E \u0442\u0435\u0431\u0435 \u0432 \u0433\u043E\u0441\u0442\u0456 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442\u044C \u043D\u0430\u0439\u043A\u0440\u0430\u0449\u0438\u0439 \u0434\u0440\u0443\u0433.', '\u041A \u0442\u0435\u0431\u0435 \u0432 \u0433\u043E\u0441\u0442\u0438 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0442 \u043B\u0443\u0447\u0448\u0438\u0439 \u0434\u0440\u0443\u0433.'), tr('Your ice cream fell on the ground.', 'Lody spad\u0142y ci na ziemi\u0119.', 'Se te cay\xF3 el helado al suelo.', 'Il gelato ti \xE8 caduto per terra.', 'Ta glace est tomb\xE9e par terre.', '\u021Ai-a c\u0103zut \xEEnghe\u021Bata pe jos.', 'Spadla ti zmrzlina na zem.', '\u0422\u0432\u043E\u0454 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E \u0432\u043F\u0430\u043B\u043E \u043D\u0430 \u0437\u0435\u043C\u043B\u044E.', '\u0422\u0432\u043E\u0451 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435 \u0443\u043F\u0430\u043B\u043E \u043D\u0430 \u0437\u0435\u043C\u043B\u044E.'), tr('Your balloon flew away.', 'Ulecia\u0142 ci balonik.', 'Se te escap\xF3 el globo.', 'Ti \xE8 volato via il palloncino.', "Ton ballon s'est envol\xE9.", '\u021Ai-a zburat balonul.', 'Uletel ti bal\xF3n.', '\u0422\u0432\u043E\u044F \u043A\u0443\u043B\u044C\u043A\u0430 \u043F\u043E\u043B\u0435\u0442\u0456\u043B\u0430.', '\u0423 \u0442\u0435\u0431\u044F \u0443\u043B\u0435\u0442\u0435\u043B \u0448\u0430\u0440\u0438\u043A.'), tr('Someone took your toy.', 'Kto\u015B zabra\u0142 ci zabawk\u0119.', 'Alguien te quit\xF3 tu juguete.', 'Qualcuno ti ha preso il giocattolo.', "Quelqu'un a pris ton jouet.", 'Cineva \u021Bi-a luat juc\u0103ria.', 'Niekto ti zobral hra\u010Dku.', '\u0425\u0442\u043E\u0441\u044C \u0437\u0430\u0431\u0440\u0430\u0432 \u0442\u0432\u043E\u044E \u0456\u0433\u0440\u0430\u0448\u043A\u0443.', '\u041A\u0442\u043E-\u0442\u043E \u0437\u0430\u0431\u0440\u0430\u043B \u0442\u0432\u043E\u044E \u0438\u0433\u0440\u0443\u0448\u043A\u0443.'), tr('Someone knocked over your tower.', 'Kto\u015B przewr\xF3ci\u0142 twoj\u0105 wie\u017C\u0119.', 'Alguien tir\xF3 tu torre.', 'Qualcuno ha buttato gi\xF9 la tua torre.', "Quelqu'un a fait tomber ta tour.", 'Cineva \u021Bi-a d\u0103r\xE2mat turnul.', 'Niekto ti zb\xFAral ve\u017Eu.', '\u0425\u0442\u043E\u0441\u044C \u0437\u0440\u0443\u0439\u043D\u0443\u0432\u0430\u0432 \u0442\u0432\u043E\u044E \u0432\u0435\u0436\u0443.', '\u041A\u0442\u043E-\u0442\u043E \u0441\u043B\u043E\u043C\u0430\u043B \u0442\u0432\u043E\u044E \u0431\u0430\u0448\u043D\u044E.'), tr('There is loud thunder at night.', 'W nocy g\u0142o\u015Bno grzmi.', 'Por la noche truena muy fuerte.', 'Di notte tuona forte.', 'La nuit, le tonnerre gronde tr\xE8s fort.', 'Noaptea tun\u0103 foarte tare.', 'V noci hlasno hrm\xED.', '\u0423\u043D\u043E\u0447\u0456 \u0433\u0443\u0447\u043D\u043E \u0433\u0440\u0438\u043C\u0438\u0442\u044C \u0433\u0440\u0456\u043C.', '\u041D\u043E\u0447\u044C\u044E \u0433\u0440\u043E\u043C\u043A\u043E \u0433\u0440\u0435\u043C\u0438\u0442 \u0433\u0440\u043E\u043C.'), tr('A big dog barks loudly.', 'Du\u017Cy pies g\u0142o\u015Bno szczeka.', 'Un perro grande ladra muy fuerte.', 'Un cane grande abbaia forte.', 'Un gros chien aboie tr\xE8s fort.', 'Un c\xE2ine mare latr\u0103 tare.', 'Ve\u013Ek\xFD pes hlasno \u0161tek\xE1.', '\u0412\u0435\u043B\u0438\u043A\u0438\u0439 \u043F\u0435\u0441 \u0433\u043E\u043B\u043E\u0441\u043D\u043E \u0433\u0430\u0432\u043A\u0430\u0454.', '\u0411\u043E\u043B\u044C\u0448\u0430\u044F \u0441\u043E\u0431\u0430\u043A\u0430 \u0433\u0440\u043E\u043C\u043A\u043E \u043B\u0430\u0435\u0442.'), tr('You come home and everyone shouts: surprise!', 'Wracasz do domu, a wszyscy krzycz\u0105: niespodzianka!', 'Llegas a casa y todos gritan: \xA1sorpresa!', 'Torni a casa e tutti gridano: sorpresa!', 'Tu rentres et tout le monde crie : surprise !', 'Ajungi acas\u0103 \u0219i to\u021Bi strig\u0103: surpriz\u0103!', 'Pr\xEDde\u0161 domov a v\u0161etci kri\u010Dia: prekvapenie!', '\u0422\u0438 \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0448 \u0434\u043E\u0434\u043E\u043C\u0443, \u0430 \u0432\u0441\u0456 \u043A\u0440\u0438\u0447\u0430\u0442\u044C: \u0441\u044E\u0440\u043F\u0440\u0438\u0437!', '\u0422\u044B \u043F\u0440\u0438\u0445\u043E\u0434\u0438\u0448\u044C \u0434\u043E\u043C\u043E\u0439, \u0430 \u0432\u0441\u0435 \u043A\u0440\u0438\u0447\u0430\u0442: \u0441\u044E\u0440\u043F\u0440\u0438\u0437!'), tr('You played all day and now it is evening.', 'Ca\u0142y dzie\u0144 by\u0142a zabawa, a teraz jest wiecz\xF3r.', 'Jugaste todo el d\xEDa y ya es de noche.', 'Hai giocato tutto il giorno e ora \xE8 sera.', "Tu as jou\xE9 toute la journ\xE9e et c'est le soir.", 'Te-ai jucat toat\u0103 ziua \u0219i acum e sear\u0103.', 'Cel\xFD de\u0148 bola z\xE1bava a teraz je ve\u010Der.', '\u0426\u0456\u043B\u0438\u0439 \u0434\u0435\u043D\u044C \u0431\u0443\u043B\u0438 \u0456\u0433\u0440\u0438, \u0430 \u0442\u0435\u043F\u0435\u0440 \u0432\u0435\u0447\u0456\u0440.', '\u0412\u0435\u0441\u044C \u0434\u0435\u043D\u044C \u0431\u044B\u043B\u0438 \u0438\u0433\u0440\u044B, \u0430 \u0442\u0435\u043F\u0435\u0440\u044C \u0432\u0435\u0447\u0435\u0440.'), tr('You lost your teddy.', 'Tw\xF3j mi\u015B si\u0119 zgubi\u0142.', 'Has perdido tu osito.', 'Hai perso il tuo orsetto.', 'Tu as perdu ton nounours.', '\u021Ai-ai pierdut ursule\u021Bul.', 'Stratil sa ti macko.', '\u0422\u0432\u0456\u0439 \u0432\u0435\u0434\u043C\u0435\u0434\u0438\u043A \u0437\u0430\u0433\u0443\u0431\u0438\u0432\u0441\u044F.', '\u0422\u0432\u043E\u0439 \u043C\u0438\u0448\u043A\u0430 \u043F\u043E\u0442\u0435\u0440\u044F\u043B\u0441\u044F.'), tr('Mum praises you.', 'Mama ci\u0119 chwali.', 'Mam\xE1 te felicita.', 'La mamma ti fa i complimenti.', 'Maman te f\xE9licite.', 'Mama te laud\u0103.', 'Mama \u0165a pochv\xE1li.', '\u041C\u0430\u043C\u0430 \u0442\u0435\u0431\u0435 \u0445\u0432\u0430\u043B\u0438\u0442\u044C.', '\u041C\u0430\u043C\u0430 \u0442\u0435\u0431\u044F \u0445\u0432\u0430\u043B\u0438\u0442.'), tr('Your brother scribbled on your drawing.', 'Brat pobazgra\u0142 tw\xF3j rysunek.', 'Tu hermano ha garabateado tu dibujo.', 'Tuo fratello ha scarabocchiato il tuo disegno.', 'Ton fr\xE8re a gribouill\xE9 sur ton dessin.', 'Fratele t\u0103u \u021Bi-a m\xE2zg\u0103lit desenul.', 'Brat ti po\u010Dm\xE1ral obr\xE1zok.', '\u0411\u0440\u0430\u0442 \u043F\u043E\u0447\u0435\u0440\u043A\u0430\u0432 \u0442\u0432\u0456\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A.', '\u0411\u0440\u0430\u0442 \u0438\u0441\u0447\u0435\u0440\u043A\u0430\u043B \u0442\u0432\u043E\u0439 \u0440\u0438\u0441\u0443\u043D\u043E\u043A.'), tr('A big spider is crawling on the wall.', 'Po \u015Bcianie chodzi du\u017Cy paj\u0105k.', 'Una ara\xF1a grande sube por la pared.', 'Un grosso ragno cammina sul muro.', 'Une grosse araign\xE9e grimpe sur le mur.', 'Un p\u0103ianjen mare merge pe perete.', 'Po stene lezie ve\u013Ek\xFD pav\xFAk.', '\u041F\u043E \u0441\u0442\u0456\u043D\u0456 \u043F\u043E\u0432\u0437\u0435 \u0432\u0435\u043B\u0438\u043A\u0438\u0439 \u043F\u0430\u0432\u0443\u043A.', '\u041F\u043E \u0441\u0442\u0435\u043D\u0435 \u043F\u043E\u043B\u0437\u0451\u0442 \u0431\u043E\u043B\u044C\u0448\u043E\u0439 \u043F\u0430\u0443\u043A.'), tr('You open the box and a clown jumps out!', 'Otwierasz pude\u0142ko, a z niego wyskakuje klaun!', '\xA1Abres la caja y sale un payaso de un salto!', 'Apri la scatola e salta fuori un pagliaccio!', "Tu ouvres la bo\xEEte et un clown en sort d'un bond !", 'Deschizi cutia \u0219i sare din ea un clovn!', 'Otvor\xED\u0161 krabicu a vysko\u010D\xED z nej klaun!', '\u0422\u0438 \u0432\u0456\u0434\u043A\u0440\u0438\u0432\u0430\u0454\u0448 \u043A\u043E\u0440\u043E\u0431\u043A\u0443, \u0430 \u0437\u0432\u0456\u0434\u0442\u0438 \u0432\u0438\u0441\u0442\u0440\u0438\u0431\u0443\u0454 \u043A\u043B\u043E\u0443\u043D!', '\u0422\u044B \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0448\u044C \u043A\u043E\u0440\u043E\u0431\u043A\u0443, \u0430 \u043E\u0442\u0442\u0443\u0434\u0430 \u0432\u044B\u0441\u043A\u0430\u043A\u0438\u0432\u0430\u0435\u0442 \u043A\u043B\u043E\u0443\u043D!'), tr('It is late in the evening and you yawn a lot.', 'Jest p\xF3\u017Any wiecz\xF3r i du\u017Co ziewasz.', 'Es muy tarde y bostezas mucho.', '\xC8 sera tardi e sbadigli tanto.', 'Il est tard le soir et tu b\xE2illes beaucoup.', 'E sear\u0103 t\xE2rziu \u0219i ca\u0219ti mult.', 'Je neskoro ve\u010Der a ve\u013Ea z\xEDv\xE4\u0161.', '\u041F\u0456\u0437\u043D\u0456\u0439 \u0432\u0435\u0447\u0456\u0440, \u0456 \u0442\u0438 \u0431\u0430\u0433\u0430\u0442\u043E \u043F\u043E\u0437\u0456\u0445\u0430\u0454\u0448.', '\u041F\u043E\u0437\u0434\u043D\u0438\u0439 \u0432\u0435\u0447\u0435\u0440, \u0438 \u0442\u044B \u043C\u043D\u043E\u0433\u043E \u0437\u0435\u0432\u0430\u0435\u0448\u044C.'), tr('You have to sing in front of everyone.', 'Musisz za\u015Bpiewa\u0107 przed wszystkimi.', 'Tienes que cantar delante de todos.', 'Devi cantare davanti a tutti.', 'Tu dois chanter devant tout le monde.', 'Trebuie s\u0103 c\xE2n\u021Bi \xEEn fa\u021Ba tuturor.', 'M\xE1\u0161 spieva\u0165 pred v\u0161etk\xFDmi.', '\u0422\u043E\u0431\u0456 \u0442\u0440\u0435\u0431\u0430 \u0437\u0430\u0441\u043F\u0456\u0432\u0430\u0442\u0438 \u043F\u0435\u0440\u0435\u0434 \u0443\u0441\u0456\u043C\u0430.', '\u0422\u0435\u0431\u0435 \u043D\u0443\u0436\u043D\u043E \u0441\u043F\u0435\u0442\u044C \u043F\u0435\u0440\u0435\u0434 \u0432\u0441\u0435\u043C\u0438.'), tr("A lady you don't know says hello in the shop.", 'W sklepie wita si\u0119 z tob\u0105 nieznajoma pani.', 'En la tienda te saluda una se\xF1ora que no conoces.', 'Nel negozio ti saluta una signora che non conosci.', 'Au magasin, une dame que tu ne connais pas te dit bonjour.', 'La magazin te salut\u0103 o doamn\u0103 pe care n-o cuno\u0219ti.', 'V obchode \u0165a pozdrav\xED nezn\xE1ma pani.', '\u0423 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0456 \u0437 \u0442\u043E\u0431\u043E\u044E \u0432\u0456\u0442\u0430\u0454\u0442\u044C\u0441\u044F \u043D\u0435\u0437\u043D\u0430\u0439\u043E\u043C\u0430 \u043F\u0430\u043D\u0456.', '\u0412 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435 \u0441 \u0442\u043E\u0431\u043E\u0439 \u0437\u0434\u043E\u0440\u043E\u0432\u0430\u0435\u0442\u0441\u044F \u043D\u0435\u0437\u043D\u0430\u043A\u043E\u043C\u0430\u044F \u0442\u0451\u0442\u044F.'), tr('In the evening Mum reads you a story.', 'Wieczorem mama czyta ci bajk\u0119.', 'Por la noche mam\xE1 te lee un cuento.', 'La sera la mamma ti legge una storia.', 'Le soir, maman te lit une histoire.', 'Seara mama \xEE\u021Bi cite\u0219te o poveste.', 'Ve\u010Der ti mama \u010D\xEDta rozpr\xE1vku.', '\u0423\u0432\u0435\u0447\u0435\u0440\u0456 \u043C\u0430\u043C\u0430 \u0447\u0438\u0442\u0430\u0454 \u0442\u043E\u0431\u0456 \u043A\u0430\u0437\u043A\u0443.', '\u0412\u0435\u0447\u0435\u0440\u043E\u043C \u043C\u0430\u043C\u0430 \u0447\u0438\u0442\u0430\u0435\u0442 \u0442\u0435\u0431\u0435 \u0441\u043A\u0430\u0437\u043A\u0443.'), tr('You are sitting in a warm bath.', 'Siedzisz w ciep\u0142ej k\u0105pieli.', 'Est\xE1s en un ba\xF1o calentito.', 'Sei in un bagno caldo.', 'Tu es dans un bain bien chaud.', 'Stai \xEEntr-o baie cald\u0103.', 'Sed\xED\u0161 v teplom k\xFApeli.', '\u0422\u0438 \u0441\u0438\u0434\u0438\u0448 \u0443 \u0442\u0435\u043F\u043B\u0456\u0439 \u0432\u0430\u043D\u043D\u0456.', '\u0422\u044B \u0441\u0438\u0434\u0438\u0448\u044C \u0432 \u0442\u0451\u043F\u043B\u043E\u0439 \u0432\u0430\u043D\u043D\u0435.'), tr('I draw a nice picture for her.', 'Rysuj\u0119 dla niej \u0142adny obrazek.', 'Le hago un dibujo bonito.', 'Le faccio un bel disegno.', 'Je lui fais un joli dessin.', '\xCEi fac un desen frumos.', 'Nakresl\xEDm jej pekn\xFD obr\xE1zok.', '\u042F \u043C\u0430\u043B\u044E\u044E \u0434\u043B\u044F \u043D\u0435\u0457 \u0433\u0430\u0440\u043D\u0438\u0439 \u043C\u0430\u043B\u044E\u043D\u043E\u043A.', '\u042F \u0440\u0438\u0441\u0443\u044E \u0434\u043B\u044F \u043D\u0435\u0451 \u043A\u0440\u0430\u0441\u0438\u0432\u044B\u0439 \u0440\u0438\u0441\u0443\u043D\u043E\u043A.'), tr('I go over and say hello.', 'Podchodz\u0119 i m\xF3wi\u0119 cze\u015B\u0107.', 'Me acerco y le digo hola.', 'Mi avvicino e lo saluto.', 'Je vais le voir et je lui dis bonjour.', 'M\u0103 duc la el \u0219i \xEEl salut.', 'Pr\xEDdem k nemu a pozdrav\xEDm ho.', '\u042F \u043F\u0456\u0434\u0445\u043E\u0434\u0436\u0443 \u0456 \u0432\u0456\u0442\u0430\u044E\u0441\u044F.', '\u042F \u043F\u043E\u0434\u0445\u043E\u0436\u0443 \u0438 \u0437\u0434\u043E\u0440\u043E\u0432\u0430\u044E\u0441\u044C.'), tr('I give a hug.', 'Przytulam.', 'Le doy un abrazo.', 'Lo abbraccio.', 'Je fais un c\xE2lin.', '\xCEl \xEEmbr\u0103\u021Bi\u0219ez.', 'Obj\xEDmem ho.', '\u042F \u043E\u0431\u0456\u0439\u043C\u0430\u044E.', '\u042F \u043E\u0431\u043D\u0438\u043C\u0430\u044E.'), tr('I laugh at them.', '\u015Amiej\u0119 si\u0119 z niego.', 'Me r\xEDo de \xE9l.', 'Lo prendo in giro.', 'Je me moque.', 'R\xE2d de el.', 'Vysmejem sa mu.', '\u042F \u0441\u043C\u0456\u044E\u0441\u044F \u0437 \u043D\u044C\u043E\u0433\u043E.', '\u042F \u0441\u043C\u0435\u044E\u0441\u044C \u043D\u0430\u0434 \u043D\u0438\u043C.'), tr('I run away.', 'Uciekam.', 'Salgo corriendo.', 'Scappo via.', "Je m'enfuis.", 'Fug.', 'Ute\u010Diem.', '\u042F \u0442\u0456\u043A\u0430\u044E.', '\u042F \u0443\u0431\u0435\u0433\u0430\u044E.'), tr('I look away.', 'Odwracam wzrok.', 'Miro hacia otro lado.', 'Guardo altrove.', 'Je regarde ailleurs.', 'M\u0103 uit \xEEn alt\u0103 parte.', 'Pozriem sa inam.', '\u042F \u0432\u0456\u0434\u0432\u0435\u0440\u0442\u0430\u044E\u0441\u044F.', '\u042F \u043E\u0442\u0432\u043E\u0440\u0430\u0447\u0438\u0432\u0430\u044E\u0441\u044C.'), tr('I help them get up.', 'Pomagam mu wsta\u0107.', 'Le ayudo a levantarse.', 'Lo aiuto ad alzarsi.', "Je l'aide \xE0 se relever.", '\xCEl ajut s\u0103 se ridice.', 'Pom\xF4\u017Eem mu vsta\u0165.', '\u042F \u0434\u043E\u043F\u043E\u043C\u0430\u0433\u0430\u044E \u0439\u043E\u043C\u0443 \u0432\u0441\u0442\u0430\u0442\u0438.', '\u042F \u043F\u043E\u043C\u043E\u0433\u0430\u044E \u0435\u043C\u0443 \u0432\u0441\u0442\u0430\u0442\u044C.'), tr('I ask what is wrong.', 'Pytam, co si\u0119 sta\u0142o.', 'Le pregunto qu\xE9 le pasa.', "Gli chiedo cosa c'\xE8.", 'Je demande ce qui ne va pas.', '\xCEntreb ce s-a \xEEnt\xE2mplat.', 'Sp\xFDtam sa, \u010Do sa stalo.', '\u042F \u043F\u0438\u0442\u0430\u044E, \u0449\u043E \u0441\u0442\u0430\u043B\u043E\u0441\u044F.', '\u042F \u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u044E, \u0447\u0442\u043E \u0441\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C.'), tr('I share my teddy.', 'Daj\u0119 mu mojego misia.', 'Le dejo mi osito.', 'Gli presto il mio orsetto.', 'Je lui pr\xEAte mon nounours.', '\xCEi dau ursule\u021Bul meu.', 'D\xE1m mu svojho macka.', '\u042F \u0434\u0430\u044E \u0439\u043E\u043C\u0443 \u0441\u0432\u043E\u0433\u043E \u0432\u0435\u0434\u043C\u0435\u0434\u0438\u043A\u0430.', '\u042F \u0434\u0430\u044E \u0435\u043C\u0443 \u0441\u0432\u043E\u0435\u0433\u043E \u043C\u0438\u0448\u043A\u0443.'), tr('I turn on the light.', 'Zapalam \u015Bwiat\u0142o.', 'Enciendo la luz.', 'Accendo la luce.', "J'allume la lumi\xE8re.", 'Aprind lumina.', 'Zapnem svetlo.', '\u042F \u0432\u043C\u0438\u043A\u0430\u044E \u0441\u0432\u0456\u0442\u043B\u043E.', '\u042F \u0432\u043A\u043B\u044E\u0447\u0430\u044E \u0441\u0432\u0435\u0442.'), tr('I take a deep breath.', 'Bior\u0119 g\u0142\u0119boki oddech.', 'Respiro hondo.', 'Faccio un respiro profondo.', 'Je respire profond\xE9ment.', 'Respir ad\xE2nc.', 'Zhlboka sa nad\xFDchnem.', '\u042F \u0433\u043B\u0438\u0431\u043E\u043A\u043E \u0434\u0438\u0445\u0430\u044E.', '\u042F \u0433\u043B\u0443\u0431\u043E\u043A\u043E \u0434\u044B\u0448\u0443.'), tr('I throw my toys around.', 'Rzucam zabawkami.', 'Tiro los juguetes.', 'Lancio i giocattoli.', 'Je lance mes jouets.', 'Arunc juc\u0103riile.', 'H\xE1d\u017Eem hra\u010Dky.', '\u042F \u043A\u0438\u0434\u0430\u044E \u0456\u0433\u0440\u0430\u0448\u043A\u0438.', '\u042F \u0440\u0430\u0437\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u044E \u0438\u0433\u0440\u0443\u0448\u043A\u0438.'), tr('I scream very loudly.', 'G\u0142o\u015Bno krzycz\u0119.', 'Grito muy fuerte.', 'Urlo fortissimo.', 'Je crie tr\xE8s fort.', '\u021Aip foarte tare.', 'Hlasno kri\u010D\xEDm.', '\u042F \u0433\u043E\u043B\u043E\u0441\u043D\u043E \u043A\u0440\u0438\u0447\u0443.', '\u042F \u0433\u0440\u043E\u043C\u043A\u043E \u043A\u0440\u0438\u0447\u0443.'), tr('Someone is crying. What can you do?', 'Kto\u015B p\u0142acze. Co mo\u017Cesz zrobi\u0107?', 'Alguien est\xE1 llorando. \xBFQu\xE9 puedes hacer?', 'Qualcuno piange. Cosa puoi fare?', "Quelqu'un pleure. Que peux-tu faire ?", 'Cineva pl\xE2nge. Ce po\u021Bi face?', 'Niekto pla\u010De. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u0425\u0442\u043E\u0441\u044C \u043F\u043B\u0430\u0447\u0435. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u041A\u0442\u043E-\u0442\u043E \u043F\u043B\u0430\u0447\u0435\u0442. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('Your friend fell down. What do you do?', 'Tw\xF3j przyjaciel si\u0119 przewr\xF3ci\u0142. Co robisz?', 'Tu amigo se ha ca\xEDdo. \xBFQu\xE9 haces?', 'Il tuo amico \xE8 caduto. Cosa fai?', 'Ton ami est tomb\xE9. Que fais-tu ?', 'Prietenul t\u0103u a c\u0103zut. Ce faci?', 'Tvoj kamar\xE1t spadol. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0434\u0440\u0443\u0433 \u0443\u043F\u0430\u0432. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0434\u0440\u0443\u0433 \u0443\u043F\u0430\u043B. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Your brother is angry. What can you do?', 'Tw\xF3j brat jest z\u0142y. Co mo\u017Cesz zrobi\u0107?', 'Tu hermano est\xE1 enfadado. \xBFQu\xE9 puedes hacer?', 'Tuo fratello \xE8 arrabbiato. Cosa puoi fare?', 'Ton fr\xE8re est f\xE2ch\xE9. Que peux-tu faire ?', 'Fratele t\u0103u e sup\u0103rat. Ce po\u021Bi face?', 'Tvoj brat sa hnev\xE1. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u0422\u0432\u0456\u0439 \u0431\u0440\u0430\u0442 \u0441\u0435\u0440\u0434\u0438\u0442\u044C\u0441\u044F. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u0422\u0432\u043E\u0439 \u0431\u0440\u0430\u0442 \u0441\u0435\u0440\u0434\u0438\u0442\u0441\u044F. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('Your friend is sad because they have no toy. What do you do?', 'Tw\xF3j przyjaciel jest smutny, bo nie ma zabawki. Co robisz?', 'Tu amigo est\xE1 triste porque no tiene juguete. \xBFQu\xE9 haces?', 'Il tuo amico \xE8 triste perch\xE9 non ha un giocattolo. Cosa fai?', "Ton ami est triste parce qu'il n'a pas de jouet. Que fais-tu ?", 'Prietenul t\u0103u e trist pentru c\u0103 nu are nicio juc\u0103rie. Ce faci?', 'Tvoj kamar\xE1t je smutn\xFD, lebo nem\xE1 hra\u010Dku. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0434\u0440\u0443\u0433 \u0441\u0443\u043C\u043D\u0438\u0439, \u0431\u043E \u0432 \u043D\u044C\u043E\u0433\u043E \u043D\u0435\u043C\u0430\u0454 \u0456\u0433\u0440\u0430\u0448\u043A\u0438. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0434\u0440\u0443\u0433 \u0433\u0440\u0443\u0441\u0442\u0438\u0442, \u043F\u043E\u0442\u043E\u043C\u0443 \u0447\u0442\u043E \u0443 \u043D\u0435\u0433\u043E \u043D\u0435\u0442 \u0438\u0433\u0440\u0443\u0448\u043A\u0438. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Your little sibling is scared of the dark. What do you do?', 'Tw\xF3j m\u0142odszy brat boi si\u0119 ciemno\u015Bci. Co robisz?', 'Tu hermanito tiene miedo de la oscuridad. \xBFQu\xE9 haces?', 'Il tuo fratellino ha paura del buio. Cosa fai?', 'Ton petit fr\xE8re a peur du noir. Que fais-tu ?', 'Fr\u0103\u021Biorul t\u0103u se teme de \xEEntuneric. Ce faci?', 'Tvoj bra\u010Dek sa boj\xED tmy. \u010Co urob\xED\u0161?', '\u0422\u0432\u0456\u0439 \u0431\u0440\u0430\u0442\u0438\u043A \u0431\u043E\u0457\u0442\u044C\u0441\u044F \u0442\u0435\u043C\u0440\u044F\u0432\u0438. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u0422\u0432\u043E\u0439 \u0431\u0440\u0430\u0442\u0438\u043A \u0431\u043E\u0438\u0442\u0441\u044F \u0442\u0435\u043C\u043D\u043E\u0442\u044B. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr('Mum is tired and sad. What can you do?', 'Mama jest zm\u0119czona i smutna. Co mo\u017Cesz zrobi\u0107?', 'Mam\xE1 est\xE1 cansada y triste. \xBFQu\xE9 puedes hacer?', 'La mamma \xE8 stanca e triste. Cosa puoi fare?', 'Maman est fatigu\xE9e et triste. Que peux-tu faire ?', 'Mama e obosit\u0103 \u0219i trist\u0103. Ce po\u021Bi face?', 'Mama je unaven\xE1 a smutn\xE1. \u010Co m\xF4\u017Ee\u0161 urobi\u0165?', '\u041C\u0430\u043C\u0430 \u0432\u0442\u043E\u043C\u043B\u0435\u043D\u0430 \u0439 \u0441\u0443\u043C\u043D\u0430. \u0429\u043E \u0442\u0438 \u043C\u043E\u0436\u0435\u0448 \u0437\u0440\u043E\u0431\u0438\u0442\u0438?', '\u041C\u0430\u043C\u0430 \u0443\u0441\u0442\u0430\u043B\u0430 \u0438 \u0433\u0440\u0443\u0441\u0442\u0438\u0442. \u0427\u0442\u043E \u0442\u044B \u043C\u043E\u0436\u0435\u0448\u044C \u0441\u0434\u0435\u043B\u0430\u0442\u044C?'), tr('A new child is standing alone at nursery. What do you do?', 'Nowe dziecko stoi samo w przedszkolu. Co robisz?', 'Un ni\xF1o nuevo est\xE1 solo en la guarder\xEDa. \xBFQu\xE9 haces?', "Un bambino nuovo \xE8 da solo all'asilo. Cosa fai?", "Un nouvel enfant est tout seul \xE0 l'\xE9cole. Que fais-tu ?", 'Un copil nou st\u0103 singur la gr\u0103dini\u021B\u0103. Ce faci?', 'Nov\xE9 die\u0165a stoj\xED samo v \u0161k\xF4lke. \u010Co urob\xED\u0161?', '\u041D\u043E\u0432\u0430 \u0434\u0438\u0442\u0438\u043D\u0430 \u0441\u0442\u043E\u0457\u0442\u044C \u0441\u0430\u043C\u0430 \u0432 \u0441\u0430\u0434\u043E\u0447\u043A\u0443. \u0429\u043E \u0442\u0438 \u0437\u0440\u043E\u0431\u0438\u0448?', '\u041D\u043E\u0432\u044B\u0439 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u0441\u0442\u043E\u0438\u0442 \u043E\u0434\u0438\u043D \u0432 \u0441\u0430\u0434\u0438\u043A\u0435. \u0427\u0442\u043E \u0442\u044B \u0441\u0434\u0435\u043B\u0430\u0435\u0448\u044C?'), tr("Let's breathe together! Watch the balloon.", 'Oddychajmy razem! Patrz na balonik.', '\xA1Respiremos juntos! Mira el globo.', 'Respiriamo insieme! Guarda il palloncino.', 'Respirons ensemble ! Regarde le ballon.', 'Hai s\u0103 respir\u0103m \xEEmpreun\u0103! Uit\u0103-te la balon.', 'D\xFDchajme spolu! Pozeraj na bal\xF3n.', '\u0414\u0438\u0445\u0430\u0439\u043C\u043E \u0440\u0430\u0437\u043E\u043C! \u0414\u0438\u0432\u0438\u0441\u044C \u043D\u0430 \u043A\u0443\u043B\u044C\u043A\u0443.', '\u0414\u0430\u0432\u0430\u0439 \u043F\u043E\u0434\u044B\u0448\u0438\u043C \u0432\u043C\u0435\u0441\u0442\u0435! \u0421\u043C\u043E\u0442\u0440\u0438 \u043D\u0430 \u0448\u0430\u0440\u0438\u043A.'), tr('Breathe in\u2026', 'Wdech\u2026', 'Toma aire\u2026', 'Inspira\u2026', 'Inspire\u2026', 'Inspir\u0103\u2026', 'N\xE1dych\u2026', '\u0412\u0434\u0438\u0445\u2026', '\u0412\u0434\u043E\u0445\u2026'), tr('\u2026and out.', '\u2026i wydech.', '\u2026y su\xE9ltalo.', '\u2026ed espira.', '\u2026et expire.', '\u2026\u0219i expir\u0103.', '\u2026a v\xFDdych.', '\u2026\u0456 \u0432\u0438\u0434\u0438\u0445.', '\u2026\u0438 \u0432\u044B\u0434\u043E\u0445.'), tr('Calm balloon', 'Balonik spokoju', 'Globo de la calma', 'Palloncino della calma', 'Ballon du calme', 'Balonul lini\u0219tii', 'Bal\xF3nik pokoja', '\u041A\u0443\u043B\u044C\u043A\u0430 \u0441\u043F\u043E\u043A\u043E\u044E', '\u0428\u0430\u0440\u0438\u043A \u0441\u043F\u043E\u043A\u043E\u0439\u0441\u0442\u0432\u0438\u044F'), tr('How many breaths?', 'Ile oddech\xF3w?', '\xBFCu\xE1ntas respiraciones?', 'Quanti respiri?', 'Combien de respirations ?', 'C\xE2te respira\u021Bii?', 'Ko\u013Eko n\xE1dychov?', '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 \u0432\u0434\u0438\u0445\u0456\u0432?', '\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0432\u0434\u043E\u0445\u043E\u0432?'), tr('Well done! Do you feel calmer now?', 'Brawo! Czujesz si\u0119 teraz spokojniej?', '\xA1Muy bien! \xBFYa est\xE1s m\xE1s en calma?', 'Bravo! Ora va meglio?', 'Bravo ! Tu te sens plus calme maintenant ?', 'Bravo! Acum e mai bine?', 'V\xFDborne! U\u017E je ti lep\u0161ie?', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446\u044C! \u0422\u0435\u043F\u0435\u0440 \u0442\u043E\u0431\u0456 \u0441\u043F\u043E\u043A\u0456\u0439\u043D\u0456\u0448\u0435?', '\u041C\u043E\u043B\u043E\u0434\u0435\u0446! \u0422\u0435\u043F\u0435\u0440\u044C \u0442\u0435\u0431\u0435 \u0441\u043F\u043E\u043A\u043E\u0439\u043D\u0435\u0435?'), tr('Copy this face!', 'Zr\xF3b tak\u0105 min\u0119!', '\xA1Pon esta cara!', 'Fai questa faccia!', 'Fais cette t\xEAte !', 'F\u0103 fa\u021Ba asta!', 'Urob tak\xFAto tv\xE1r!', '\u041F\u043E\u043A\u0430\u0436\u0438 \u0442\u0430\u043A\u0435 \u043E\u0431\u043B\u0438\u0447\u0447\u044F!', '\u0421\u0434\u0435\u043B\u0430\u0439 \u0442\u0430\u043A\u043E\u0435 \u043B\u0438\u0446\u043E!'), tr('You are very angry. What helps you calm down?', 'Czujesz z\u0142o\u015B\u0107. Co pomo\u017Ce ci si\u0119 uspokoi\u0107?', 'Sientes mucha rabia. \xBFQu\xE9 te ayuda a calmarte?', 'Senti tanta rabbia. Cosa ti aiuta a calmarti?', "Tu es tr\xE8s en col\xE8re. Qu'est-ce qui t'aide \xE0 te calmer ?", 'Sim\u021Bi mult\u0103 furie. Ce te ajut\u0103 s\u0103 te lini\u0219te\u0219ti?', 'C\xEDti\u0161 ve\u013Ek\xFD hnev. \u010Co ti pom\xF4\u017Ee upokoji\u0165 sa?', '\u0422\u0438 \u0434\u0443\u0436\u0435 \u0441\u0435\u0440\u0434\u0438\u0448\u0441\u044F. \u0429\u043E \u0434\u043E\u043F\u043E\u043C\u043E\u0436\u0435 \u0442\u043E\u0431\u0456 \u0437\u0430\u0441\u043F\u043E\u043A\u043E\u0457\u0442\u0438\u0441\u044F?', '\u0422\u044B \u043E\u0447\u0435\u043D\u044C \u0441\u0435\u0440\u0434\u0438\u0448\u044C\u0441\u044F. \u0427\u0442\u043E \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0442\u0435\u0431\u0435 \u0443\u0441\u043F\u043E\u043A\u043E\u0438\u0442\u044C\u0441\u044F?'), tr('What do we take when it rains?', 'Co bierzemy, gdy pada deszcz?', '\xBFQu\xE9 llevamos cuando llueve?', 'Cosa prendiamo quando piove?', "Qu'est-ce qu'on prend quand il pleut ?", 'Ce lu\u0103m c\xE2nd plou\u0103?', '\u010Co si berieme, ke\u010F pr\u0161\xED?', '\u0429\u043E \u043C\u0438 \u0431\u0435\u0440\u0435\u043C\u043E, \u043A\u043E\u043B\u0438 \u0439\u0434\u0435 \u0434\u043E\u0449?', '\u0427\u0442\u043E \u043C\u044B \u0431\u0435\u0440\u0451\u043C, \u043A\u043E\u0433\u0434\u0430 \u0438\u0434\u0451\u0442 \u0434\u043E\u0436\u0434\u044C?'), tr('What do we build from snow in winter?', 'Co lepimy zim\u0105 ze \u015Bniegu?', '\xBFQu\xE9 hacemos con la nieve en invierno?', "Cosa costruiamo con la neve d'inverno?", "Qu'est-ce qu'on fait avec la neige en hiver ?", 'Ce facem iarna din z\u0103pad\u0103?', '\u010Co stavame v zime zo snehu?', '\u0429\u043E \u043C\u0438 \u043B\u0456\u043F\u0438\u043C\u043E \u0432\u0437\u0438\u043C\u043A\u0443 \u0437\u0456 \u0441\u043D\u0456\u0433\u0443?', '\u0427\u0442\u043E \u043C\u044B \u043B\u0435\u043F\u0438\u043C \u0437\u0438\u043C\u043E\u0439 \u0438\u0437 \u0441\u043D\u0435\u0433\u0430?'), tr("What do we eat in summer when it's hot?", 'Co jemy latem, gdy jest gor\u0105co?', '\xBFQu\xE9 comemos en verano cuando hace calor?', "Cosa mangiamo d'estate quando fa caldo?", "Qu'est-ce qu'on mange en \xE9t\xE9 quand il fait chaud ?", 'Ce m\xE2nc\u0103m vara, c\xE2nd e cald?', '\u010Co jeme v lete, ke\u010F je teplo?', '\u0429\u043E \u043C\u0438 \u0457\u043C\u043E \u0432\u043B\u0456\u0442\u043A\u0443, \u043A\u043E\u043B\u0438 \u0441\u043F\u0435\u043A\u043E\u0442\u043D\u043E?', '\u0427\u0442\u043E \u043C\u044B \u0435\u0434\u0438\u043C \u043B\u0435\u0442\u043E\u043C, \u043A\u043E\u0433\u0434\u0430 \u0436\u0430\u0440\u043A\u043E?'), tr('What shines in the sky at night?', 'Co \u015Bwieci noc\u0105 na niebie?', '\xBFQu\xE9 brilla en el cielo por la noche?', 'Cosa brilla nel cielo di notte?', "Qu'est-ce qui brille dans le ciel la nuit ?", 'Ce str\u0103luce\u0219te noaptea pe cer?', '\u010Co svieti v noci na oblohe?', '\u0429\u043E \u0441\u0432\u0456\u0442\u0438\u0442\u044C \u0443\u043D\u043E\u0447\u0456 \u043D\u0430 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u0441\u0432\u0435\u0442\u0438\u0442 \u043D\u043E\u0447\u044C\u044E \u043D\u0430 \u043D\u0435\u0431\u0435?'), tr('What shines in the sky during the day?', 'Co \u015Bwieci w dzie\u0144 na niebie?', '\xBFQu\xE9 brilla en el cielo durante el d\xEDa?', 'Cosa splende nel cielo di giorno?', "Qu'est-ce qui brille dans le ciel le jour ?", 'Ce str\u0103luce\u0219te ziua pe cer?', '\u010Co svieti cez de\u0148 na oblohe?', '\u0429\u043E \u0441\u0432\u0456\u0442\u0438\u0442\u044C \u0443\u0434\u0435\u043D\u044C \u043D\u0430 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u0441\u0432\u0435\u0442\u0438\u0442 \u0434\u043D\u0451\u043C \u043D\u0430 \u043D\u0435\u0431\u0435?'), tr("What do we wear when it's cold?", 'Co zak\u0142adamy, gdy jest zimno?', '\xBFQu\xE9 nos ponemos cuando hace fr\xEDo?', 'Cosa mettiamo quando fa freddo?', "Qu'est-ce qu'on met quand il fait froid ?", 'Ce purt\u0103m c\xE2nd e frig?', '\u010Co si obliekame, ke\u010F je zima?', '\u0429\u043E \u043C\u0438 \u0432\u0434\u044F\u0433\u0430\u0454\u043C\u043E, \u043A\u043E\u043B\u0438 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?', '\u0427\u0442\u043E \u043C\u044B \u043D\u0430\u0434\u0435\u0432\u0430\u0435\u043C, \u043A\u043E\u0433\u0434\u0430 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?'), tr('What falls from the trees in autumn?', 'Co spada jesieni\u0105 z drzew?', '\xBFQu\xE9 cae de los \xE1rboles en oto\xF1o?', 'Cosa cade dagli alberi in autunno?', "Qu'est-ce qui tombe des arbres en automne ?", 'Ce cade toamna din copaci?', '\u010Co pad\xE1 na jese\u0148 zo stromov?', '\u0429\u043E \u043F\u0430\u0434\u0430\u0454 \u0432\u043E\u0441\u0435\u043D\u0438 \u0437 \u0434\u0435\u0440\u0435\u0432?', '\u0427\u0442\u043E \u043F\u0430\u0434\u0430\u0435\u0442 \u043E\u0441\u0435\u043D\u044C\u044E \u0441 \u0434\u0435\u0440\u0435\u0432\u044C\u0435\u0432?'), tr('What blooms in spring?', 'Co kwitnie wiosn\u0105?', '\xBFQu\xE9 florece en primavera?', 'Cosa fiorisce in primavera?', "Qu'est-ce qui fleurit au printemps ?", 'Ce \xEEnflore\u0219te prim\u0103vara?', '\u010Co kvitne na jar?', '\u0429\u043E \u0446\u0432\u0456\u0442\u0435 \u043D\u0430\u0432\u0435\u0441\u043D\u0456?', '\u0427\u0442\u043E \u0446\u0432\u0435\u0442\u0451\u0442 \u0432\u0435\u0441\u043D\u043E\u0439?'), tr('Who lives in the water?', 'Kto mieszka w wodzie?', '\xBFQui\xE9n vive en el agua?', "Chi vive nell'acqua?", "Qui vit dans l'eau ?", 'Cine tr\u0103ie\u0219te \xEEn ap\u0103?', 'Kto \u017Eije vo vode?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u0443 \u0432\u043E\u0434\u0456?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u0432 \u0432\u043E\u0434\u0435?'), tr("Who lives on the ice, where it's cold?", 'Kto mieszka na lodzie, gdzie jest zimno?', '\xBFQui\xE9n vive en el hielo, donde hace fr\xEDo?', 'Chi vive sul ghiaccio, dove fa freddo?', 'Qui vit sur la glace, l\xE0 o\xF9 il fait froid ?', 'Cine tr\u0103ie\u0219te pe ghea\u021B\u0103, unde e frig?', 'Kto \u017Eije na \u013Eade, kde je zima?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u043D\u0430 \u043A\u0440\u0438\u0437\u0456, \u0434\u0435 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u043D\u0430 \u043B\u044C\u0434\u0443, \u0433\u0434\u0435 \u0445\u043E\u043B\u043E\u0434\u043D\u043E?'), tr('Who lives in the desert?', 'Kto mieszka na pustyni?', '\xBFQui\xE9n vive en el desierto?', 'Chi vive nel deserto?', 'Qui vit dans le d\xE9sert ?', 'Cine tr\u0103ie\u0219te \xEEn de\u0219ert?', 'Kto \u017Eije na p\xFA\u0161ti?', '\u0425\u0442\u043E \u0436\u0438\u0432\u0435 \u0432 \u043F\u0443\u0441\u0442\u0435\u043B\u0456?', '\u041A\u0442\u043E \u0436\u0438\u0432\u0451\u0442 \u0432 \u043F\u0443\u0441\u0442\u044B\u043D\u0435?'), tr('Who can fly?', 'Kto umie lata\u0107?', '\xBFQui\xE9n sabe volar?', 'Chi sa volare?', 'Qui sait voler ?', 'Cine poate zbura?', 'Kto vie lieta\u0165?', '\u0425\u0442\u043E \u0432\u043C\u0456\u0454 \u043B\u0456\u0442\u0430\u0442\u0438?', '\u041A\u0442\u043E \u0443\u043C\u0435\u0435\u0442 \u043B\u0435\u0442\u0430\u0442\u044C?'), tr('Which animal gives milk?', 'Kt\xF3re zwierz\u0119 daje mleko?', '\xBFQu\xE9 animal da leche?', 'Quale animale d\xE0 il latte?', 'Quel animal donne du lait ?', 'Ce animal d\u0103 lapte?', 'Ktor\xE9 zviera d\xE1va mlieko?', '\u042F\u043A\u0430 \u0442\u0432\u0430\u0440\u0438\u043D\u0430 \u0434\u0430\u0454 \u043C\u043E\u043B\u043E\u043A\u043E?', '\u041A\u0430\u043A\u043E\u0435 \u0436\u0438\u0432\u043E\u0442\u043D\u043E\u0435 \u0434\u0430\u0451\u0442 \u043C\u043E\u043B\u043E\u043A\u043E?'), tr('Who lays eggs?', 'Kto znosi jajka?', '\xBFQui\xE9n pone huevos?', 'Chi fa le uova?', 'Qui pond des \u0153ufs ?', 'Cine face ou\u0103?', 'Kto zn\xE1\u0161a vaj\xED\u010Dka?', '\u0425\u0442\u043E \u043D\u0435\u0441\u0435 \u044F\u0439\u0446\u044F?', '\u041A\u0442\u043E \u043D\u0435\u0441\u0451\u0442 \u044F\u0439\u0446\u0430?'), tr('Who loves carrots?', 'Kto lubi marchewki?', '\xBFA qui\xE9n le gustan las zanahorias?', 'A chi piacciono le carote?', 'Qui adore les carottes ?', 'Cine iube\u0219te morcovii?', 'Kto m\xE1 r\xE1d mrkvu?', '\u0425\u0442\u043E \u043B\u044E\u0431\u0438\u0442\u044C \u043C\u043E\u0440\u043A\u0432\u0443?', '\u041A\u0442\u043E \u043B\u044E\u0431\u0438\u0442 \u043C\u043E\u0440\u043A\u043E\u0432\u043A\u0443?'), tr('Who loves bananas?', 'Kto lubi banany?', '\xBFA qui\xE9n le gustan los pl\xE1tanos?', 'A chi piacciono le banane?', 'Qui adore les bananes ?', 'Cine iube\u0219te bananele?', 'Kto m\xE1 r\xE1d ban\xE1ny?', '\u0425\u0442\u043E \u043B\u044E\u0431\u0438\u0442\u044C \u0431\u0430\u043D\u0430\u043D\u0438?', '\u041A\u0442\u043E \u043B\u044E\u0431\u0438\u0442 \u0431\u0430\u043D\u0430\u043D\u044B?'), tr('At which light can we cross the street?', 'Przy jakim \u015Bwietle mo\u017Cemy przej\u015B\u0107 przez ulic\u0119?', '\xBFCon qu\xE9 luz podemos cruzar la calle?', 'Con quale luce possiamo attraversare la strada?', '\xC0 quelle couleur peut-on traverser la rue ?', 'La ce culoare putem traversa strada?', 'Pri akom svetle m\xF4\u017Eeme prejs\u0165 cez cestu?', '\u041D\u0430 \u044F\u043A\u0435 \u0441\u0432\u0456\u0442\u043B\u043E \u043C\u043E\u0436\u043D\u0430 \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0438\u0442\u0438 \u0434\u043E\u0440\u043E\u0433\u0443?', '\u041D\u0430 \u043A\u0430\u043A\u043E\u0439 \u0441\u0432\u0435\u0442 \u043C\u043E\u0436\u043D\u043E \u043F\u0435\u0440\u0435\u0445\u043E\u0434\u0438\u0442\u044C \u0434\u043E\u0440\u043E\u0433\u0443?'), tr('At which light do we have to stop?', 'Przy jakim \u015Bwietle musimy si\u0119 zatrzyma\u0107?', '\xBFCon qu\xE9 luz tenemos que parar?', 'Con quale luce dobbiamo fermarci?', "\xC0 quelle couleur doit-on s'arr\xEAter ?", 'La ce culoare trebuie s\u0103 ne oprim?', 'Pri akom svetle mus\xEDme zastavi\u0165?', '\u041D\u0430 \u044F\u043A\u0435 \u0441\u0432\u0456\u0442\u043B\u043E \u0442\u0440\u0435\u0431\u0430 \u0437\u0443\u043F\u0438\u043D\u0438\u0442\u0438\u0441\u044F?', '\u041D\u0430 \u043A\u0430\u043A\u043E\u0439 \u0441\u0432\u0435\u0442 \u043D\u0443\u0436\u043D\u043E \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C\u0441\u044F?'), tr('Who puts out fires?', 'Kto gasi po\u017Car?', '\xBFQui\xE9n apaga el fuego?', 'Chi spegne il fuoco?', 'Qui \xE9teint le feu ?', 'Cine stinge focul?', 'Kto has\xED ohe\u0148?', '\u0425\u0442\u043E \u0433\u0430\u0441\u0438\u0442\u044C \u043F\u043E\u0436\u0435\u0436\u0443?', '\u041A\u0442\u043E \u0442\u0443\u0448\u0438\u0442 \u043F\u043E\u0436\u0430\u0440?'), tr('What takes sick people to hospital?', 'Co wiezie chorych do szpitala?', '\xBFQu\xE9 lleva a los enfermos al hospital?', 'Cosa porta i malati in ospedale?', "Qu'est-ce qui emm\xE8ne les malades \xE0 l'h\xF4pital ?", 'Ce duce bolnavii la spital?', '\u010Co vezie chor\xFDch do nemocnice?', '\u0429\u043E \u0432\u0435\u0437\u0435 \u0445\u0432\u043E\u0440\u0438\u0445 \u0434\u043E \u043B\u0456\u043A\u0430\u0440\u043D\u0456?', '\u0427\u0442\u043E \u0432\u0435\u0437\u0451\u0442 \u0431\u043E\u043B\u044C\u043D\u044B\u0445 \u0432 \u0431\u043E\u043B\u044C\u043D\u0438\u0446\u0443?'), tr('What runs on rails?', 'Co je\u017Adzi po szynach?', '\xBFQu\xE9 va sobre ra\xEDles?', 'Cosa va sui binari?', "Qu'est-ce qui roule sur des rails ?", 'Ce merge pe \u0219ine?', '\u010Co jazd\xED po ko\u013Eajniciach?', '\u0429\u043E \u0457\u0437\u0434\u0438\u0442\u044C \u043F\u043E \u0440\u0435\u0439\u043A\u0430\u0445?', '\u0427\u0442\u043E \u0435\u0437\u0434\u0438\u0442 \u043F\u043E \u0440\u0435\u043B\u044C\u0441\u0430\u043C?'), tr('What flies in the sky?', 'Co lata po niebie?', '\xBFQu\xE9 vuela por el cielo?', 'Cosa vola nel cielo?', "Qu'est-ce qui vole dans le ciel ?", 'Ce zboar\u0103 pe cer?', '\u010Co lieta po oblohe?', '\u0429\u043E \u043B\u0456\u0442\u0430\u0454 \u0432 \u043D\u0435\u0431\u0456?', '\u0427\u0442\u043E \u043B\u0435\u0442\u0430\u0435\u0442 \u0432 \u043D\u0435\u0431\u0435?'), tr('What sails on the water?', 'Co p\u0142ywa po wodzie?', '\xBFQu\xE9 navega por el agua?', "Cosa naviga sull'acqua?", "Qu'est-ce qui navigue sur l'eau ?", 'Ce plute\u0219te pe ap\u0103?', '\u010Co pl\xE1va po vode?', '\u0429\u043E \u043F\u043B\u0438\u0432\u0435 \u043F\u043E \u0432\u043E\u0434\u0456?', '\u0427\u0442\u043E \u043F\u043B\u044B\u0432\u0451\u0442 \u043F\u043E \u0432\u043E\u0434\u0435?'), tr('What do we hear with?', 'Czym s\u0142yszymy?', '\xBFCon qu\xE9 o\xEDmos?', 'Con cosa sentiamo?', 'Avec quoi entend-on ?', 'Cu ce auzim?', '\u010C\xEDm po\u010Dujeme?', '\u0427\u0438\u043C \u043C\u0438 \u0447\u0443\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0441\u043B\u044B\u0448\u0438\u043C?'), tr('What do we see with?', 'Czym widzimy?', '\xBFCon qu\xE9 vemos?', 'Con cosa vediamo?', 'Avec quoi voit-on ?', 'Cu ce vedem?', '\u010C\xEDm vid\xEDme?', '\u0427\u0438\u043C \u043C\u0438 \u0431\u0430\u0447\u0438\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0432\u0438\u0434\u0438\u043C?'), tr('What do we smell with?', 'Czym w\u0105chamy?', '\xBFCon qu\xE9 olemos?', 'Con cosa annusiamo?', 'Avec quoi sent-on les odeurs ?', 'Cu ce mirosim?', '\u010C\xEDm voniame?', '\u0427\u0438\u043C \u043C\u0438 \u043D\u044E\u0445\u0430\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u043D\u044E\u0445\u0430\u0435\u043C?'), tr('What do we eat with?', 'Czym jemy?', '\xBFCon qu\xE9 comemos?', 'Con cosa mangiamo?', 'Avec quoi mange-t-on ?', 'Cu ce m\xE2nc\u0103m?', '\u010C\xEDm jeme?', '\u0427\u0438\u043C \u043C\u0438 \u0457\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0435\u0434\u0438\u043C?'), tr('What do we walk with?', 'Czym chodzimy?', '\xBFCon qu\xE9 caminamos?', 'Con cosa camminiamo?', 'Avec quoi marche-t-on ?', 'Cu ce mergem?', '\u010C\xEDm chod\xEDme?', '\u0427\u0438\u043C \u043C\u0438 \u0445\u043E\u0434\u0438\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u0445\u043E\u0434\u0438\u043C?'), tr('What do we wave with?', 'Czym machamy?', '\xBFCon qu\xE9 saludamos?', 'Con cosa salutiamo?', 'Avec quoi fait-on coucou ?', 'Cu ce salut\u0103m?', '\u010C\xEDm m\xE1vame?', '\u0427\u0438\u043C \u043C\u0438 \u043C\u0430\u0445\u0430\u0454\u043C\u043E?', '\u0427\u0435\u043C \u043C\u044B \u043C\u0430\u0448\u0435\u043C?'), tr('\uD83D\uDD12 Parents only', '\uD83D\uDD12 Tylko dla rodzic\xF3w', '\uD83D\uDD12 Solo para padres', '\uD83D\uDD12 Solo per genitori', '\uD83D\uDD12 R\xE9serv\xE9 aux parents', '\uD83D\uDD12 Doar pentru p\u0103rin\u021Bi', '\uD83D\uDD12 Len pre rodi\u010Dov', '\uD83D\uDD12 \u0422\u0456\u043B\u044C\u043A\u0438 \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432', '\uD83D\uDD12 \u0422\u043E\u043B\u044C\u043A\u043E \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439'), tr('What is', 'Ile to', 'Cu\xE1nto es', 'Quanto fa', 'Combien font', 'C\xE2t face', 'Ko\u013Eko je', '\u0421\u043A\u0456\u043B\u044C\u043A\u0438 \u0431\u0443\u0434\u0435', '\u0421\u043A\u043E\u043B\u044C\u043A\u043E \u0431\u0443\u0434\u0435\u0442'), tr('Cancel', 'Anuluj', 'Cancelar', 'Annulla', 'Annuler', 'Anuleaz\u0103', 'Zru\u0161i\u0165', '\u0421\u043A\u0430\u0441\u0443\u0432\u0430\u0442\u0438', '\u041E\u0442\u043C\u0435\u043D\u0430'), tr('\u2699\uFE0F Parent settings', '\u2699\uFE0F Ustawienia dla rodzic\xF3w', '\u2699\uFE0F Ajustes para padres', '\u2699\uFE0F Impostazioni genitori', '\u2699\uFE0F R\xE9glages parents', '\u2699\uFE0F Set\u0103ri pentru p\u0103rin\u021Bi', '\u2699\uFE0F Nastavenia pre rodi\u010Dov', '\u2699\uFE0F \u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432', '\u2699\uFE0F \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439'), tr('Language', 'J\u0119zyk', 'Idioma', 'Lingua', 'Langue', 'Limba', 'Jazyk', '\u041C\u043E\u0432\u0430', '\u042F\u0437\u044B\u043A'), tr('All texts and speech use only this language. The exception is the \u201COther languages\u201D game, where your child practises the words of another language.', 'Wszystkie teksty i nagrania s\u0105 tylko w tym j\u0119zyku. Wyj\u0105tkiem jest gra \u201EInne j\u0119zyki\u201D, w kt\xF3rej dziecko \u0107wiczy s\u0142owa z innego j\u0119zyka.', 'Todos los textos y la voz est\xE1n solo en este idioma. La excepci\xF3n es el juego \xABOtros idiomas\xBB, donde tu hijo practica palabras de otro idioma.', "Tutti i testi e la voce sono solo in questa lingua. L'eccezione \xE8 il gioco \xABAltre lingue\xBB, dove il bambino esercita le parole di un'altra lingua.", "Tous les textes et la voix sont uniquement dans cette langue. L'exception est le jeu \xAB Autres langues \xBB, o\xF9 votre enfant apprend les mots d'une autre langue.", 'Toate textele \u0219i vocea sunt doar \xEEn aceast\u0103 limb\u0103. Excep\u021Bie face jocul \u201EAlte limbi\u201D, unde copilul exerseaz\u0103 cuvinte dintr-o alt\u0103 limb\u0103.', 'V\u0161etky texty a hlas s\xFA len v tomto jazyku. V\xFDnimkou je hra \u201EIn\xE9 jazyky\u201C, kde die\u0165a cvi\u010D\xED slov\xE1 z in\xE9ho jazyka.', '\u0423\u0441\u0456 \u0442\u0435\u043A\u0441\u0442\u0438 \u0439 \u043E\u0437\u0432\u0443\u0447\u0435\u043D\u043D\u044F \u043B\u0438\u0448\u0435 \u0446\u0456\u0454\u044E \u043C\u043E\u0432\u043E\u044E. \u0412\u0438\u043D\u044F\u0442\u043E\u043A \u2014 \u0433\u0440\u0430 \xAB\u0406\u043D\u0448\u0456 \u043C\u043E\u0432\u0438\xBB, \u0434\u0435 \u0434\u0438\u0442\u0438\u043D\u0430 \u0432\u0447\u0438\u0442\u044C \u0441\u043B\u043E\u0432\u0430 \u0456\u043D\u0448\u043E\u0457 \u043C\u043E\u0432\u0438.', '\u0412\u0441\u0435 \u0442\u0435\u043A\u0441\u0442\u044B \u0438 \u043E\u0437\u0432\u0443\u0447\u043A\u0430 \u0442\u043E\u043B\u044C\u043A\u043E \u043D\u0430 \u044D\u0442\u043E\u043C \u044F\u0437\u044B\u043A\u0435. \u0418\u0441\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435 \u2014 \u0438\u0433\u0440\u0430 \xAB\u0414\u0440\u0443\u0433\u0438\u0435 \u044F\u0437\u044B\u043A\u0438\xBB, \u0433\u0434\u0435 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u0443\u0447\u0438\u0442 \u0441\u043B\u043E\u0432\u0430 \u0434\u0440\u0443\u0433\u043E\u0433\u043E \u044F\u0437\u044B\u043A\u0430.'), tr('min', 'min', 'min', 'min', 'min', 'min', 'min', '\u0445\u0432', '\u043C\u0438\u043D'), tr('Play time', 'Czas gry', 'Tiempo de juego', 'Tempo di gioco', 'Temps de jeu', 'Timp de joac\u0103', '\u010Cas hry', '\u0427\u0430\u0441 \u0433\u0440\u0438', '\u0412\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B'), tr('\uD83C\uDF1E Morning', '\uD83C\uDF1E Rano', '\uD83C\uDF1E Ma\xF1ana', '\uD83C\uDF1E Mattina', '\uD83C\uDF1E Matin', '\uD83C\uDF1E Diminea\u021Ba', '\uD83C\uDF1E R\xE1no', '\uD83C\uDF1E \u0420\u0430\u043D\u043E\u043A', '\uD83C\uDF1E \u0423\u0442\u0440\u043E'), tr('\uD83C\uDF19 Afternoon', '\uD83C\uDF19 Po po\u0142udniu', '\uD83C\uDF19 Tarde', '\uD83C\uDF19 Pomeriggio', '\uD83C\uDF19 Apr\xE8s-midi', '\uD83C\uDF19 Dup\u0103-amiaza', '\uD83C\uDF19 Popoludnie', '\uD83C\uDF19 \u041F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443', '\uD83C\uDF19 \u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430'), tr('Morning = before 12:00, afternoon = from 12:00. 0 minutes: no play at that time of day. Time only runs while the game is on screen. Each player has their own time.', 'Rano = przed 12:00, po po\u0142udniu = od 12:00. 0 minut: o tej porze nie ma gry. Czas p\u0142ynie tylko wtedy, gdy gra jest na ekranie. Ka\u017Cdy gracz ma w\u0142asny czas.', 'Ma\xF1ana = antes de las 12:00, tarde = desde las 12:00. 0 minutos: en ese momento del d\xEDa no se juega. El tiempo solo corre mientras el juego est\xE1 en pantalla. Cada jugador tiene su propio tiempo.', 'Mattina = prima delle 12:00, pomeriggio = dalle 12:00. 0 minuti: in quel momento della giornata non si gioca. Il tempo scorre solo mentre il gioco \xE8 sullo schermo. Ogni giocatore ha il suo tempo.', "Matin = avant 12h00, apr\xE8s-midi = \xE0 partir de 12h00. 0 minute : pas de jeu \xE0 ce moment de la journ\xE9e. Le temps ne s'\xE9coule que lorsque le jeu est \xE0 l'\xE9cran. Chaque joueur a son propre temps.", 'Diminea\u021Ba = \xEEnainte de 12:00, dup\u0103-amiaza = de la 12:00. 0 minute: atunci nu se joac\u0103. Timpul curge doar c\xE2t jocul e pe ecran. Fiecare juc\u0103tor are timpul lui.', 'R\xE1no = pred 12:00, popoludnie = od 12:00. 0 min\xFAt: v tejto \u010Dasti d\u0148a sa nehr\xE1. \u010Cas plynie, len ke\u010F je hra na obrazovke. Ka\u017Ed\xFD hr\xE1\u010D m\xE1 vlastn\xFD \u010Das.', '\u0420\u0430\u043D\u043E\u043A = \u0434\u043E 12:00, \u043F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443 = \u0437 12:00. 0 \u0445\u0432\u0438\u043B\u0438\u043D: \u0443 \u0446\u0435\u0439 \u0447\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435\u043C\u0430\u0454. \u0427\u0430\u0441 \u0456\u0434\u0435 \u043B\u0438\u0448\u0435 \u0442\u043E\u0434\u0456, \u043A\u043E\u043B\u0438 \u0433\u0440\u0430 \u043D\u0430 \u0435\u043A\u0440\u0430\u043D\u0456. \u041A\u043E\u0436\u0435\u043D \u0433\u0440\u0430\u0432\u0435\u0446\u044C \u043C\u0430\u0454 \u0441\u0432\u0456\u0439 \u0447\u0430\u0441.', '\u0423\u0442\u0440\u043E = \u0434\u043E 12:00, \u043F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430 = \u0441 12:00. 0 \u043C\u0438\u043D\u0443\u0442: \u0432 \u044D\u0442\u043E \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435\u0442. \u0412\u0440\u0435\u043C\u044F \u0438\u0434\u0451\u0442, \u0442\u043E\u043B\u044C\u043A\u043E \u043F\u043E\u043A\u0430 \u0438\u0433\u0440\u0430 \u043D\u0430 \u044D\u043A\u0440\u0430\u043D\u0435. \u0423 \u043A\u0430\u0436\u0434\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430 \u0441\u0432\u043E\u0451 \u0432\u0440\u0435\u043C\u044F.'), tr('Current session', 'Bie\u017C\u0105ca gra', 'Sesi\xF3n actual', 'Sessione attuale', 'Session en cours', 'Sesiunea curent\u0103', 'Aktu\xE1lne hranie', '\u041F\u043E\u0442\u043E\u0447\u043D\u0430 \u0433\u0440\u0430', '\u0422\u0435\u043A\u0443\u0449\u0430\u044F \u0438\u0433\u0440\u0430'), tr('Morning', 'Rano', 'Ma\xF1ana', 'Mattina', 'Matin', 'Diminea\u021Ba', 'R\xE1no', '\u0420\u0430\u043D\u043E\u043A', '\u0423\u0442\u0440\u043E'), tr('Afternoon', 'Po po\u0142udniu', 'Tarde', 'Pomeriggio', 'Apr\xE8s-midi', 'Dup\u0103-amiaza', 'Popoludnie', '\u041F\u0456\u0441\u043B\u044F \u043E\u0431\u0456\u0434\u0443', '\u041F\u043E\u0441\u043B\u0435 \u043E\u0431\u0435\u0434\u0430'), tr('played', 'zagrane', 'jugado', 'giocato', 'jou\xE9', 'jucat', 'odohran\xE9', '\u0437\u0456\u0433\u0440\u0430\u043D\u043E', '\u0441\u044B\u0433\u0440\u0430\u043D\u043E'), tr('left', 'zosta\u0142o', 'queda', 'rimasto', 'restant', 'r\u0103mas', 'zost\xE1va', '\u0437\u0430\u043B\u0438\u0448\u0438\u043B\u043E\u0441\u044C', '\u043E\u0441\u0442\u0430\u043B\u043E\u0441\u044C'), tr('Reset time now', 'Zresetuj czas teraz', 'Reiniciar el tiempo ahora', 'Azzera il tempo ora', 'R\xE9initialiser le temps', 'Reseteaz\u0103 timpul acum', 'Vynulova\u0165 \u010Das teraz', '\u0421\u043A\u0438\u043D\u0443\u0442\u0438 \u0447\u0430\u0441 \u0437\u0430\u0440\u0430\u0437', '\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0432\u0440\u0435\u043C\u044F \u0441\u0435\u0439\u0447\u0430\u0441'), tr('Voice', 'G\u0142os', 'Voz', 'Voce', 'Voix', 'Voce', 'Hlas', '\u0413\u043E\u043B\u043E\u0441', '\u0413\u043E\u043B\u043E\u0441'), tr('\u2705 available', '\u2705 dost\u0119pny', '\u2705 disponible', '\u2705 disponibile', '\u2705 disponible', '\u2705 disponibil', '\u2705 dostupn\xFD', '\u2705 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0438\u0439', '\u2705 \u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D'), tr('\u26A0\uFE0F not installed', '\u26A0\uFE0F nie zainstalowano', '\u26A0\uFE0F no instalada', '\u26A0\uFE0F non installata', '\u26A0\uFE0F non install\xE9e', '\u26A0\uFE0F neinstalat\u0103', '\u26A0\uFE0F nenain\u0161talovan\xFD', '\u26A0\uFE0F \u043D\u0435 \u0432\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u043E', '\u26A0\uFE0F \u043D\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D'), tr('If a language is missing: Settings \u2192 Text-to-speech \u2192 Speech Services by Google \u2192 install voice data.', 'Je\u015Bli brakuje j\u0119zyka: Ustawienia \u2192 Zamiana tekstu na mow\u0119 \u2192 Us\u0142ugi mowy Google \u2192 zainstaluj dane g\u0142osowe.', 'Si falta un idioma: Ajustes \u2192 S\xEDntesis de voz \u2192 Servicios de voz de Google \u2192 instalar datos de voz.', 'Se manca una lingua: Impostazioni \u2192 Sintesi vocale \u2192 Servizi di sintesi vocale Google \u2192 installa i dati vocali.', "S'il manque une langue : Param\xE8tres \u2192 Synth\xE8se vocale \u2192 Services vocaux Google \u2192 installer les donn\xE9es vocales.", 'Dac\u0103 lipse\u0219te o limb\u0103: Set\u0103ri \u2192 Redare vocal\u0103 a textului \u2192 Serviciile de vorbire Google \u2192 instaleaz\u0103 datele vocale.', 'Ak jazyk ch\xFDba: Nastavenia \u2192 Prevod textu na re\u010D \u2192 Hlasov\xE9 slu\u017Eby Google \u2192 nain\u0161talova\u0165 hlasov\xE9 \xFAdaje.', '\u042F\u043A\u0449\u043E \u043C\u043E\u0432\u0438 \u043D\u0435\u043C\u0430\u0454: \u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u2192 \u0421\u0438\u043D\u0442\u0435\u0437 \u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F \u2192 \u041C\u043E\u0432\u043D\u0456 \u0441\u043B\u0443\u0436\u0431\u0438 Google \u2192 \u0432\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u0438 \u0433\u043E\u043B\u043E\u0441\u043E\u0432\u0456 \u0434\u0430\u043D\u0456.', '\u0415\u0441\u043B\u0438 \u044F\u0437\u044B\u043A\u0430 \u043D\u0435\u0442: \u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u2192 \u0421\u0438\u043D\u0442\u0435\u0437 \u0440\u0435\u0447\u0438 \u2192 \u0420\u0435\u0447\u0435\u0432\u044B\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\u044B Google \u2192 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0433\u043E\u043B\u043E\u0441\u043E\u0432\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435.'), tr('Open voice settings', 'Otw\xF3rz ustawienia g\u0142osu', 'Abrir ajustes de voz', 'Apri impostazioni voce', 'Ouvrir les r\xE9glages de voix', 'Deschide set\u0103rile vocii', 'Otvori\u0165 nastavenia hlasu', '\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0433\u043E\u043B\u043E\u0441\u0443', '\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0433\u043E\u043B\u043E\u0441\u0430'), tr('Progress', 'Post\u0119py', 'Progreso', 'Progressi', 'Progr\xE8s', 'Progres', 'Pokrok', '\u041F\u0440\u043E\u0433\u0440\u0435\u0441', '\u041F\u0440\u043E\u0433\u0440\u0435\u0441\u0441'), tr('correct', 'dobrze', 'aciertos', 'giuste', 'bonnes r\xE9ponses', 'corecte', 'spr\xE1vne', '\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E', '\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E'), tr('Total stars', 'Wszystkie gwiazdki', 'Estrellas en total', 'Stelle in totale', '\xC9toiles au total', 'Total stele', 'Hviezdy spolu', '\u0423\u0441\u044C\u043E\u0433\u043E \u0437\u0456\u0440\u043E\u043A', '\u0412\u0441\u0435\u0433\u043E \u0437\u0432\u0451\u0437\u0434'), tr('Every game has 3 levels. After 5 stars your child can choose a harder level and gets a sticker for every finished round.', 'Ka\u017Cda gra ma 3 poziomy. Po 5 gwiazdkach dziecko mo\u017Ce wybra\u0107 trudniejszy poziom i za ka\u017Cd\u0105 uko\u0144czon\u0105 rund\u0119 dostaje naklejk\u0119.', 'Cada juego tiene 3 niveles. Tras 5 estrellas, tu hijo puede elegir un nivel m\xE1s dif\xEDcil y recibe una pegatina por cada ronda terminada.', 'Ogni gioco ha 3 livelli. Dopo 5 stelle il bambino pu\xF2 scegliere un livello pi\xF9 difficile e riceve un adesivo per ogni giro finito.', 'Chaque jeu a 3 niveaux. Apr\xE8s 5 \xE9toiles, votre enfant peut choisir un niveau plus difficile et re\xE7oit un autocollant pour chaque partie termin\xE9e.', 'Fiecare joc are 3 niveluri. Dup\u0103 5 stele, copilul poate alege un nivel mai greu \u0219i prime\u0219te un ab\u021Bibild pentru fiecare rund\u0103 terminat\u0103.', 'Ka\u017Ed\xE1 hra m\xE1 3 \xFArovne. Po 5 hviezdach si die\u0165a m\xF4\u017Ee vybra\u0165 \u0165a\u017E\u0161iu \xFArove\u0148 a za ka\u017Ed\xE9 dokon\u010Den\xE9 kolo dostane n\xE1lepku.', '\u041A\u043E\u0436\u043D\u0430 \u0433\u0440\u0430 \u043C\u0430\u0454 3 \u0440\u0456\u0432\u043D\u0456. \u041F\u0456\u0441\u043B\u044F 5 \u0437\u0456\u0440\u043E\u043A \u0434\u0438\u0442\u0438\u043D\u0430 \u043C\u043E\u0436\u0435 \u043E\u0431\u0440\u0430\u0442\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u0456\u0448\u0438\u0439 \u0440\u0456\u0432\u0435\u043D\u044C \u0456 \u043E\u0442\u0440\u0438\u043C\u0443\u0454 \u043D\u0430\u043B\u0456\u043F\u043A\u0443 \u0437\u0430 \u043A\u043E\u0436\u0435\u043D \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u0439 \u0440\u0430\u0443\u043D\u0434.', '\u0412 \u043A\u0430\u0436\u0434\u043E\u0439 \u0438\u0433\u0440\u0435 3 \u0443\u0440\u043E\u0432\u043D\u044F. \u041F\u043E\u0441\u043B\u0435 5 \u0437\u0432\u0451\u0437\u0434 \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u043C\u043E\u0436\u0435\u0442 \u0432\u044B\u0431\u0440\u0430\u0442\u044C \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u0441\u043B\u043E\u0436\u043D\u0435\u0435 \u0438 \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0443 \u0437\u0430 \u043A\u0430\u0436\u0434\u044B\u0439 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043D\u043D\u044B\u0439 \u0440\u0430\u0443\u043D\u0434.'), tr('Tip', 'Wskaz\xF3wka', 'Consejo', 'Consiglio', 'Astuce', 'Sfat', 'Tip', '\u041F\u043E\u0440\u0430\u0434\u0430', '\u0421\u043E\u0432\u0435\u0442'), tr("Turn on Android's \u201CApp pinning\u201D, so your child can't leave the game for other apps.", 'W\u0142\u0105cz w Androidzie \u201EPrzypinanie aplikacji\u201D, aby dziecko nie mog\u0142o wyj\u015B\u0107 z gry do innych aplikacji.', 'Activa la \xABFijaci\xF3n de pantalla\xBB de Android para que tu hijo no pueda salir del juego a otras apps.', 'Attiva il \xABBlocco app\xBB di Android, cos\xEC il bambino non pu\xF2 uscire dal gioco.', "Activez l'\xAB \xC9pinglage d'application \xBB d'Android pour que votre enfant ne puisse pas quitter le jeu.", 'Activeaz\u0103 \u201EFixarea aplica\u021Biei\u201D din Android, ca s\u0103 nu poat\u0103 ie\u0219i copilul din joc.', 'Zapnite v Androide \u201EPripnutie aplik\xE1cie\u201C, aby die\u0165a nemohlo od\xEDs\u0165 z hry do in\xFDch aplik\xE1ci\xED.', '\u0423\u0432\u0456\u043C\u043A\u043D\u0456\u0442\u044C \u0432 Android \xAB\u0417\u0430\u043A\u0440\u0456\u043F\u043B\u0435\u043D\u043D\u044F \u0437\u0430\u0441\u0442\u043E\u0441\u0443\u043D\u043A\u0443\xBB, \u0449\u043E\u0431 \u0434\u0438\u0442\u0438\u043D\u0430 \u043D\u0435 \u043C\u043E\u0433\u043B\u0430 \u0432\u0438\u0439\u0442\u0438 \u0437 \u0433\u0440\u0438.', '\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u0435 \u0432 Android \xAB\u0417\u0430\u043A\u0440\u0435\u043F\u043B\u0435\u043D\u0438\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F\xBB, \u0447\u0442\u043E\u0431\u044B \u0440\u0435\u0431\u0451\u043D\u043E\u043A \u043D\u0435 \u043C\u043E\u0433 \u0432\u044B\u0439\u0442\u0438 \u0438\u0437 \u0438\u0433\u0440\u044B.'), tr('Back', 'Wstecz', 'Atr\xE1s', 'Indietro', 'Retour', '\xCEnapoi', 'Sp\xE4\u0165', '\u041D\u0430\u0437\u0430\u0434', '\u041D\u0430\u0437\u0430\u0434'), tr('Players', 'Gracze', 'Jugadores', 'Giocatori', 'Joueurs', 'Juc\u0103tori', 'Hr\xE1\u010Di', '\u0413\u0440\u0430\u0432\u0446\u0456', '\u0418\u0433\u0440\u043E\u043A\u0438'), tr('Manage players', 'Zarz\u0105dzaj graczami', 'Gestionar jugadores', 'Gestisci giocatori', 'G\xE9rer les joueurs', 'Gestioneaz\u0103 juc\u0103torii', 'Spravova\u0165 hr\xE1\u010Dov', '\u041A\u0435\u0440\u0443\u0432\u0430\u0442\u0438 \u0433\u0440\u0430\u0432\u0446\u044F\u043C\u0438', '\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0438\u0433\u0440\u043E\u043A\u0430\u043C\u0438'), tr('Who is playing?', 'Kto gra?', '\xBFQui\xE9n juega?', 'Chi gioca?', 'Qui joue ?', 'Cine se joac\u0103?', 'Kto sa hr\xE1?', '\u0425\u0442\u043E \u0433\u0440\u0430\u0454?', '\u041A\u0442\u043E \u0438\u0433\u0440\u0430\u0435\u0442?'), tr('Each player has their own stars, stickers and play time.', 'Ka\u017Cdy gracz ma w\u0142asne gwiazdki, naklejki i czas gry.', 'Cada jugador tiene sus propias estrellas, pegatinas y tiempo de juego.', 'Ogni giocatore ha le sue stelle, i suoi adesivi e il suo tempo di gioco.', 'Chaque joueur a ses propres \xE9toiles, autocollants et temps de jeu.', 'Fiecare juc\u0103tor are stelele, ab\u021Bibildurile \u0219i timpul lui.', 'Ka\u017Ed\xFD hr\xE1\u010D m\xE1 vlastn\xE9 hviezdy, n\xE1lepky a \u010Das hry.', '\u041A\u043E\u0436\u0435\u043D \u0433\u0440\u0430\u0432\u0435\u0446\u044C \u043C\u0430\u0454 \u0441\u0432\u043E\u0457 \u0437\u0456\u0440\u043A\u0438, \u043D\u0430\u043B\u0456\u043F\u043A\u0438 \u0439 \u0447\u0430\u0441 \u0433\u0440\u0438.', '\u0423 \u043A\u0430\u0436\u0434\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430 \u0441\u0432\u043E\u0438 \u0437\u0432\u0451\u0437\u0434\u044B, \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438 \u0438 \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B.'), tr('Delete this player? Their stars and stickers will be lost.', 'Usun\u0105\u0107 tego gracza? Jego gwiazdki i naklejki przepadn\u0105.', '\xBFBorrar este jugador? Se perder\xE1n sus estrellas y pegatinas.', 'Eliminare questo giocatore? Stelle e adesivi andranno persi.', 'Supprimer ce joueur ? Ses \xE9toiles et autocollants seront perdus.', '\u0218tergi acest juc\u0103tor? Stelele \u0219i ab\u021Bibildurile lui se vor pierde.', 'Vymaza\u0165 tohto hr\xE1\u010Da? Jeho hviezdy a n\xE1lepky sa stratia.', '\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u044C\u043E\u0433\u043E \u0433\u0440\u0430\u0432\u0446\u044F? \u0419\u043E\u0433\u043E \u0437\u0456\u0440\u043A\u0438 \u0439 \u043D\u0430\u043B\u0456\u043F\u043A\u0438 \u0437\u043D\u0438\u043A\u043D\u0443\u0442\u044C.', '\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u0442\u043E\u0433\u043E \u0438\u0433\u0440\u043E\u043A\u0430? \u0415\u0433\u043E \u0437\u0432\u0451\u0437\u0434\u044B \u0438 \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438 \u043F\u0440\u043E\u043F\u0430\u0434\u0443\u0442.'), tr('Delete', 'Usu\u0144', 'Borrar', 'Elimina', 'Supprimer', '\u0218terge', 'Vymaza\u0165', '\u0412\u0438\u0434\u0430\u043B\u0438\u0442\u0438', '\u0423\u0434\u0430\u043B\u0438\u0442\u044C'), tr('New player', 'Nowy gracz', 'Nuevo jugador', 'Nuovo giocatore', 'Nouveau joueur', 'Juc\u0103tor nou', 'Nov\xFD hr\xE1\u010D', '\u041D\u043E\u0432\u0438\u0439 \u0433\u0440\u0430\u0432\u0435\u0446\u044C', '\u041D\u043E\u0432\u044B\u0439 \u0438\u0433\u0440\u043E\u043A'), tr('Pick a character:', 'Wybierz posta\u0107:', 'Elige un personaje:', 'Scegli un personaggio:', 'Choisis un personnage :', 'Alege un personaj:', 'Vyber si postavi\u010Dku:', '\u041E\u0431\u0435\u0440\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430:', '\u0412\u044B\u0431\u0435\u0440\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430:'), tr('Name (optional)', 'Imi\u0119 (opcjonalnie)', 'Nombre (opcional)', 'Nome (facoltativo)', 'Pr\xE9nom (facultatif)', 'Nume (op\u021Bional)', 'Meno (nepovinn\xE9)', "\u0406\u043C'\u044F (\u043D\u0435\u043E\u0431\u043E\u0432'\u044F\u0437\u043A\u043E\u0432\u043E)", '\u0418\u043C\u044F (\u043D\u0435\u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u043E)'), tr('Save', 'Zapisz', 'Guardar', 'Salva', 'Enregistrer', 'Salveaz\u0103', 'Ulo\u017Ei\u0165', '\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438', '\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'), tr('What should start over?', 'Co zacz\u0105\u0107 od nowa?', '\xBFQu\xE9 quieres empezar de nuevo?', 'Cosa vuoi ricominciare?', "Qu'est-ce qui doit recommencer ?", 'Ce o lu\u0103m de la cap\u0103t?', '\u010Co za\u010Da\u0165 odznova?', '\u0429\u043E \u043F\u043E\u0447\u0430\u0442\u0438 \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443?', '\u0427\u0442\u043E \u043D\u0430\u0447\u0430\u0442\u044C \u0437\u0430\u043D\u043E\u0432\u043E?'), tr('\uD83D\uDCD2 Only the sticker album', '\uD83D\uDCD2 Tylko album z naklejkami', '\uD83D\uDCD2 Solo el \xE1lbum de pegatinas', "\uD83D\uDCD2 Solo l'album degli adesivi", "\uD83D\uDCD2 Seulement l'album d'autocollants", '\uD83D\uDCD2 Doar albumul cu ab\u021Bibilduri', '\uD83D\uDCD2 Len album n\xE1lepiek', '\uD83D\uDCD2 \u041B\u0438\u0448\u0435 \u0430\u043B\u044C\u0431\u043E\u043C \u043D\u0430\u043B\u0456\u043F\u043E\u043A', '\uD83D\uDCD2 \u0422\u043E\u043B\u044C\u043A\u043E \u0430\u043B\u044C\u0431\u043E\u043C \u043D\u0430\u043A\u043B\u0435\u0435\u043A'), tr('\uD83D\uDD04 Everything: stars, stickers, levels', '\uD83D\uDD04 Wszystko: gwiazdki, naklejki, poziomy', '\uD83D\uDD04 Todo: estrellas, pegatinas, niveles', '\uD83D\uDD04 Tutto: stelle, adesivi, livelli', '\uD83D\uDD04 Tout : \xE9toiles, autocollants, niveaux', '\uD83D\uDD04 Tot: stele, ab\u021Bibilduri, niveluri', '\uD83D\uDD04 V\u0161etko: hviezdy, n\xE1lepky, \xFArovne', '\uD83D\uDD04 \u0423\u0441\u0435: \u0437\u0456\u0440\u043A\u0438, \u043D\u0430\u043B\u0456\u043F\u043A\u0438, \u0440\u0456\u0432\u043D\u0456', '\uD83D\uDD04 \u0412\u0441\u0451: \u0437\u0432\u0451\u0437\u0434\u044B, \u043D\u0430\u043A\u043B\u0435\u0439\u043A\u0438, \u0443\u0440\u043E\u0432\u043D\u0438'), tr('Play time is not changed.', 'Czas gry si\u0119 nie zmienia.', 'El tiempo de juego no cambia.', 'Il tempo di gioco non cambia.', 'Le temps de jeu ne change pas.', 'Timpul de joac\u0103 nu se schimb\u0103.', '\u010Cas hry sa nemen\xED.', '\u0427\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435 \u0437\u043C\u0456\u043D\u044E\u0454\u0442\u044C\u0441\u044F.', '\u0412\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435 \u043C\u0435\u043D\u044F\u0435\u0442\u0441\u044F.'), tr('You can add more players later in the parent settings.', 'Kolejnych graczy mo\u017Cesz doda\u0107 p\xF3\u017Aniej w ustawieniach dla rodzic\xF3w.', 'Puedes a\xF1adir m\xE1s jugadores despu\xE9s en los ajustes para padres.', 'Puoi aggiungere altri giocatori pi\xF9 tardi nelle impostazioni genitori.', "Vous pourrez ajouter d'autres joueurs plus tard dans les r\xE9glages parents.", 'Po\u021Bi ad\u0103uga al\u021Bi juc\u0103tori mai t\xE2rziu \xEEn set\u0103rile pentru p\u0103rin\u021Bi.', '\u010Eal\u0161\xEDch hr\xE1\u010Dov m\xF4\u017Eete prida\u0165 nesk\xF4r v nastaveniach pre rodi\u010Dov.', '\u0406\u043D\u0448\u0438\u0445 \u0433\u0440\u0430\u0432\u0446\u0456\u0432 \u043C\u043E\u0436\u043D\u0430 \u0434\u043E\u0434\u0430\u0442\u0438 \u043F\u0456\u0437\u043D\u0456\u0448\u0435 \u0432 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F\u0445 \u0434\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432.', '\u0414\u0440\u0443\u0433\u0438\u0445 \u0438\u0433\u0440\u043E\u043A\u043E\u0432 \u043C\u043E\u0436\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u043E\u0437\u0436\u0435 \u0432 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430\u0445 \u0434\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439.'), tr('Do you want to leave the game?', 'Chcesz wyj\u015B\u0107 z gry?', '\xBFQuieres salir del juego?', 'Vuoi uscire dal gioco?', 'Tu veux quitter le jeu ?', 'Vrei s\u0103 ie\u0219i din joc?', 'Chce\u0161 od\xEDs\u0165 z hry?', '\u0425\u043E\u0447\u0435\u0448 \u0432\u0438\u0439\u0442\u0438 \u0437 \u0433\u0440\u0438?', '\u0425\u043E\u0447\u0435\u0448\u044C \u0432\u044B\u0439\u0442\u0438 \u0438\u0437 \u0438\u0433\u0440\u044B?'), tr("Let's go!", 'Zaczynamy!', '\xA1Vamos!', 'Andiamo!', "C'est parti !", 'Hai s\u0103 \xEEncepem!', 'Po\u010Fme na to!', '\u041F\u043E\u0447\u043D\u0456\u043C\u043E!', '\u041F\u043E\u0435\u0445\u0430\u043B\u0438!'), tr('Board game', 'Gra planszowa', 'Juego de mesa', 'Gioco da tavolo', 'Jeu de plateau', 'Joc de societate', 'Spolo\u010Densk\xE1 hra', '\u041D\u0430\u0441\u0442\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430', '\u041D\u0430\u0441\u0442\u043E\u043B\u044C\u043D\u0430\u044F \u0438\u0433\u0440\u0430'), tr('For parents and teachers', 'Dla rodzic\xF3w i nauczycieli', 'Para padres y educadores', 'Per genitori ed educatori', 'Pour les parents et les \xE9ducateurs', 'Pentru p\u0103rin\u021Bi \u0219i educatori', 'Pre rodi\u010Dov a pedag\xF3gov', '\u0414\u043B\u044F \u0431\u0430\u0442\u044C\u043A\u0456\u0432 \u0456 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u0456\u0432', '\u0414\u043B\u044F \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u0439 \u0438 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u0432'), tr('We recommend playing this game together with a parent or a teacher. There are no right or wrong answers: listen to the child, ask follow-up questions and praise their ideas. When a question has been talked through, tap \u201CDone\u201D.', 'Zalecamy gra\u0107 w t\u0119 gr\u0119 razem z rodzicem lub nauczycielem. Nie ma tu dobrych ani z\u0142ych odpowiedzi: wys\u0142uchaj dziecka, dopytaj i pochwal jego pomys\u0142y. Gdy porozmawiacie o pytaniu, naci\u015Bnijcie \u201EGotowe\u201D.', 'Recomendamos jugar a este juego junto con un padre, una madre o un educador. No hay respuestas correctas ni incorrectas: escuchad al ni\xF1o, haced preguntas y elogiad sus ideas. Cuando hay\xE1is hablado de una pregunta, pulsad \xABListo\xBB.', 'Consigliamo di giocare insieme a un genitore o a un educatore. Non ci sono risposte giuste o sbagliate: ascoltate il bambino, fate altre domande e lodate le sue idee. Quando avete parlato di una domanda, toccate \xABFatto\xBB.', "Nous conseillons de jouer \xE0 ce jeu avec un parent ou un \xE9ducateur. Il n'y a pas de bonne ou de mauvaise r\xE9ponse : \xE9coutez l'enfant, posez-lui d'autres questions et f\xE9licitez-le pour ses id\xE9es. Quand vous avez parl\xE9 d'une question, appuyez sur \xAB Fini \xBB.", 'V\u0103 recomand\u0103m s\u0103 juca\u021Bi acest joc \xEEmpreun\u0103 cu un p\u0103rinte sau un educator. Nu exist\u0103 r\u0103spunsuri bune sau gre\u0219ite: asculta\u021Bi copilul, pune\u021Bi \xEEntreb\u0103ri \u0219i l\u0103uda\u021Bi-i ideile. Dup\u0103 ce a\u021Bi vorbit despre o \xEEntrebare, ap\u0103sa\u021Bi \u201EGata\u201D.', 'T\xFAto hru odpor\xFA\u010Dame hra\u0165 spolu s rodi\u010Dom alebo pedag\xF3gom. Neexistuj\xFA dobr\xE9 ani zl\xE9 odpovede: vypo\u010Dujte si die\u0165a, p\xFDtajte sa \u010Falej a pochv\xE1\u013Ete jeho n\xE1pady. Ke\u010F sa o ot\xE1zke porozpr\xE1vate, \u0165uknite na \u201EHotovo\u201C.', '\u0420\u0430\u0434\u0438\u043C\u043E \u0433\u0440\u0430\u0442\u0438 \u0432 \u0446\u044E \u0433\u0440\u0443 \u0440\u0430\u0437\u043E\u043C \u0456\u0437 \u0431\u0430\u0442\u044C\u043A\u0430\u043C\u0438 \u0430\u0431\u043E \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u043C. \u0422\u0443\u0442 \u043D\u0435\u043C\u0430\u0454 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0445 \u0447\u0438 \u043D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u0438\u0445 \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0435\u0439: \u0432\u0438\u0441\u043B\u0443\u0445\u0430\u0439\u0442\u0435 \u0434\u0438\u0442\u0438\u043D\u0443, \u043F\u043E\u0441\u0442\u0430\u0432\u0442\u0435 \u0434\u043E\u0434\u0430\u0442\u043A\u043E\u0432\u0456 \u0437\u0430\u043F\u0438\u0442\u0430\u043D\u043D\u044F \u0439 \u043F\u043E\u0445\u0432\u0430\u043B\u0456\u0442\u044C \u0457\u0457 \u0434\u0443\u043C\u043A\u0438. \u041A\u043E\u043B\u0438 \u0432\u0438 \u043E\u0431\u0433\u043E\u0432\u043E\u0440\u0438\u043B\u0438 \u0437\u0430\u043F\u0438\u0442\u0430\u043D\u043D\u044F, \u043D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \xAB\u0413\u043E\u0442\u043E\u0432\u043E\xBB.', '\u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u043C \u0438\u0433\u0440\u0430\u0442\u044C \u0432 \u044D\u0442\u0443 \u0438\u0433\u0440\u0443 \u0432\u043C\u0435\u0441\u0442\u0435 \u0441 \u0440\u043E\u0434\u0438\u0442\u0435\u043B\u0435\u043C \u0438\u043B\u0438 \u043F\u0435\u0434\u0430\u0433\u043E\u0433\u043E\u043C. \u0417\u0434\u0435\u0441\u044C \u043D\u0435\u0442 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445 \u0438 \u043D\u0435\u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445 \u043E\u0442\u0432\u0435\u0442\u043E\u0432: \u0432\u044B\u0441\u043B\u0443\u0448\u0430\u0439\u0442\u0435 \u0440\u0435\u0431\u0451\u043D\u043A\u0430, \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0443\u0442\u043E\u0447\u043D\u044F\u044E\u0449\u0438\u0435 \u0432\u043E\u043F\u0440\u043E\u0441\u044B \u0438 \u043F\u043E\u0445\u0432\u0430\u043B\u0438\u0442\u0435 \u0435\u0433\u043E \u043C\u044B\u0441\u043B\u0438. \u041A\u043E\u0433\u0434\u0430 \u0432\u044B \u043E\u0431\u0441\u0443\u0434\u0438\u043B\u0438 \u0432\u043E\u043F\u0440\u043E\u0441, \u043D\u0430\u0436\u043C\u0438\u0442\u0435 \xAB\u0413\u043E\u0442\u043E\u0432\u043E\xBB.'), tr('The game is not saved: if you leave, it starts again from the beginning next time.', 'Gra nie jest zapisywana: po wyj\u015Bciu nast\u0119pnym razem zaczyna si\u0119 od nowa.', 'La partida no se guarda: si sal\xEDs, la pr\xF3xima vez empieza desde el principio.', 'La partita non viene salvata: se uscite, la prossima volta ricomincia da capo.', "La partie n'est pas enregistr\xE9e : si vous quittez, elle recommence depuis le d\xE9but la prochaine fois.", 'Jocul nu se salveaz\u0103: dac\u0103 ie\u0219i\u021Bi, data viitoare \xEEncepe de la cap\u0103t.', 'Hra sa neuklad\xE1: ak od\xEDdete, nabud\xFAce sa za\u010Dne od za\u010Diatku.', '\u0413\u0440\u0430 \u043D\u0435 \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u0454\u0442\u044C\u0441\u044F: \u044F\u043A\u0449\u043E \u0432\u0438\u0439\u0442\u0438, \u043D\u0430\u0441\u0442\u0443\u043F\u043D\u043E\u0433\u043E \u0440\u0430\u0437\u0443 \u0432\u043E\u043D\u0430 \u043F\u043E\u0447\u043D\u0435\u0442\u044C\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443.', '\u0418\u0433\u0440\u0430 \u043D\u0435 \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442\u0441\u044F: \u0435\u0441\u043B\u0438 \u0432\u044B\u0439\u0442\u0438, \u0432 \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0440\u0430\u0437 \u043E\u043D\u0430 \u043D\u0430\u0447\u043D\u0451\u0442\u0441\u044F \u0441\u043D\u0430\u0447\u0430\u043B\u0430.'), tr('Who is playing?', 'Kto gra?', '\xBFQui\xE9n juega?', 'Chi gioca?', 'Qui joue ?', 'Cine joac\u0103?', 'Kto sa hr\xE1?', '\u0425\u0442\u043E \u0433\u0440\u0430\u0454?', '\u041A\u0442\u043E \u0438\u0433\u0440\u0430\u0435\u0442?'), tr('Play alone', 'Gram w pojedynk\u0119', 'Juego solo', 'Gioco in solitaria', 'Je joue en solo', 'Joc solo', 'Hra pre jedn\xE9ho', '\u0413\u0440\u0430 \u043D\u0430 \u043E\u0434\u043D\u043E\u0433\u043E', '\u0418\u0433\u0440\u0430 \u043D\u0430 \u043E\u0434\u043D\u043E\u0433\u043E'), tr('Play together', 'Gramy razem', 'Jugamos juntos', 'Giochiamo insieme', 'On joue ensemble', 'Juc\u0103m \xEEmpreun\u0103', 'Hr\xE1me sa spolu', '\u0413\u0440\u0430\u0454\u043C\u043E \u0440\u0430\u0437\u043E\u043C', '\u0418\u0433\u0440\u0430\u0435\u043C \u0432\u043C\u0435\u0441\u0442\u0435'), tr('{0}, roll the dice!', '{0}, rzu\u0107 kostk\u0105!', '\xA1{0}, tira el dado!', '{0}, tira il dado!', '{0}, lance le d\xE9 !', '{0}, arunc\u0103 zarul!', '{0}, ho\u010F kockou!', '{0}, \u043A\u0438\u0434\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!', '{0}, \u0431\u0440\u043E\u0441\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!'), tr('Roll the dice!', 'Rzu\u0107 kostk\u0105!', '\xA1Tira el dado!', 'Tira il dado!', 'Lance le d\xE9 !', 'Arunc\u0103 zarul!', 'Ho\u010F kockou!', '\u041A\u0438\u0434\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!', '\u0411\u0440\u043E\u0441\u0430\u0439 \u043A\u0443\u0431\u0438\u043A!'), tr('Done', 'Gotowe', 'Listo', 'Fatto', 'Fini', 'Gata', 'Hotovo', '\u0413\u043E\u0442\u043E\u0432\u043E', '\u0413\u043E\u0442\u043E\u0432\u043E'), tr('{0} has reached the finish!', '{0} jest na mecie!', '\xA1{0} ha llegado a la meta!', '{0} ha raggiunto il traguardo!', "{0} a atteint l'arriv\xE9e !", '{0} a ajuns la sosire!', '{0} je v cieli!', '{0} \u043D\u0430 \u0444\u0456\u043D\u0456\u0448\u0456!', '{0} \u043D\u0430 \u0444\u0438\u043D\u0438\u0448\u0435!'), tr('You reached the finish!', 'Jeste\u015B na mecie!', '\xA1Has llegado a la meta!', 'Hai raggiunto il traguardo!', "Tu as atteint l'arriv\xE9e !", 'Ai ajuns la sosire!', 'Si v cieli!', '\u0422\u0438 \u043D\u0430 \u0444\u0456\u043D\u0456\u0448\u0456!', '\u0422\u044B \u043D\u0430 \u0444\u0438\u043D\u0438\u0448\u0435!'), tr('New game', 'Nowa gra', 'Nueva partida', 'Nuova partita', 'Nouvelle partie', 'Joc nou', 'Nov\xE1 hra', '\u041D\u043E\u0432\u0430 \u0433\u0440\u0430', '\u041D\u043E\u0432\u0430\u044F \u0438\u0433\u0440\u0430'), tr('If you leave, the game starts again from the beginning.', 'Je\u015Bli wyjdziesz, gra zacznie si\u0119 od nowa.', 'Si sales, el juego empezar\xE1 desde el principio.', 'Se esci, il gioco ricomincia da capo.', 'Si tu quittes, le jeu recommence depuis le d\xE9but.', 'Dac\u0103 ie\u0219i, jocul \xEEncepe de la cap\u0103t.', 'Ak od\xEDde\u0161, hra sa za\u010Dne od za\u010Diatku.', '\u042F\u043A\u0449\u043E \u0432\u0438\u0439\u0434\u0435\u0448, \u0433\u0440\u0430 \u043F\u043E\u0447\u043D\u0435\u0442\u044C\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443.', '\u0415\u0441\u043B\u0438 \u0432\u044B\u0439\u0434\u0435\u0448\u044C, \u0438\u0433\u0440\u0430 \u043D\u0430\u0447\u043D\u0451\u0442\u0441\u044F \u0441\u043D\u0430\u0447\u0430\u043B\u0430.'), tr('Play time does not run in this game.', 'W tej grze czas gry si\u0119 nie zmniejsza.', 'En este juego no se gasta el tiempo de juego.', 'In questo gioco il tempo di gioco non scorre.', "Dans ce jeu, le temps de jeu ne s'\xE9coule pas.", '\xCEn acest joc timpul de joac\u0103 nu scade.', 'V tejto hre sa \u010Das hry neminie.', '\u0423 \u0446\u0456\u0439 \u0433\u0440\u0456 \u0447\u0430\u0441 \u0433\u0440\u0438 \u043D\u0435 \u0441\u043F\u043B\u0438\u0432\u0430\u0454.', '\u0412 \u044D\u0442\u043E\u0439 \u0438\u0433\u0440\u0435 \u0432\u0440\u0435\u043C\u044F \u0438\u0433\u0440\u044B \u043D\u0435 \u0440\u0430\u0441\u0445\u043E\u0434\u0443\u0435\u0442\u0441\u044F.'), tr('Grown-up', 'Doros\u0142y', 'Adulto', 'Adulto', 'Adulte', 'Adult', 'Dospel\xFD', '\u0414\u043E\u0440\u043E\u0441\u043B\u0438\u0439', '\u0412\u0437\u0440\u043E\u0441\u043B\u044B\u0439'), tr('The grown-up token plays along but gets no stars or stickers.', 'Pionek doros\u0142ego gra razem, ale nie dostaje gwiazdek ani naklejek.', 'La ficha del adulto juega tambi\xE9n, pero no recibe estrellas ni pegatinas.', "La pedina dell'adulto gioca insieme, ma non riceve stelle n\xE9 adesivi.", "Le pion de l'adulte joue aussi, mais ne re\xE7oit ni \xE9toiles ni autocollants.", 'Pionul adultului joac\u0103 \u0219i el, dar nu prime\u0219te stele sau ab\u021Bibilduri.', 'Fig\xFArka dospel\xE9ho hr\xE1 spolu, ale nedost\xE1va hviezdy ani n\xE1lepky.', '\u0424\u0456\u0448\u043A\u0430 \u0434\u043E\u0440\u043E\u0441\u043B\u043E\u0433\u043E \u0433\u0440\u0430\u0454 \u0440\u0430\u0437\u043E\u043C, \u0430\u043B\u0435 \u043D\u0435 \u043E\u0442\u0440\u0438\u043C\u0443\u0454 \u0437\u0456\u0440\u043E\u043A \u0456 \u043D\u0430\u043B\u0456\u043F\u043E\u043A.', '\u0424\u0438\u0448\u043A\u0430 \u0432\u0437\u0440\u043E\u0441\u043B\u043E\u0433\u043E \u0438\u0433\u0440\u0430\u0435\u0442 \u0432\u043C\u0435\u0441\u0442\u0435, \u043D\u043E \u043D\u0435 \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442 \u0437\u0432\u0451\u0437\u0434 \u0438 \u043D\u0430\u043A\u043B\u0435\u0435\u043A.'), tr('You can roll again!', 'Mo\u017Cesz rzuci\u0107 jeszcze raz!', '\xA1Puedes tirar otra vez!', 'Puoi tirare di nuovo!', 'Tu peux relancer le d\xE9 !', 'Po\u021Bi arunca \xEEnc\u0103 o dat\u0103!', 'M\xF4\u017Ee\u0161 hodi\u0165 e\u0161te raz!', '\u041C\u043E\u0436\u0435\u0448 \u043A\u0438\u043D\u0443\u0442\u0438 \u0449\u0435 \u0440\u0430\u0437!', '\u041C\u043E\u0436\u0435\u0448\u044C \u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Move forward two squares!', 'Id\u017A dwa pola do przodu!', '\xA1Avanza dos casillas!', 'Vai avanti di due caselle!', 'Avance de deux cases !', 'Mergi dou\u0103 c\u0103su\u021Be \xEEnainte!', 'Cho\u010F o dve pol\xED\u010Dka dopredu!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0434\u0432\u0456 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u0432\u043F\u0435\u0440\u0435\u0434!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0434\u0432\u0435 \u043A\u043B\u0435\u0442\u043A\u0438 \u0432\u043F\u0435\u0440\u0451\u0434!'), tr('Move forward three squares!', 'Id\u017A trzy pola do przodu!', '\xA1Avanza tres casillas!', 'Vai avanti di tre caselle!', 'Avance de trois cases !', 'Mergi trei c\u0103su\u021Be \xEEnainte!', 'Cho\u010F o tri pol\xED\u010Dka dopredu!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0442\u0440\u0438 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u0432\u043F\u0435\u0440\u0435\u0434!', '\u041F\u0440\u043E\u0439\u0434\u0438 \u0442\u0440\u0438 \u043A\u043B\u0435\u0442\u043A\u0438 \u0432\u043F\u0435\u0440\u0451\u0434!'), tr('Move back two squares!', 'Cofnij si\u0119 o dwa pola!', '\xA1Retrocede dos casillas!', 'Torna indietro di due caselle!', 'Recule de deux cases !', 'Mergi dou\u0103 c\u0103su\u021Be \xEEnapoi!', 'Vr\xE1\u0165 sa o dve pol\xED\u010Dka sp\xE4\u0165!', '\u041F\u043E\u0432\u0435\u0440\u043D\u0438\u0441\u044F \u043D\u0430 \u0434\u0432\u0456 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!', '\u0412\u0435\u0440\u043D\u0438\u0441\u044C \u043D\u0430 \u0434\u0432\u0435 \u043A\u043B\u0435\u0442\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!'), tr('Move back three squares!', 'Cofnij si\u0119 o trzy pola!', '\xA1Retrocede tres casillas!', 'Torna indietro di tre caselle!', 'Recule de trois cases !', 'Mergi trei c\u0103su\u021Be \xEEnapoi!', 'Vr\xE1\u0165 sa o tri pol\xED\u010Dka sp\xE4\u0165!', '\u041F\u043E\u0432\u0435\u0440\u043D\u0438\u0441\u044F \u043D\u0430 \u0442\u0440\u0438 \u043A\u043B\u0456\u0442\u0438\u043D\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!', '\u0412\u0435\u0440\u043D\u0438\u0441\u044C \u043D\u0430 \u0442\u0440\u0438 \u043A\u043B\u0435\u0442\u043A\u0438 \u043D\u0430\u0437\u0430\u0434!'), tr('Maze', 'Labirynt', 'Laberinto', 'Labirinto', 'Labyrinthe', 'Labirint', 'Labyrint', '\u041B\u0430\u0431\u0456\u0440\u0438\u043D\u0442', '\u041B\u0430\u0431\u0438\u0440\u0438\u043D\u0442'), tr('Lead your character home! Drag your finger along the path.', 'Zaprowad\u017A swoj\u0105 posta\u0107 do domu! Przesuwaj palec po \u015Bcie\u017Cce.', '\xA1Lleva a tu personaje a casa! Desliza el dedo por el camino.', 'Porta il tuo personaggio a casa! Trascina il dito lungo il sentiero.', 'Ram\xE8ne ton personnage \xE0 la maison ! Fais glisser ton doigt le long du chemin.', 'Du-\u021Bi personajul acas\u0103! Trage cu degetul de-a lungul drumului.', 'Dove\u010F svoju postavi\u010Dku domov! \u0164ahaj prstom po cesti\u010Dke.', '\u0412\u0456\u0434\u0432\u0435\u0434\u0438 \u0441\u0432\u043E\u0433\u043E \u0433\u0435\u0440\u043E\u044F \u0434\u043E\u0434\u043E\u043C\u0443! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u0456\u0436\u0446\u0456.', '\u041E\u0442\u0432\u0435\u0434\u0438 \u0441\u0432\u043E\u0435\u0433\u043E \u0433\u0435\u0440\u043E\u044F \u0434\u043E\u043C\u043E\u0439! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u043E\u0436\u043A\u0435.'), tr('Recycling', 'Segregacja', 'Reciclaje', 'Raccolta differenziata', 'Tri des d\xE9chets', 'Reciclare', 'Triedenie odpadu', '\u0421\u043E\u0440\u0442\u0443\u0432\u0430\u043D\u043D\u044F', '\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430'), tr('Which bin does it go in?', 'Do kt\xF3rego pojemnika to pasuje?', '\xBFEn qu\xE9 contenedor va?', 'In quale bidone va?', 'Dans quelle poubelle \xE7a va ?', '\xCEn ce pubel\u0103 se pune?', 'Do ktorej n\xE1doby to patr\xED?', '\u0423 \u044F\u043A\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0446\u0435 \u0432\u0438\u043A\u0438\u043D\u0443\u0442\u0438?', '\u0412 \u043A\u0430\u043A\u043E\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u044D\u0442\u043E \u0432\u044B\u0431\u0440\u043E\u0441\u0438\u0442\u044C?'), tr('Paper', 'Papier', 'Papel', 'Carta', 'Papier', 'H\xE2rtie', 'Papier', '\u041F\u0430\u043F\u0456\u0440', '\u0411\u0443\u043C\u0430\u0433\u0430'), tr('Packaging', 'Plastik i metal', 'Envases', 'Plastica e metallo', 'Emballages', 'Plastic \u0219i metal', 'Plasty a kovy', '\u041F\u043B\u0430\u0441\u0442\u0438\u043A \u0456 \u043C\u0435\u0442\u0430\u043B', '\u041F\u043B\u0430\u0441\u0442\u0438\u043A \u0438 \u043C\u0435\u0442\u0430\u043B\u043B'), tr('Organic', 'Bio', 'Org\xE1nico', 'Organico', 'Biod\xE9chets', 'Bio', 'Bio', '\u041E\u0440\u0433\u0430\u043D\u0456\u043A\u0430', '\u041E\u0440\u0433\u0430\u043D\u0438\u043A\u0430'), tr('General waste', 'Zmieszane', 'Resto', 'Indifferenziato', 'Ordures', 'Menajer', 'Zmesov\xFD', '\u0417\u043C\u0456\u0448\u0430\u043D\u0456', '\u0421\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0435'), tr('Glass', 'Szk\u0142o', 'Vidrio', 'Vetro', 'Verre', 'Sticl\u0103', 'Sklo', '\u0421\u043A\u043B\u043E', '\u0421\u0442\u0435\u043A\u043B\u043E'), tr('Old paper becomes new paper!', 'Ze starego papieru powstaje nowy papier!', '\xA1El papel viejo se convierte en papel nuevo!', 'La carta vecchia diventa carta nuova!', 'Le vieux papier devient du papier neuf !', 'Din h\xE2rtia veche se face h\xE2rtie nou\u0103!', 'Zo star\xE9ho papiera vznikne nov\xFD papier!', '\u0417\u0456 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u043F\u0430\u043F\u0435\u0440\u0443 \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0438\u0439 \u043F\u0430\u043F\u0456\u0440!', '\u0418\u0437 \u0441\u0442\u0430\u0440\u043E\u0439 \u0431\u0443\u043C\u0430\u0433\u0438 \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u0443\u044E \u0431\u0443\u043C\u0430\u0433\u0443!'), tr('This becomes new bottles and tins!', 'Powstan\u0105 z tego nowe butelki i puszki!', '\xA1Con esto se hacen botellas y latas nuevas!', 'Da qui nascono nuove bottiglie e lattine!', 'On en fait de nouvelles bouteilles et bo\xEEtes !', 'Din asta se fac sticle \u0219i cutii noi!', 'Vznikn\xFA z toho nov\xE9 f\u013Ea\u0161e a plechovky!', '\u0417 \u0446\u044C\u043E\u0433\u043E \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0456 \u043F\u043B\u044F\u0448\u043A\u0438 \u0439 \u0431\u043B\u044F\u0448\u0430\u043D\u043A\u0438!', '\u0418\u0437 \u044D\u0442\u043E\u0433\u043E \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u044B\u0435 \u0431\u0443\u0442\u044B\u043B\u043A\u0438 \u0438 \u0431\u0430\u043D\u043A\u0438!'), tr('This becomes compost that feeds the flowers!', 'Powstanie z tego kompost, kt\xF3ry karmi kwiaty!', '\xA1Esto se convierte en compost que alimenta las flores!', 'Diventa compost che nutre i fiori!', '\xC7a devient du compost qui nourrit les fleurs !', 'Din asta se face compost, hran\u0103 pentru flori!', 'Vznikne z toho kompost, ktor\xFD k\u0155mi kvety!', '\u0417 \u0446\u044C\u043E\u0433\u043E \u0431\u0443\u0434\u0435 \u043A\u043E\u043C\u043F\u043E\u0441\u0442, \u044F\u043A\u0438\u0439 \u0436\u0438\u0432\u0438\u0442\u044C \u043A\u0432\u0456\u0442\u0438!', '\u0418\u0437 \u044D\u0442\u043E\u0433\u043E \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u0441\u044F \u043A\u043E\u043C\u043F\u043E\u0441\u0442, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u043A\u043E\u0440\u043C\u0438\u0442 \u0446\u0432\u0435\u0442\u044B!'), tr("This can't be recycled, so it goes in the general waste.", 'Tego nie da si\u0119 przetworzy\u0107, wi\u0119c trafia do zmieszanych.', 'Esto no se puede reciclar, por eso va al resto.', "Questo non si pu\xF2 riciclare, quindi va nell'indifferenziato.", '\xC7a ne se recycle pas, donc \xE7a va aux ordures.', 'Asta nu se poate recicla, de aceea merge la menajer.', 'Toto sa ned\xE1 recyklova\u0165, preto ide do zmesov\xE9ho odpadu.', '\u0426\u0435 \u043D\u0435 \u043C\u043E\u0436\u043D\u0430 \u043F\u0435\u0440\u0435\u0440\u043E\u0431\u0438\u0442\u0438, \u0442\u043E\u043C\u0443 \u0432\u043E\u043D\u043E \u0439\u0434\u0435 \u0434\u043E \u0437\u043C\u0456\u0448\u0430\u043D\u0438\u0445 \u0432\u0456\u0434\u0445\u043E\u0434\u0456\u0432.', '\u042D\u0442\u043E \u043D\u0435\u043B\u044C\u0437\u044F \u043F\u0435\u0440\u0435\u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C, \u043F\u043E\u044D\u0442\u043E\u043C\u0443 \u043E\u043D\u043E \u0438\u0434\u0451\u0442 \u0432 \u0441\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0435 \u043E\u0442\u0445\u043E\u0434\u044B.'), tr('Old glass becomes new glass again and again!', 'Ze starego szk\u0142a wci\u0105\u017C powstaje nowe szk\u0142o!', '\xA1El vidrio viejo se convierte una y otra vez en vidrio nuevo!', 'Il vetro vecchio diventa sempre di nuovo vetro nuovo!', 'Le vieux verre redevient du verre neuf, encore et encore !', 'Din sticla veche se face mereu sticl\u0103 nou\u0103!', 'Zo star\xE9ho skla vznik\xE1 st\xE1le nov\xE9 sklo!', '\u0417\u0456 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u0441\u043A\u043B\u0430 \u0437\u043D\u043E\u0432\u0443 \u0439 \u0437\u043D\u043E\u0432\u0443 \u0440\u043E\u0431\u043B\u044F\u0442\u044C \u043D\u043E\u0432\u0435 \u0441\u043A\u043B\u043E!', '\u0418\u0437 \u0441\u0442\u0430\u0440\u043E\u0433\u043E \u0441\u0442\u0435\u043A\u043B\u0430 \u0441\u043D\u043E\u0432\u0430 \u0438 \u0441\u043D\u043E\u0432\u0430 \u0434\u0435\u043B\u0430\u044E\u0442 \u043D\u043E\u0432\u043E\u0435 \u0441\u0442\u0435\u043A\u043B\u043E!'), tr('This goes in the blue bin with the paper.', 'To wrzucamy do niebieskiego pojemnika na papier.', 'Esto va al contenedor azul, con el papel.', 'Questo va nel bidone blu, con la carta.', '\xC7a va dans la poubelle bleue, avec le papier.', 'Asta merge \xEEn pubela albastr\u0103, la h\xE2rtie.', 'Toto patr\xED do modrej n\xE1doby na papier.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0441\u0438\u043D\u0456\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u0430\u043F\u0435\u0440\u0443.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0441\u0438\u043D\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0431\u0443\u043C\u0430\u0433\u0438.'), tr('This goes in the yellow bin with the packaging.', 'To wrzucamy do \u017C\xF3\u0142tego pojemnika na plastik i metal.', 'Esto va al contenedor amarillo, con los envases.', 'Questo va nel bidone giallo, con plastica e metallo.', '\xC7a va dans la poubelle jaune, avec les emballages.', 'Asta merge \xEEn pubela galben\u0103, la plastic \u0219i metal.', 'Toto patr\xED do \u017Eltej n\xE1doby na plasty a kovy.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0436\u043E\u0432\u0442\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043A\u0443 \u0439 \u043C\u0435\u0442\u0430\u043B\u0443.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0436\u0451\u043B\u0442\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043F\u043B\u0430\u0441\u0442\u0438\u043A\u0430 \u0438 \u043C\u0435\u0442\u0430\u043B\u043B\u0430.'), tr('This goes in the brown bin for food and garden waste.', 'To wrzucamy do br\u0105zowego pojemnika na bioodpady.', 'Esto va al contenedor marr\xF3n, con lo org\xE1nico.', "Questo va nel bidone marrone, con l'organico.", '\xC7a va dans la poubelle marron, avec les biod\xE9chets.', 'Asta merge \xEEn pubela maro, la de\u0219eurile bio.', 'Toto patr\xED do hnedej n\xE1doby na bioodpad.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043E\u0440\u0433\u0430\u043D\u0456\u043A\u0438.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u043A\u043E\u0440\u0438\u0447\u043D\u0435\u0432\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u043E\u0440\u0433\u0430\u043D\u0438\u043A\u0438.'), tr('This goes in the black bin for general waste.', 'To wrzucamy do czarnego pojemnika na odpady zmieszane.', 'Esto va al contenedor gris, con el resto.', "Questo va nel bidone nero, con l'indifferenziato.", '\xC7a va dans la poubelle noire, avec les ordures.', 'Asta merge \xEEn pubela neagr\u0103, la de\u0219eul menajer.', 'Toto patr\xED do \u010Diernej n\xE1doby na zmesov\xFD odpad.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u0447\u043E\u0440\u043D\u0438\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0437\u043C\u0456\u0448\u0430\u043D\u0438\u0445 \u0432\u0456\u0434\u0445\u043E\u0434\u0456\u0432.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u0447\u0451\u0440\u043D\u044B\u0439 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u043C\u0435\u0448\u0430\u043D\u043D\u044B\u0445 \u043E\u0442\u0445\u043E\u0434\u043E\u0432.'), tr('This goes in the glass container.', 'To wrzucamy do pojemnika na szk\u0142o.', 'Esto va al contenedor de vidrio.', 'Questo va nella campana del vetro.', '\xC7a va dans le conteneur \xE0 verre.', 'Asta merge \xEEn containerul pentru sticl\u0103.', 'Toto patr\xED do n\xE1doby na sklo.', '\u0426\u0435 \u0432\u0438\u043A\u0438\u0434\u0430\u0454\u043C\u043E \u0432 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u043A\u043B\u0430.', '\u042D\u0442\u043E \u0432\u044B\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u043C \u0432 \u043A\u043E\u043D\u0442\u0435\u0439\u043D\u0435\u0440 \u0434\u043B\u044F \u0441\u0442\u0435\u043A\u043B\u0430.'), tr('newspaper', 'gazeta', 'peri\xF3dico', 'giornale', 'journal', 'ziar', 'noviny', '\u0433\u0430\u0437\u0435\u0442\u0430', '\u0433\u0430\u0437\u0435\u0442\u0430'), tr('cardboard box', 'karton', 'caja de cart\xF3n', 'scatola di cartone', 'carton', 'cutie de carton', 'kart\xF3nov\xE1 krabica', '\u043A\u0430\u0440\u0442\u043E\u043D\u043D\u0430 \u043A\u043E\u0440\u043E\u0431\u043A\u0430', '\u043A\u0430\u0440\u0442\u043E\u043D\u043D\u0430\u044F \u043A\u043E\u0440\u043E\u0431\u043A\u0430'), tr('notebook', 'zeszyt', 'cuaderno', 'quaderno', 'cahier', 'caiet', 'zo\u0161it', '\u0437\u043E\u0448\u0438\u0442', '\u0442\u0435\u0442\u0440\u0430\u0434\u044C'), tr('envelope', 'koperta', 'sobre', 'busta', 'enveloppe', 'plic', 'ob\xE1lka', '\u043A\u043E\u043D\u0432\u0435\u0440\u0442', '\u043A\u043E\u043D\u0432\u0435\u0440\u0442'), tr('tin can', 'puszka po konserwie', 'lata de conserva', 'lattina', 'bo\xEEte de conserve', 'cutie de conserv\u0103', 'plechovka od konzervy', '\u043A\u043E\u043D\u0441\u0435\u0440\u0432\u043D\u0430 \u0431\u043B\u044F\u0448\u0430\u043D\u043A\u0430', '\u043A\u043E\u043D\u0441\u0435\u0440\u0432\u043D\u0430\u044F \u0431\u0430\u043D\u043A\u0430'), tr('shampoo bottle', 'butelka po szamponie', 'bote de champ\xFA', 'flacone dello shampoo', 'flacon de shampooing', 'flacon de \u0219ampon', 'f\u013Ea\u0161a od \u0161amp\xF3nu', '\u043F\u043B\u044F\u0448\u0435\u0447\u043A\u0430 \u0437-\u043F\u0456\u0434 \u0448\u0430\u043C\u043F\u0443\u043D\u044E', '\u0444\u043B\u0430\u043A\u043E\u043D \u043E\u0442 \u0448\u0430\u043C\u043F\u0443\u043D\u044F'), tr('juice carton', 'karton po soku', 'brik de zumo', 'cartone del succo', 'brique de jus', 'cutie de suc', 'krabica od d\u017E\xFAsu', '\u043F\u0430\u043A\u0435\u0442 \u0437-\u043F\u0456\u0434 \u0441\u043E\u043A\u0443', '\u043F\u0430\u043A\u0435\u0442 \u0438\u0437-\u043F\u043E\u0434 \u0441\u043E\u043A\u0430'), tr('banana peel', 'sk\xF3rka od banana', 'piel de pl\xE1tano', 'buccia di banana', 'peau de banane', 'coaj\u0103 de banan\u0103', '\u0161upka z ban\xE1nu', '\u0431\u0430\u043D\u0430\u043D\u043E\u0432\u0430 \u0448\u043A\u0456\u0440\u043A\u0430', '\u0431\u0430\u043D\u0430\u043D\u043E\u0432\u0430\u044F \u043A\u043E\u0436\u0443\u0440\u0430'), tr('apple core', 'ogryzek', 'coraz\xF3n de manzana', 'torsolo di mela', 'trognon de pomme', 'cotor de m\u0103r', 'ohryzok', '\u043D\u0435\u0434\u043E\u0433\u0440\u0438\u0437\u043E\u043A \u044F\u0431\u043B\u0443\u043A\u0430', '\u043E\u0433\u0440\u044B\u0437\u043E\u043A \u044F\u0431\u043B\u043E\u043A\u0430'), tr('eggshell', 'skorupka jajka', 'c\xE1scara de huevo', "guscio d'uovo", "coquille d'\u0153uf", 'coaj\u0103 de ou', '\u0161krupina z vaj\xED\u010Dka', '\u044F\u0454\u0447\u043D\u0430 \u0448\u043A\u0430\u0440\u0430\u043B\u0443\u043F\u0430', '\u044F\u0438\u0447\u043D\u0430\u044F \u0441\u043A\u043E\u0440\u043B\u0443\u043F\u0430'), tr('autumn leaves', 'jesienne li\u015Bcie', 'hojas secas', 'foglie secche', 'feuilles mortes', 'frunze uscate', 'jesenn\xE9 l\xEDstie', '\u043E\u0441\u0456\u043D\u043D\u0454 \u043B\u0438\u0441\u0442\u044F', '\u043E\u0441\u0435\u043D\u043D\u0438\u0435 \u043B\u0438\u0441\u0442\u044C\u044F'), tr('potato peel', 'obierki z ziemniak\xF3w', 'piel de patata', 'buccia di patata', '\xE9pluchure de pomme de terre', 'coaj\u0103 de cartof', '\u0161upka zo zemiaka', '\u043A\u0430\u0440\u0442\u043E\u043F\u043B\u044F\u043D\u0435 \u043B\u0443\u0448\u043F\u0438\u043D\u043D\u044F', '\u043A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C\u043D\u044B\u0435 \u043E\u0447\u0438\u0441\u0442\u043A\u0438'), tr('melon rind', 'sk\xF3rka od arbuza', 'c\xE1scara de sand\xEDa', 'buccia di anguria', '\xE9corce de past\xE8que', 'coaj\u0103 de pepene', '\u0161upka z mel\xF3na', '\u043A\u0430\u0432\u0443\u043D\u043E\u0432\u0430 \u0448\u043A\u0456\u0440\u043A\u0430', '\u0430\u0440\u0431\u0443\u0437\u043D\u0430\u044F \u043A\u043E\u0440\u043A\u0430'), tr('old toothbrush', 'stara szczoteczka do z\u0119b\xF3w', 'cepillo de dientes viejo', 'spazzolino vecchio', 'vieille brosse \xE0 dents', 'periu\u021B\u0103 de din\u021Bi veche', 'star\xE1 zubn\xE1 kefka', '\u0441\u0442\u0430\u0440\u0430 \u0437\u0443\u0431\u043D\u0430 \u0449\u0456\u0442\u043A\u0430', '\u0441\u0442\u0430\u0440\u0430\u044F \u0437\u0443\u0431\u043D\u0430\u044F \u0449\u0451\u0442\u043A\u0430'), tr('used plaster', 'zu\u017Cyty plaster', 'tirita usada', 'cerotto usato', 'pansement usag\xE9', 'plasture folosit', 'pou\u017Eit\xE1 n\xE1plas\u0165', '\u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u0430\u043D\u0438\u0439 \u043F\u043B\u0430\u0441\u0442\u0438\u0440', '\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u043D\u044B\u0439 \u043F\u043B\u0430\u0441\u0442\u044B\u0440\u044C'), tr('old sponge', 'stara g\u0105bka', 'esponja vieja', 'spugna vecchia', 'vieille \xE9ponge', 'burete vechi', 'star\xE1 \u0161pongia', '\u0441\u0442\u0430\u0440\u0430 \u0433\u0443\u0431\u043A\u0430', '\u0441\u0442\u0430\u0440\u0430\u044F \u0433\u0443\u0431\u043A\u0430'), tr('empty pen', 'wypisany d\u0142ugopis', 'bol\xEDgrafo gastado', 'penna scarica', 'stylo vide', 'pix gol', 'vyp\xEDsan\xE9 pero', '\u0441\u043F\u0438\u0441\u0430\u043D\u0430 \u0440\u0443\u0447\u043A\u0430', '\u043F\u0443\u0441\u0442\u0430\u044F \u0440\u0443\u0447\u043A\u0430'), tr('empty honey jar', 'pusty s\u0142oik po miodzie', 'tarro de miel vac\xEDo', 'barattolo di miele vuoto', 'pot de miel vide', 'borcan gol de miere', 'pr\xE1zdny poh\xE1r od medu', '\u043F\u043E\u0440\u043E\u0436\u043D\u044F \u0431\u0430\u043D\u043A\u0430 \u0437-\u043F\u0456\u0434 \u043C\u0435\u0434\u0443', '\u043F\u0443\u0441\u0442\u0430\u044F \u0431\u0430\u043D\u043A\u0430 \u0438\u0437-\u043F\u043E\u0434 \u043C\u0451\u0434\u0430'), tr('empty glass bottle', 'pusta szklana butelka', 'botella de vidrio vac\xEDa', 'bottiglia di vetro vuota', 'bouteille en verre vide', 'sticl\u0103 goal\u0103', 'pr\xE1zdna sklenen\xE1 f\u013Ea\u0161a', '\u043F\u043E\u0440\u043E\u0436\u043D\u044F \u0441\u043A\u043B\u044F\u043D\u0430 \u043F\u043B\u044F\u0448\u043A\u0430', '\u043F\u0443\u0441\u0442\u0430\u044F \u0441\u0442\u0435\u043A\u043B\u044F\u043D\u043D\u0430\u044F \u0431\u0443\u0442\u044B\u043B\u043A\u0430'), tr('How hard should the maze be?', 'Jak trudny ma by\u0107 labirynt?', '\xBFQu\xE9 tan dif\xEDcil quieres el laberinto?', 'Quanto deve essere difficile il labirinto?', 'Quelle difficult\xE9 pour le labyrinthe ?', 'C\xE2t de greu s\u0103 fie labirintul?', 'Ak\xFD \u0165a\u017Ek\xFD m\xE1 by\u0165 labyrint?', '\u041D\u0430\u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u0438\u043C \u0431\u0443\u0434\u0435 \u043B\u0430\u0431\u0456\u0440\u0438\u043D\u0442?', '\u041D\u0430\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u043B\u043E\u0436\u043D\u044B\u043C \u0431\u0443\u0434\u0435\u0442 \u043B\u0430\u0431\u0438\u0440\u0438\u043D\u0442?'), tr('Easy', '\u0141atwy', 'F\xE1cil', 'Facile', 'Facile', 'U\u0219or', '\u013Dahk\xFD', '\u041B\u0435\u0433\u043A\u0438\u0439', '\u041B\u0451\u0433\u043A\u0438\u0439'), tr('Medium', '\u015Aredni', 'Medio', 'Medio', 'Moyen', 'Mediu', 'Stredn\xFD', '\u0421\u0435\u0440\u0435\u0434\u043D\u0456\u0439', '\u0421\u0440\u0435\u0434\u043D\u0438\u0439'), tr('Hard', 'Trudny', 'Dif\xEDcil', 'Difficile', 'Difficile', 'Greu', '\u0164a\u017Ek\xFD', '\u0421\u043A\u043B\u0430\u0434\u043D\u0438\u0439', '\u0421\u043B\u043E\u0436\u043D\u044B\u0439'), tr('How hard should it be?', 'Jak trudne ma by\u0107?', '\xBFQu\xE9 tan dif\xEDcil lo quieres?', 'Quanto deve essere difficile?', 'Quelle difficult\xE9 veux-tu ?', 'C\xE2t de greu s\u0103 fie?', 'Ak\xE9 \u0165a\u017Ek\xE9 to m\xE1 by\u0165?', '\u041D\u0430\u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0441\u043A\u043B\u0430\u0434\u043D\u043E \u043C\u0430\u0454 \u0431\u0443\u0442\u0438?', '\u041D\u0430\u0441\u043A\u043E\u043B\u044C\u043A\u043E \u0441\u043B\u043E\u0436\u043D\u043E \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C?'), tr('Find all {0} differences!', 'Znajd\u017A wszystkie {0} r\xF3\u017Cnice!', '\xA1Encuentra las {0} diferencias!', 'Trova tutte le {0} differenze!', 'Trouve les {0} diff\xE9rences !', 'G\u0103se\u0219te toate cele {0} diferen\u021Be!', 'N\xE1jdi v\u0161etky {0} rozdiely!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0432\u0441\u0456 {0} \u0432\u0456\u0434\u043C\u0456\u043D\u043D\u043E\u0441\u0442\u0456!', '\u041D\u0430\u0439\u0434\u0438 \u0432\u0441\u0435 {0} \u043E\u0442\u043B\u0438\u0447\u0438\u044F!'), tr('Two things are missing. Which ones?', 'Brakuje dw\xF3ch rzeczy. Kt\xF3rych?', 'Faltan dos cosas. \xBFCu\xE1les?', 'Mancano due cose. Quali?', 'Il manque deux choses. Lesquelles ?', 'Lipsesc dou\u0103 lucruri. Care?', 'Ch\xFDbaj\xFA dve veci. Ktor\xE9?', '\u0411\u0440\u0430\u043A\u0443\u0454 \u0434\u0432\u043E\u0445 \u0440\u0435\u0447\u0435\u0439. \u042F\u043A\u0438\u0445?', '\u041D\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 \u0434\u0432\u0443\u0445 \u0432\u0435\u0449\u0435\u0439. \u041A\u0430\u043A\u0438\u0445?'), tr('Find the groups of three!', 'Znajd\u017A tr\xF3jki!', '\xA1Encuentra los tr\xEDos!', 'Trova i tris!', 'Trouve les trios !', 'G\u0103se\u0219te grupurile de c\xE2te trei!', 'N\xE1jdi trojice!', '\u0417\u043D\u0430\u0439\u0434\u0438 \u0442\u0440\u0456\u0439\u043A\u0438!', '\u041D\u0430\u0439\u0434\u0438 \u0442\u0440\u043E\u0439\u043A\u0438!'), tr('Tracing', 'Rysowanie po \u015Bladzie', 'Repasar', 'Ricalca', 'Suivre le trac\xE9', 'Traseaz\u0103', 'Ob\u0165ahovanie', '\u041E\u0431\u0432\u0435\u0434\u0438', '\u041E\u0431\u0432\u0435\u0434\u0438'), tr('Little robot', 'Ma\u0142y robot', 'Peque\xF1o robot', 'Piccolo robot', 'Petit robot', 'Micul robot', 'Mal\xFD robot', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u0440\u043E\u0431\u043E\u0442', '\u041C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0439 \u0440\u043E\u0431\u043E\u0442'), tr('What came first?', 'Co by\u0142o najpierw?', '\xBFQu\xE9 pas\xF3 primero?', 'Cosa \xE8 successo prima?', "Qu'est-ce qui vient d'abord ?", 'Ce a fost mai \xEEnt\xE2i?', '\u010Co bolo sk\xF4r?', '\u0429\u043E \u0431\u0443\u043B\u043E \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443?', '\u0427\u0442\u043E \u0431\u044B\u043B\u043E \u0441\u043D\u0430\u0447\u0430\u043B\u0430?'), tr('Ice cream shop', 'Lodziarnia', 'Helader\xEDa', 'Gelateria', 'Glacier', 'Gelaterie', 'Zmrzlin\xE1re\u0148', '\u041A\u0430\u0444\u0435-\u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E', '\u041A\u0430\u0444\u0435-\u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435'), tr('Marble run', 'Tor kulkowy', 'Circuito de canicas', 'Pista delle biglie', 'Circuit de billes', 'Pista cu bile', 'Gu\u013E\xF4\u010Dkov\xE1 dr\xE1ha', '\u041A\u0443\u043B\u044C\u043A\u043E\u0432\u0430 \u0434\u043E\u0440\u0456\u0436\u043A\u0430', '\u0428\u0430\u0440\u0438\u043A\u043E\u0432\u0430\u044F \u0434\u043E\u0440\u043E\u0436\u043A\u0430'), tr('Drag the pieces onto the track so the marble rolls into the basket! Tap a piece to turn it around. Then press the green button!', 'Przeci\u0105gnij elementy na tor, \u017Ceby kulka wtoczy\u0142a si\u0119 do koszyka! Stuknij element, \u017Ceby go obr\xF3ci\u0107. Potem naci\u015Bnij zielony przycisk!', '\xA1Arrastra las piezas al circuito para que la canica ruede hasta la cesta! Toca una pieza para darle la vuelta. \xA1Luego pulsa el bot\xF3n verde!', 'Trascina i pezzi sulla pista perch\xE9 la biglia rotoli nel cestino! Tocca un pezzo per girarlo. Poi premi il pulsante verde!', 'Fais glisser les pi\xE8ces sur le circuit pour que la bille roule dans le panier ! Touche une pi\xE8ce pour la retourner. Puis appuie sur le bouton vert !', 'Trage piesele pe pist\u0103, ca bila s\u0103 se rostogoleasc\u0103 \xEEn co\u0219! Atinge o pies\u0103 ca s\u0103 o \xEEntorci. Apoi apas\u0103 butonul verde!', 'Potiahni dieliky na dr\xE1hu, aby sa gu\u013E\xF4\u010Dka skot\xFA\u013Eala do ko\u0161\xEDka! \u0164ukni na dielik, aby sa oto\u010Dil. Potom stla\u010D zelen\xE9 tla\u010Didlo!', '\u041F\u0435\u0440\u0435\u0442\u044F\u0433\u043D\u0438 \u0434\u0435\u0442\u0430\u043B\u0456 \u043D\u0430 \u0434\u043E\u0440\u0456\u0436\u043A\u0443, \u0449\u043E\u0431 \u043A\u0443\u043B\u044C\u043A\u0430 \u0441\u043A\u043E\u0442\u0438\u043B\u0430\u0441\u044F \u0432 \u043A\u043E\u0448\u0438\u043A! \u0422\u043E\u0440\u043A\u043D\u0438\u0441\u044C \u0434\u0435\u0442\u0430\u043B\u0456, \u0449\u043E\u0431 \u0457\u0457 \u043F\u0435\u0440\u0435\u0432\u0435\u0440\u043D\u0443\u0442\u0438. \u041F\u043E\u0442\u0456\u043C \u043D\u0430\u0442\u0438\u0441\u043D\u0438 \u0437\u0435\u043B\u0435\u043D\u0443 \u043A\u043D\u043E\u043F\u043A\u0443!', '\u041F\u0435\u0440\u0435\u0442\u0430\u0449\u0438 \u0434\u0435\u0442\u0430\u043B\u0438 \u043D\u0430 \u0434\u043E\u0440\u043E\u0436\u043A\u0443, \u0447\u0442\u043E\u0431\u044B \u0448\u0430\u0440\u0438\u043A \u0441\u043A\u0430\u0442\u0438\u043B\u0441\u044F \u0432 \u043A\u043E\u0440\u0437\u0438\u043D\u043A\u0443! \u041D\u0430\u0436\u043C\u0438 \u043D\u0430 \u0434\u0435\u0442\u0430\u043B\u044C, \u0447\u0442\u043E\u0431\u044B \u0435\u0451 \u043F\u0435\u0440\u0435\u0432\u0435\u0440\u043D\u0443\u0442\u044C. \u041F\u043E\u0442\u043E\u043C \u043D\u0430\u0436\u043C\u0438 \u0437\u0435\u043B\u0451\u043D\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443!'), tr('Trace it! Start at the green dot and move your finger the way the arrow points.', 'Narysuj! Zacznij od zielonej kropki i prowad\u017A palec w stron\u0119 strza\u0142ki.', '\xA1Rep\xE1salo! Empieza en el punto verde y mueve el dedo hacia donde apunta la flecha.', 'Ricalcalo! Parti dal punto verde e muovi il dito nella direzione della freccia.', 'Repasse dessus ! Commence au point vert et d\xE9place ton doigt dans le sens de la fl\xE8che.', 'Traseaz\u0103! \xCEncepe de la punctul verde \u0219i mi\u0219c\u0103 degetul \xEEn direc\u021Bia s\u0103ge\u021Bii.', 'Ob\u0165ahuj! Za\u010Dni pri zelenej bodke a \u0165ahaj prst v smere \u0161\xEDpky.', '\u041E\u0431\u0432\u0435\u0434\u0438! \u041F\u043E\u0447\u043D\u0438 \u0456\u0437 \u0437\u0435\u043B\u0435\u043D\u043E\u0457 \u043A\u0440\u0430\u043F\u043A\u0438 \u0439 \u0432\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u0442\u0443\u0434\u0438, \u043A\u0443\u0434\u0438 \u043F\u043E\u043A\u0430\u0437\u0443\u0454 \u0441\u0442\u0440\u0456\u043B\u043A\u0430.', '\u041E\u0431\u0432\u0435\u0434\u0438! \u041D\u0430\u0447\u043D\u0438 \u0441 \u0437\u0435\u043B\u0451\u043D\u043E\u0439 \u0442\u043E\u0447\u043A\u0438 \u0438 \u0432\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u0442\u0443\u0434\u0430, \u043A\u0443\u0434\u0430 \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u0441\u0442\u0440\u0435\u043B\u043A\u0430.'), tr('Help it get there! Drag your finger along the path from the green dot.', 'Pom\xF3\u017C dotrze\u0107 do celu! Prowad\u017A palec po drodze od zielonej kropki.', '\xA1Ay\xFAdale a llegar! Desliza el dedo por el camino desde el punto verde.', 'Aiutalo ad arrivare! Fai scorrere il dito lungo il sentiero dal punto verde.', 'Aide-le \xE0 arriver ! Fais glisser ton doigt sur le chemin depuis le point vert.', 'Ajut\u0103-l s\u0103 ajung\u0103! Trage degetul pe drum de la punctul verde.', 'Pom\xF4\u017E mu dosta\u0165 sa do cie\u013Ea! \u0164ahaj prst po cesti\u010Dke od zelenej bodky.', '\u0414\u043E\u043F\u043E\u043C\u043E\u0436\u0438 \u0434\u0456\u0441\u0442\u0430\u0442\u0438\u0441\u044F! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u0456\u0436\u0446\u0456 \u0432\u0456\u0434 \u0437\u0435\u043B\u0435\u043D\u043E\u0457 \u043A\u0440\u0430\u043F\u043A\u0438.', '\u041F\u043E\u043C\u043E\u0433\u0438 \u0434\u043E\u0431\u0440\u0430\u0442\u044C\u0441\u044F! \u0412\u0435\u0434\u0438 \u043F\u0430\u043B\u044C\u0446\u0435\u043C \u043F\u043E \u0434\u043E\u0440\u043E\u0436\u043A\u0435 \u043E\u0442 \u0437\u0435\u043B\u0451\u043D\u043E\u0439 \u0442\u043E\u0447\u043A\u0438.'), tr('Hooray, it got there!', 'Hurra, uda\u0142o si\u0119 dotrze\u0107!', '\xA1Hurra, ha llegado!', "Evviva, ce l'ha fatta!", "Hourra, c'est gagn\xE9 !", 'Ura, a ajuns!', 'Hur\xE1, je v cieli!', '\u0423\u0440\u0430, \u0434\u0456\u0441\u0442\u0430\u043B\u0438\u0441\u044F!', '\u0423\u0440\u0430, \u0434\u043E\u0431\u0440\u0430\u043B\u0438\u0441\u044C!'), tr('Get the robot to the treasure! Put the arrows in order, then press Go!', 'Doprowad\u017A robota do skarbu! U\u0142\xF3\u017C strza\u0142ki po kolei, a potem naci\u015Bnij Start!', '\xA1Lleva al robot hasta el tesoro! Pon las flechas en orden y luego pulsa \xA1Vamos!', 'Porta il robot al tesoro! Metti le frecce in ordine, poi premi Via!', "Am\xE8ne le robot jusqu'au tr\xE9sor ! Place les fl\xE8ches dans l'ordre, puis appuie sur En route !", 'Du robotul la comoar\u0103! Pune s\u0103ge\u021Bile \xEEn ordine, apoi apas\u0103 Start!', 'Dove\u010F robota k pokladu! Polo\u017E \u0161\xEDpky za sebou a potom stla\u010D \u0160tart!', '\u0414\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043A\u0430\u0440\u0431\u0443! \u0421\u043A\u043B\u0430\u0434\u0438 \u0441\u0442\u0440\u0456\u043B\u043A\u0438 \u043F\u043E \u0447\u0435\u0440\u0437\u0456, \u0430 \u043F\u043E\u0442\u0456\u043C \u043D\u0430\u0442\u0438\u0441\u043D\u0438 \u0412\u043F\u0435\u0440\u0435\u0434!', '\u0414\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043E\u043A\u0440\u043E\u0432\u0438\u0449\u0430! \u0412\u044B\u043B\u043E\u0436\u0438 \u0441\u0442\u0440\u0435\u043B\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443, \u0430 \u043F\u043E\u0442\u043E\u043C \u043D\u0430\u0436\u043C\u0438 \u0412\u043F\u0435\u0440\u0451\u0434!'), tr('Go!', 'Start!', '\xA1Vamos!', 'Via!', 'En route !', 'Start!', '\u0160tart!', '\u0412\u043F\u0435\u0440\u0435\u0434!', '\u0412\u043F\u0435\u0440\u0451\u0434!'), tr('First collect the star, then take the robot to the treasure!', 'Najpierw zbierz gwiazdk\u0119, a potem zaprowad\u017A robota do skarbu!', '\xA1Primero recoge la estrella y luego lleva al robot hasta el tesoro!', 'Prima prendi la stella, poi porta il robot al tesoro!', "Ramasse d'abord l'\xE9toile, puis am\xE8ne le robot jusqu'au tr\xE9sor !", 'Mai \xEEnt\xE2i adun\u0103 steaua, apoi du robotul la comoar\u0103!', 'Najprv zober hviezdi\u010Dku a potom dove\u010F robota k pokladu!', '\u0421\u043F\u0435\u0440\u0448\u0443 \u0437\u0431\u0435\u0440\u0438 \u0437\u0456\u0440\u043E\u0447\u043A\u0443, \u0430 \u043F\u043E\u0442\u0456\u043C \u0434\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043A\u0430\u0440\u0431\u0443!', '\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u0441\u043E\u0431\u0435\u0440\u0438 \u0437\u0432\u0451\u0437\u0434\u043E\u0447\u043A\u0443, \u0430 \u043F\u043E\u0442\u043E\u043C \u0434\u043E\u0432\u0435\u0434\u0438 \u0440\u043E\u0431\u043E\u0442\u0430 \u0434\u043E \u0441\u043E\u043A\u0440\u043E\u0432\u0438\u0449\u0430!'), tr('Put down some arrows first!', 'Najpierw po\u0142\xF3\u017C strza\u0142ki!', '\xA1Primero pon algunas flechas!', 'Prima metti qualche freccia!', "Place d'abord des fl\xE8ches !", 'Mai \xEEnt\xE2i pune ni\u0219te s\u0103ge\u021Bi!', 'Najprv polo\u017E \u0161\xEDpky!', '\u0421\u043F\u0435\u0440\u0448\u0443 \u043F\u043E\u043A\u043B\u0430\u0434\u0438 \u0441\u0442\u0440\u0456\u043B\u043A\u0438!', '\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u043E\u043B\u043E\u0436\u0438 \u0441\u0442\u0440\u0435\u043B\u043A\u0438!'), tr("Almost! Let's fix the program!", 'Prawie! Poprawmy program!', '\xA1Casi! \xA1Arreglemos el programa!', 'Quasi! Sistemiamo il programma!', 'Presque ! Corrigeons le programme !', 'Aproape! Hai s\u0103 repar\u0103m programul!', 'Takmer! Opravme program!', '\u041C\u0430\u0439\u0436\u0435! \u0412\u0438\u043F\u0440\u0430\u0432\u043C\u043E \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u0443!', '\u041F\u043E\u0447\u0442\u0438! \u0414\u0430\u0432\u0430\u0439 \u0438\u0441\u043F\u0440\u0430\u0432\u0438\u043C \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0443!'), tr('What happened first? Put the pictures in order!', 'Co by\u0142o najpierw? U\u0142\xF3\u017C obrazki po kolei!', '\xBFQu\xE9 pas\xF3 primero? \xA1Ordena las im\xE1genes!', 'Cosa \xE8 successo prima? Metti le immagini in ordine!', "Qu'est-ce qui s'est pass\xE9 d'abord ? Mets les images dans l'ordre !", 'Ce s-a \xEEnt\xE2mplat mai \xEEnt\xE2i? Pune imaginile \xEEn ordine!', '\u010Co sa stalo sk\xF4r? Usporiadaj obr\xE1zky!', '\u0429\u043E \u0441\u0442\u0430\u043B\u043E\u0441\u044F \u0441\u043F\u043E\u0447\u0430\u0442\u043A\u0443? \u0421\u043A\u043B\u0430\u0434\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443!', '\u0427\u0442\u043E \u0441\u043B\u0443\u0447\u0438\u043B\u043E\u0441\u044C \u0441\u043D\u0430\u0447\u0430\u043B\u0430? \u0420\u0430\u0437\u043B\u043E\u0436\u0438 \u043A\u0430\u0440\u0442\u0438\u043D\u043A\u0438 \u043F\u043E \u043F\u043E\u0440\u044F\u0434\u043A\u0443!'), tr('Not this one yet. What comes before?', 'To jeszcze nie ten. Co jest wcze\u015Bniej?', 'Todav\xEDa no es esta. \xBFQu\xE9 va antes?', 'Non \xE8 ancora questa. Cosa viene prima?', "Pas encore celle-ci. Qu'est-ce qui vient avant ?", '\xCEnc\u0103 nu aceasta. Ce vine \xEEnainte?', 'E\u0161te nie tento. \u010Co je sk\xF4r?', '\u0429\u0435 \u043D\u0435 \u0446\u044F. \u0429\u043E \u0431\u0443\u0434\u0435 \u0440\u0430\u043D\u0456\u0448\u0435?', '\u0415\u0449\u0451 \u043D\u0435 \u044D\u0442\u0430. \u0427\u0442\u043E \u0431\u044B\u043B\u043E \u0440\u0430\u043D\u044C\u0448\u0435?'), tr('Make the ice cream that is ordered! Then press Here you are!', 'Zr\xF3b zam\xF3wionego loda! Potem naci\u015Bnij Prosz\u0119!', '\xA1Prepara el helado que te piden! Luego pulsa \xA1Aqu\xED tienes!', 'Prepara il gelato ordinato! Poi premi Ecco a te!', 'Pr\xE9pare la glace command\xE9e ! Puis appuie sur Voil\xE0 !', 'F\u0103 \xEEnghe\u021Bata comandat\u0103! Apoi apas\u0103 Poftim!', 'Priprav objednan\xFA zmrzlinu! Potom stla\u010D Nech sa p\xE1\u010Di!', '\u041F\u0440\u0438\u0433\u043E\u0442\u0443\u0439 \u0437\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u0435 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E! \u041F\u043E\u0442\u0456\u043C \u043D\u0430\u0442\u0438\u0441\u043D\u0438 \u041F\u0440\u043E\u0448\u0443!', '\u041F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u044C \u0437\u0430\u043A\u0430\u0437\u0430\u043D\u043D\u043E\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435! \u041F\u043E\u0442\u043E\u043C \u043D\u0430\u0436\u043C\u0438 \u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430!'), tr('Here you are!', 'Prosz\u0119!', '\xA1Aqu\xED tienes!', 'Ecco a te!', 'Voil\xE0 !', 'Poftim!', 'Nech sa p\xE1\u010Di!', '\u041F\u0440\u043E\u0448\u0443!', '\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430!'), tr('I would like an ice cream, please:', 'Poprosz\u0119 loda:', 'Quiero un helado, por favor:', 'Vorrei un gelato, per favore:', "Je voudrais une glace, s'il te pla\xEEt :", 'A\u0219 vrea o \xEEnghe\u021Bat\u0103, te rog:', 'Pros\xEDm si zmrzlinu:', '\u041C\u043E\u0436\u043D\u0430 \u043C\u0435\u043D\u0456 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E:', '\u041C\u043E\u0436\u043D\u043E \u043C\u043D\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435:'), tr('Yum yum! The unicorn is very happy!', 'Mniam, mniam! Jednoro\u017Cec jest bardzo szcz\u0119\u015Bliwy!', '\xA1\xD1am, \xF1am! \xA1El unicornio est\xE1 muy contento!', "Gnam gnam! L'unicorno \xE8 felicissimo!", 'Miam miam ! La licorne est tr\xE8s contente !', 'Mmm! Unicornul este foarte fericit!', 'M\u0148am, m\u0148am! Jednoro\u017Eec je ve\u013Emi \u0161\u0165astn\xFD!', '\u041D\u044F\u043C-\u043D\u044F\u043C! \u0404\u0434\u0438\u043D\u043E\u0440\u0456\u0433 \u0434\u0443\u0436\u0435 \u0449\u0430\u0441\u043B\u0438\u0432\u0438\u0439!', '\u041D\u044F\u043C-\u043D\u044F\u043C! \u0415\u0434\u0438\u043D\u043E\u0440\u043E\u0433 \u043E\u0447\u0435\u043D\u044C \u0441\u0447\u0430\u0441\u0442\u043B\u0438\u0432!'), tr('Yum yum, thank you!', 'Mniam, mniam, dzi\u0119kuj\u0119!', '\xA1\xD1am, \xF1am, gracias!', 'Gnam gnam, grazie!', 'Miam miam, merci !', 'Mmm, mul\u021Bumesc!', 'M\u0148am, m\u0148am, \u010Fakujem!', '\u041D\u044F\u043C-\u043D\u044F\u043C, \u0434\u044F\u043A\u0443\u044E!', '\u041D\u044F\u043C-\u043D\u044F\u043C, \u0441\u043F\u0430\u0441\u0438\u0431\u043E!'), tr('Hmm, yummy! But I asked for a cone.', 'Mmm, pyszne! Ale ja chc\u0119 w wafelku.', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED cucurucho.', 'Mmm, buono! Ma io volevo il cono.', 'Mmm, d\xE9licieux ! Mais moi, je voulais un cornet.', 'Mmm, ce bun\u0103! Dar eu am cerut cornet.', 'Mmm, v\xFDborn\xE9! Ale ja chcem korn\xFAtok.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0432 \u0440\u0456\u0436\u043A\u0443.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0432 \u0440\u043E\u0436\u043A\u0435.'), tr('Hmm, yummy! But I asked for a cup.', 'Mmm, pyszne! Ale ja chc\u0119 w kubeczku.', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED tarrina.', 'Mmm, buono! Ma io volevo la coppetta.', 'Mmm, d\xE9licieux ! Mais moi, je voulais un pot.', 'Mmm, ce bun\u0103! Dar eu am cerut pahar.', 'Mmm, v\xFDborn\xE9! Ale ja chcem poh\xE1rik.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0432 \u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A\u0443.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0432 \u0441\u0442\u0430\u043A\u0430\u043D\u0447\u0438\u043A\u0435.'), tr('Hmm, yummy! But I asked for other scoops. Look again!', 'Mmm, pyszne! Ale ja chc\u0119 inne ga\u0142ki. Sp\xF3jrz jeszcze raz!', '\xA1Mmm, qu\xE9 rico! Pero yo ped\xED otras bolas. \xA1Mira otra vez!', 'Mmm, buono! Ma io volevo altre palline. Guarda di nuovo!', "Mmm, d\xE9licieux ! Mais moi, je voulais d'autres boules. Regarde encore !", 'Mmm, ce bun\u0103! Dar eu am cerut alte cupe. Mai uit\u0103-te o dat\u0103!', 'Mmm, v\xFDborn\xE9! Ale ja chcem in\xE9 kop\u010Deky. Pozri sa e\u0161te raz!', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u044F \u0445\u043E\u0447\u0443 \u0456\u043D\u0448\u0456 \u043A\u0443\u043B\u044C\u043A\u0438. \u041F\u043E\u0434\u0438\u0432\u0438\u0441\u044C \u0449\u0435 \u0440\u0430\u0437!', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u044F \u0445\u043E\u0447\u0443 \u0434\u0440\u0443\u0433\u0438\u0435 \u0448\u0430\u0440\u0438\u043A\u0438. \u041F\u043E\u0441\u043C\u043E\u0442\u0440\u0438 \u0435\u0449\u0451 \u0440\u0430\u0437!'), tr('Hmm, yummy! But I wanted something else on top.', 'Mmm, pyszne! Ale na g\xF3r\u0119 chc\u0119 co\u015B innego.', '\xA1Mmm, qu\xE9 rico! Pero encima quer\xEDa otra cosa.', "Mmm, buono! Ma sopra volevo un'altra cosa.", 'Mmm, d\xE9licieux ! Mais dessus, je voulais autre chose.', 'Mmm, ce bun\u0103! Dar deasupra voiam altceva.', 'Mmm, v\xFDborn\xE9! Ale navrch chcem nie\u010Do in\xE9.', '\u041C\u043C\u043C, \u0441\u043C\u0430\u0447\u043D\u043E! \u0410\u043B\u0435 \u0437\u0432\u0435\u0440\u0445\u0443 \u044F \u0445\u043E\u0447\u0443 \u0449\u043E\u0441\u044C \u0456\u043D\u0448\u0435.', '\u041C\u043C\u043C, \u0432\u043A\u0443\u0441\u043D\u043E! \u041D\u043E \u0441\u0432\u0435\u0440\u0445\u0443 \u044F \u0445\u043E\u0447\u0443 \u0447\u0442\u043E-\u0442\u043E \u0434\u0440\u0443\u0433\u043E\u0435.'), tr('Do you remember?', 'Pami\u0119tasz?', '\xBFTe acuerdas?', 'Ti ricordi?', 'Tu te souviens ?', '\xCE\u021Bi aminte\u0219ti?', 'Pam\xE4t\xE1\u0161 sa?', "\u041F\u0430\u043C'\u044F\u0442\u0430\u0454\u0448?", '\u041F\u043E\u043C\u043D\u0438\u0448\u044C?'), tr('Free play: make any ice cream you like for the unicorn!', 'Swobodna zabawa: zr\xF3b jednoro\u017Ccowi dowolnego loda!', 'Juego libre: \xA1haz el helado que quieras para el unicornio!', "Gioco libero: prepara il gelato che vuoi per l'unicorno!", 'Jeu libre : pr\xE9pare la glace que tu veux pour la licorne !', 'Joc liber: f\u0103 ce \xEEnghe\u021Bat\u0103 vrei pentru unicorn!', 'Vo\u013En\xE1 hra: priprav jednoro\u017Ecovi ak\xFAko\u013Evek zmrzlinu!', '\u0412\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430: \u043F\u0440\u0438\u0433\u043E\u0442\u0443\u0439 \u0454\u0434\u0438\u043D\u043E\u0440\u043E\u0433\u043E\u0432\u0456 \u044F\u043A\u0435 \u0445\u043E\u0447\u0435\u0448 \u043C\u043E\u0440\u043E\u0437\u0438\u0432\u043E!', '\u0421\u0432\u043E\u0431\u043E\u0434\u043D\u0430\u044F \u0438\u0433\u0440\u0430: \u043F\u0440\u0438\u0433\u043E\u0442\u043E\u0432\u044C \u0435\u0434\u0438\u043D\u043E\u0440\u043E\u0433\u0443 \u043B\u044E\u0431\u043E\u0435 \u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043E\u0435!'), tr('Customers', 'Go\u015Bcie', 'Clientes', 'Clienti', 'Clients', 'Clien\u021Bi', 'Hostia', '\u0413\u043E\u0441\u0442\u0456', '\u0413\u043E\u0441\u0442\u0438'), tr('Free play', 'Swobodna zabawa', 'Juego libre', 'Gioco libero', 'Jeu libre', 'Joc liber', 'Vo\u013En\xE1 hra', '\u0412\u0456\u043B\u044C\u043D\u0430 \u0433\u0440\u0430', '\u0421\u0432\u043E\u0431\u043E\u0434\u043D\u0430\u044F \u0438\u0433\u0440\u0430')]);
+    }
+  }
+  function get_MPIECES() {
+    _init_properties_Marble_kt__ndbevx();
+    return MPIECES;
+  }
+  var MPIECES;
+  function MB() {
+    MB_instance = this;
+    this.C_1 = 45.0;
+    this.COLS_1 = 9;
+    this.ROWS_1 = 9;
+    this.MR_1 = 9.0;
+    this.GRAV_1 = 1100.0;
+    this.DT_1 = 0.004166666666666667;
+  }
+  protoOf(MB).get_C_1mhr4q_k$ = function () {
+    return this.C_1;
+  };
+  protoOf(MB).get_COLS_wnz41o_k$ = function () {
+    return this.COLS_1;
+  };
+  protoOf(MB).get_ROWS_wo8p42_k$ = function () {
+    return this.ROWS_1;
+  };
+  protoOf(MB).get_MR_kntolu_k$ = function () {
+    return this.MR_1;
+  };
+  protoOf(MB).get_GRAV_wo1pyh_k$ = function () {
+    return this.GRAV_1;
+  };
+  protoOf(MB).get_DT_kntotj_k$ = function () {
+    return this.DT_1;
+  };
+  var MB_instance;
+  function MB_getInstance() {
+    if (MB_instance == null)
+      new MB();
+    return MB_instance;
+  }
+  function MSeg(x1, y1, x2, y2, kind) {
+    kind = kind === VOID ? 'rail' : kind;
+    this.x1__1 = x1;
+    this.y1__1 = y1;
+    this.x2__1 = x2;
+    this.y2__1 = y2;
+    this.kind_1 = kind;
+  }
+  protoOf(MSeg).get_x1_kntnlq_k$ = function () {
+    return this.x1__1;
+  };
+  protoOf(MSeg).get_y1_kntnkv_k$ = function () {
+    return this.y1__1;
+  };
+  protoOf(MSeg).get_x2_kntnlp_k$ = function () {
+    return this.x2__1;
+  };
+  protoOf(MSeg).get_y2_kntnku_k$ = function () {
+    return this.y2__1;
+  };
+  protoOf(MSeg).get_kind_wop7ml_k$ = function () {
+    return this.kind_1;
+  };
+  function MPieceDef(w, h, segs, spawn, goal) {
+    spawn = spawn === VOID ? null : spawn;
+    goal = goal === VOID ? null : goal;
+    this.w_1 = w;
+    this.h_1 = h;
+    this.segs_1 = segs;
+    this.spawn_1 = spawn;
+    this.goal_1 = goal;
+  }
+  protoOf(MPieceDef).get_w_1mhr66_k$ = function () {
+    return this.w_1;
+  };
+  protoOf(MPieceDef).get_h_1mhr5r_k$ = function () {
+    return this.h_1;
+  };
+  protoOf(MPieceDef).get_segs_wou8ef_k$ = function () {
+    return this.segs_1;
+  };
+  protoOf(MPieceDef).get_spawn_iyndci_k$ = function () {
+    return this.spawn_1;
+  };
+  protoOf(MPieceDef).get_goal_womrto_k$ = function () {
+    return this.goal_1;
+  };
+  function arcSegs(cx, cy, r, a0, a1, n) {
+    _init_properties_Marble_kt__ndbevx();
+    // Inline function 'kotlin.collections.map' call
+    var this_0 = numberRangeToNumber(0, n);
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+    var inductionVariable = this_0.first_1;
+    var last = this_0.last_1;
+    if (inductionVariable <= last)
+      do {
+        var item = inductionVariable;
+        inductionVariable = inductionVariable + 1 | 0;
+        var a = (a0 + (a1 - a0) * item / n) * 3.141592653589793 / 180;
+        // Inline function 'kotlin.math.cos' call
+        var tmp = cx + r * Math.cos(a);
+        // Inline function 'kotlin.math.sin' call
+        var tmp$ret$1 = Math.sin(a);
+        var tmp$ret$2 = new Pair(tmp, cy + r * tmp$ret$1);
+        destination.add_utx5q5_k$(tmp$ret$2);
+      }
+       while (!(item === last));
+    var pts = destination;
+    // Inline function 'kotlin.collections.map' call
+    var this_1 = until_1(0, n);
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination_0 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_1, 10));
+    var inductionVariable_0 = this_1.first_1;
+    var last_0 = this_1.last_1;
+    if (inductionVariable_0 <= last_0)
+      do {
+        var item_0 = inductionVariable_0;
+        inductionVariable_0 = inductionVariable_0 + 1 | 0;
+        var i = item_0;
+        var tmp$ret$5 = new MSeg(pts.get_c1px32_k$(i).first_1, pts.get_c1px32_k$(i).second_1, pts.get_c1px32_k$(i + 1 | 0).first_1, pts.get_c1px32_k$(i + 1 | 0).second_1);
+        destination_0.add_utx5q5_k$(tmp$ret$5);
+      }
+       while (!(item_0 === last_0));
+    return destination_0;
+  }
+  function MPiece(t, c, r, m) {
+    this.t_1 = t;
+    this.c_1 = c;
+    this.r_1 = r;
+    this.m_1 = m;
+  }
+  protoOf(MPiece).get_t_1mhr63_k$ = function () {
+    return this.t_1;
+  };
+  protoOf(MPiece).get_c_1mhr5m_k$ = function () {
+    return this.c_1;
+  };
+  protoOf(MPiece).get_r_1mhr61_k$ = function () {
+    return this.r_1;
+  };
+  protoOf(MPiece).get_m_1mhr5w_k$ = function () {
+    return this.m_1;
+  };
+  protoOf(MPiece).component1_7eebsc_k$ = function () {
+    return this.t_1;
+  };
+  protoOf(MPiece).component2_7eebsb_k$ = function () {
+    return this.c_1;
+  };
+  protoOf(MPiece).component3_7eebsa_k$ = function () {
+    return this.r_1;
+  };
+  protoOf(MPiece).component4_7eebs9_k$ = function () {
+    return this.m_1;
+  };
+  protoOf(MPiece).copy_uiy6i5_k$ = function (t, c, r, m) {
+    return new MPiece(t, c, r, m);
+  };
+  protoOf(MPiece).copy$default_z8k56z_k$ = function (t, c, r, m, $super) {
+    t = t === VOID ? this.t_1 : t;
+    c = c === VOID ? this.c_1 : c;
+    r = r === VOID ? this.r_1 : r;
+    m = m === VOID ? this.m_1 : m;
+    return $super === VOID ? this.copy_uiy6i5_k$(t, c, r, m) : $super.copy_uiy6i5_k$.call(this, t, c, r, m);
+  };
+  protoOf(MPiece).toString = function () {
+    return 'MPiece(t=' + this.t_1 + ', c=' + this.c_1 + ', r=' + this.r_1 + ', m=' + this.m_1 + ')';
+  };
+  protoOf(MPiece).hashCode = function () {
+    var result = getStringHashCode(this.t_1);
+    result = imul(result, 31) + this.c_1 | 0;
+    result = imul(result, 31) + this.r_1 | 0;
+    result = imul(result, 31) + this.m_1 | 0;
+    return result;
+  };
+  protoOf(MPiece).equals = function (other) {
+    if (this === other)
+      return true;
+    if (!(other instanceof MPiece))
+      return false;
+    var tmp0_other_with_cast = other instanceof MPiece ? other : THROW_CCE();
+    if (!(this.t_1 === tmp0_other_with_cast.t_1))
+      return false;
+    if (!(this.c_1 === tmp0_other_with_cast.c_1))
+      return false;
+    if (!(this.r_1 === tmp0_other_with_cast.r_1))
+      return false;
+    if (!(this.m_1 === tmp0_other_with_cast.m_1))
+      return false;
+    return true;
+  };
+  function def(_this__u8e3s4) {
+    _init_properties_Marble_kt__ndbevx();
+    return getValue(get_MPIECES(), _this__u8e3s4.t_1);
+  }
+  function cells(_this__u8e3s4) {
+    _init_properties_Marble_kt__ndbevx();
+    // Inline function 'kotlin.collections.flatMap' call
+    var tmp0 = until_1(0, def(_this__u8e3s4).w_1);
+    // Inline function 'kotlin.collections.flatMapTo' call
+    var destination = ArrayList_init_$Create$();
+    var inductionVariable = tmp0.first_1;
+    var last = tmp0.last_1;
+    if (inductionVariable <= last)
+      do {
+        var element = inductionVariable;
+        inductionVariable = inductionVariable + 1 | 0;
+        var i = element;
+        // Inline function 'kotlin.collections.map' call
+        var this_0 = until_1(0, def(_this__u8e3s4).h_1);
+        // Inline function 'kotlin.collections.mapTo' call
+        var destination_0 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+        var inductionVariable_0 = this_0.first_1;
+        var last_0 = this_0.last_1;
+        if (inductionVariable_0 <= last_0)
+          do {
+            var item = inductionVariable_0;
+            inductionVariable_0 = inductionVariable_0 + 1 | 0;
+            var j = item;
+            var tmp$ret$0 = to(_this__u8e3s4.c_1 + i | 0, _this__u8e3s4.r_1 + j | 0);
+            destination_0.add_utx5q5_k$(tmp$ret$0);
+          }
+           while (!(item === last_0));
+        var list = destination_0;
+        addAll(destination, list);
+      }
+       while (!(element === last));
+    return destination;
+  }
+  function tx(p, lx) {
+    _init_properties_Marble_kt__ndbevx();
+    return (p.c_1 + (p.m_1 === -1 ? def(p).w_1 - lx : lx)) * 45.0;
+  }
+  function ty(p, ly) {
+    _init_properties_Marble_kt__ndbevx();
+    return (p.r_1 + ly) * 45.0;
+  }
+  function marbleStartPos(p) {
+    _init_properties_Marble_kt__ndbevx();
+    var sp = ensureNotNull(def(p).spawn_1);
+    return to(tx(p, sp.first_1), ty(p, sp.second_1) - 9.0 - 1.5);
+  }
+  function MStatic(ax, ay, bx, by, kind, rad, e, piece) {
+    this.ax_1 = ax;
+    this.ay_1 = ay;
+    this.bx_1 = bx;
+    this.by_1 = by;
+    this.kind_1 = kind;
+    this.rad_1 = rad;
+    this.e_1 = e;
+    this.piece_1 = piece;
+  }
+  protoOf(MStatic).get_ax_knto3k_k$ = function () {
+    return this.ax_1;
+  };
+  protoOf(MStatic).get_ay_knto3j_k$ = function () {
+    return this.ay_1;
+  };
+  protoOf(MStatic).get_bx_knto2p_k$ = function () {
+    return this.bx_1;
+  };
+  protoOf(MStatic).get_by_knto2o_k$ = function () {
+    return this.by_1;
+  };
+  protoOf(MStatic).get_kind_wop7ml_k$ = function () {
+    return this.kind_1;
+  };
+  protoOf(MStatic).get_rad_18ix5g_k$ = function () {
+    return this.rad_1;
+  };
+  protoOf(MStatic).get_e_1mhr5o_k$ = function () {
+    return this.e_1;
+  };
+  protoOf(MStatic).get_piece_iwvl51_k$ = function () {
+    return this.piece_1;
+  };
+  function MMarble(x, y) {
+    this.x_1 = x;
+    this.y_1 = y;
+    this.vx_1 = 0.0;
+    this.vy_1 = 0.0;
+    this.r_1 = 9.0;
+    this.lost_1 = false;
+    this.inGoal_1 = false;
+    this.goalT_1 = 0.0;
+    this.air_1 = 0.0;
+  }
+  protoOf(MMarble).set_x_scd9vp_k$ = function (_set____db54di) {
+    this.x_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_x_1mhr67_k$ = function () {
+    return this.x_1;
+  };
+  protoOf(MMarble).set_y_lelkme_k$ = function (_set____db54di) {
+    this.y_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_y_1mhr68_k$ = function () {
+    return this.y_1;
+  };
+  protoOf(MMarble).set_vx_8znk4p_k$ = function (_set____db54di) {
+    this.vx_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_vx_kntnlh_k$ = function () {
+    return this.vx_1;
+  };
+  protoOf(MMarble).set_vy_21vuve_k$ = function (_set____db54di) {
+    this.vy_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_vy_kntnlg_k$ = function () {
+    return this.vy_1;
+  };
+  protoOf(MMarble).get_r_1mhr61_k$ = function () {
+    return this.r_1;
+  };
+  protoOf(MMarble).set_lost_kzxass_k$ = function (_set____db54di) {
+    this.lost_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_lost_wopz71_k$ = function () {
+    return this.lost_1;
+  };
+  protoOf(MMarble).set_inGoal_1srts_k$ = function (_set____db54di) {
+    this.inGoal_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_inGoal_et7h0h_k$ = function () {
+    return this.inGoal_1;
+  };
+  protoOf(MMarble).set_goalT_ccek6q_k$ = function (_set____db54di) {
+    this.goalT_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_goalT_is16yg_k$ = function () {
+    return this.goalT_1;
+  };
+  protoOf(MMarble).set_air_blb2eh_k$ = function (_set____db54di) {
+    this.air_1 = _set____db54di;
+  };
+  protoOf(MMarble).get_air_18j9jz_k$ = function () {
+    return this.air_1;
+  };
+  function MGoal(x1, x2, y1, y2) {
+    this.x1__1 = x1;
+    this.x2__1 = x2;
+    this.y1__1 = y1;
+    this.y2__1 = y2;
+  }
+  protoOf(MGoal).get_x1_kntnlq_k$ = function () {
+    return this.x1__1;
+  };
+  protoOf(MGoal).get_x2_kntnlp_k$ = function () {
+    return this.x2__1;
+  };
+  protoOf(MGoal).get_y1_kntnkv_k$ = function () {
+    return this.y1__1;
+  };
+  protoOf(MGoal).get_y2_kntnku_k$ = function () {
+    return this.y2__1;
+  };
+  function collide($this, m, ax, ay, bx, by, rad, e, fr) {
+    var dx0 = bx - ax;
+    var dy0 = by - ay;
+    var l2 = dx0 * dx0 + dy0 * dy0;
+    var tt = 0.0;
+    if (l2 > 0) {
+      tt = ((m.x_1 - ax) * dx0 + (m.y_1 - ay) * dy0) / l2;
+      tt = tt < 0 ? 0.0 : tt > 1 ? 1.0 : tt;
+    }
+    var qx = ax + dx0 * tt;
+    var qy = ay + dy0 * tt;
+    var dx = m.x_1 - qx;
+    var dy = m.y_1 - qy;
+    var d2 = dx * dx + dy * dy;
+    var rr = m.r_1 + rad;
+    if (d2 >= rr * rr)
+      return null;
+    // Inline function 'kotlin.math.sqrt' call
+    var d = Math.sqrt(d2);
+    var nx;
+    var ny;
+    if (d < 1.0E-6) {
+      nx = 0.0;
+      ny = -1.0;
+      d = 0.0;
+    } else {
+      nx = dx / d;
+      ny = dy / d;
+    }
+    m.x_1 = m.x_1 + nx * (rr - d);
+    m.y_1 = m.y_1 + ny * (rr - d);
+    var rvx = m.vx_1;
+    var rvy = m.vy_1;
+    var vn = rvx * nx + rvy * ny;
+    if (vn < 0) {
+      var invM = 1.0;
+      var j = -(1 + e) * vn / invM;
+      m.vx_1 = m.vx_1 + j * nx;
+      m.vy_1 = m.vy_1 + j * ny;
+      var tvx = rvx - vn * nx;
+      var tvy = rvy - vn * ny;
+      m.vx_1 = m.vx_1 - tvx * fr;
+      m.vy_1 = m.vy_1 - tvy * fr;
+    }
+    // Inline function 'kotlin.doubleArrayOf' call
+    return new Float64Array([nx, ny, vn]);
+  }
+  function MWorld(pieces) {
+    this.pieces_1 = pieces;
+    this.t_1 = 0.0;
+    this.statics_1 = ArrayList_init_$Create$();
+    this.marbles_1 = ArrayList_init_$Create$();
+    this.goals_1 = ArrayList_init_$Create$();
+    this.hit_1 = HashSet_init_$Create$_0();
+    this.tramps_1 = 0;
+    // Inline function 'kotlin.collections.forEachIndexed' call
+    var index = 0;
+    var _iterator__ex2g4s = this.pieces_1.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      var pi = checkIndexOverflow(_unary__edvuaz);
+      var d = def(item);
+      // Inline function 'kotlin.collections.forEach' call
+      var _iterator__ex2g4s_0 = d.segs_1.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+        var element = _iterator__ex2g4s_0.next_20eer_k$();
+        var tmp0 = this.statics_1;
+        // Inline function 'kotlin.collections.plusAssign' call
+        var element_0 = new MStatic(tx(item, element.x1__1), ty(item, element.y1__1), tx(item, element.x2__1), ty(item, element.y2__1), element.kind_1, element.kind_1 === 'pin' ? 5.0 : 2.5, element.kind_1 === 'tramp' ? 0.9 : 0.25, pi);
+        tmp0.add_utx5q5_k$(element_0);
+      }
+      var tmp0_safe_receiver = d.goal_1;
+      if (tmp0_safe_receiver == null)
+        null;
+      else {
+        // Inline function 'kotlin.let' call
+        var tmp4 = this.goals_1;
+        var tmp0_0 = tx(item, tmp0_safe_receiver[0]);
+        // Inline function 'kotlin.math.min' call
+        var b = tx(item, tmp0_safe_receiver[2]);
+        var tmp = Math.min(tmp0_0, b);
+        var tmp2 = tx(item, tmp0_safe_receiver[0]);
+        // Inline function 'kotlin.math.max' call
+        var b_0 = tx(item, tmp0_safe_receiver[2]);
+        var tmp$ret$4 = Math.max(tmp2, b_0);
+        // Inline function 'kotlin.collections.plusAssign' call
+        var element_1 = new MGoal(tmp, tmp$ret$4, ty(item, tmp0_safe_receiver[1]), ty(item, tmp0_safe_receiver[3]));
+        tmp4.add_utx5q5_k$(element_1);
+      }
+    }
+  }
+  protoOf(MWorld).get_pieces_i2arm6_k$ = function () {
+    return this.pieces_1;
+  };
+  protoOf(MWorld).set_t_exnz27_k$ = function (_set____db54di) {
+    this.t_1 = _set____db54di;
+  };
+  protoOf(MWorld).get_t_1mhr63_k$ = function () {
+    return this.t_1;
+  };
+  protoOf(MWorld).get_statics_u3y9lw_k$ = function () {
+    return this.statics_1;
+  };
+  protoOf(MWorld).get_marbles_f52e3x_k$ = function () {
+    return this.marbles_1;
+  };
+  protoOf(MWorld).get_goals_is16zb_k$ = function () {
+    return this.goals_1;
+  };
+  protoOf(MWorld).get_hit_18j4d2_k$ = function () {
+    return this.hit_1;
+  };
+  protoOf(MWorld).set_tramps_mili3m_k$ = function (_set____db54di) {
+    this.tramps_1 = _set____db54di;
+  };
+  protoOf(MWorld).get_tramps_k3d29i_k$ = function () {
+    return this.tramps_1;
+  };
+  protoOf(MWorld).spawnStarts_h8hk2k_k$ = function () {
+    // Inline function 'kotlin.collections.forEach' call
+    var _iterator__ex2g4s = this.pieces_1.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      $l$block: {
+        if (!(element.t_1 === 'start')) {
+          break $l$block;
+        }
+        var _destruct__k2r9zo = marbleStartPos(element);
+        var x = _destruct__k2r9zo.component1_7eebsc_k$();
+        var y = _destruct__k2r9zo.component2_7eebsb_k$();
+        var tmp0 = this.marbles_1;
+        // Inline function 'kotlin.collections.plusAssign' call
+        var element_0 = new MMarble(x, y);
+        tmp0.add_utx5q5_k$(element_0);
+      }
+    }
+  };
+  protoOf(MWorld).get_won_18it3n_k$ = function () {
+    var tmp0 = this.marbles_1;
+    var tmp$ret$0;
+    $l$block_0: {
+      // Inline function 'kotlin.collections.any' call
+      var tmp;
+      if (isInterface(tmp0, Collection)) {
+        tmp = tmp0.isEmpty_y1axqb_k$();
+      } else {
+        tmp = false;
+      }
+      if (tmp) {
+        tmp$ret$0 = false;
+        break $l$block_0;
+      }
+      var _iterator__ex2g4s = tmp0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+        var element = _iterator__ex2g4s.next_20eer_k$();
+        if (element.inGoal_1 && !element.lost_1 && this.t_1 - element.goalT_1 > 0.35) {
+          tmp$ret$0 = true;
+          break $l$block_0;
+        }
+      }
+      tmp$ret$0 = false;
+    }
+    return tmp$ret$0;
+  };
+  protoOf(MWorld).get_wonNow_lh27hl_k$ = function () {
+    var tmp0 = this.marbles_1;
+    var tmp$ret$0;
+    $l$block_0: {
+      // Inline function 'kotlin.collections.any' call
+      var tmp;
+      if (isInterface(tmp0, Collection)) {
+        tmp = tmp0.isEmpty_y1axqb_k$();
+      } else {
+        tmp = false;
+      }
+      if (tmp) {
+        tmp$ret$0 = false;
+        break $l$block_0;
+      }
+      var _iterator__ex2g4s = tmp0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+        var element = _iterator__ex2g4s.next_20eer_k$();
+        if (element.inGoal_1 && !element.lost_1) {
+          tmp$ret$0 = true;
+          break $l$block_0;
+        }
+      }
+      tmp$ret$0 = false;
+    }
+    return tmp$ret$0;
+  };
+  protoOf(MWorld).step_mj6i9w_k$ = function () {
+    this.t_1 = this.t_1 + 0.004166666666666667;
+    var _iterator__ex2g4s = this.marbles_1.iterator_jk1svi_k$();
+    $l$loop: while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var m = _iterator__ex2g4s.next_20eer_k$();
+      if (m.lost_1)
+        continue $l$loop;
+      m.vy_1 = m.vy_1 + 1100.0 * 0.004166666666666667;
+      m.vx_1 = m.vx_1 * 0.9995;
+      m.vy_1 = m.vy_1 * 0.9995;
+      var tmp0 = m.vx_1;
+      // Inline function 'kotlin.math.hypot' call
+      var y = m.vy_1;
+      var sp = hypot(tmp0, y);
+      if (sp > 1400) {
+        m.vx_1 = m.vx_1 * (1400 / sp);
+        m.vy_1 = m.vy_1 * (1400 / sp);
+      }
+      m.x_1 = m.x_1 + m.vx_1 * 0.004166666666666667;
+      m.y_1 = m.y_1 + m.vy_1 * 0.004166666666666667;
+      var touched = false;
+      var _iterator__ex2g4s_0 = this.statics_1.iterator_jk1svi_k$();
+      $l$loop_0: while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+        var s = _iterator__ex2g4s_0.next_20eer_k$();
+        var tmp0_elvis_lhs = collide(this, m, s.ax_1, s.ay_1, s.bx_1, s.by_1, s.rad_1, s.e_1, 0.004);
+        var tmp;
+        if (tmp0_elvis_lhs == null) {
+          continue $l$loop_0;
+        } else {
+          tmp = tmp0_elvis_lhs;
+        }
+        var r = tmp;
+        touched = true;
+        var tmp2 = this.hit_1;
+        // Inline function 'kotlin.collections.plusAssign' call
+        var element = s.piece_1;
+        tmp2.add_utx5q5_k$(element);
+        if (s.kind_1 === 'tramp' && r[2] < -30) {
+          var vn2 = m.vx_1 * r[0] + m.vy_1 * r[1];
+          // Inline function 'kotlin.math.abs' call
+          var x = r[2];
+          // Inline function 'kotlin.math.max' call
+          var a = Math.abs(x) * 0.95;
+          var want = Math.max(a, 560.0);
+          if (vn2 < want) {
+            m.vx_1 = m.vx_1 + (want - vn2) * r[0];
+            m.vy_1 = m.vy_1 + (want - vn2) * r[1];
+          }
+          this.tramps_1 = this.tramps_1 + 1 | 0;
+        }
+      }
+      if (touched)
+        m.air_1 = 0.0;
+      else {
+        m.air_1 = m.air_1 + 0.004166666666666667;
+      }
+      var _iterator__ex2g4s_1 = this.goals_1.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_1.hasNext_bitz1p_k$()) {
+        var g = _iterator__ex2g4s_1.next_20eer_k$();
+        if (m.x_1 > g.x1__1 && m.x_1 < g.x2__1 && m.y_1 > g.y1__1 && m.y_1 < g.y2__1 && !m.inGoal_1) {
+          m.inGoal_1 = true;
+          m.goalT_1 = this.t_1;
+        }
+      }
+      var wPx = 9 * 45.0;
+      var hPx = 9 * 45.0;
+      if (m.y_1 > hPx + 60 || m.x_1 < -60 || m.x_1 > wPx + 60)
+        m.lost_1 = true;
+    }
+  };
+  function marbleSolves(pieces) {
+    _init_properties_Marble_kt__ndbevx();
+    var w = new MWorld(pieces);
+    w.spawnStarts_h8hk2k_k$();
+    while (w.t_1 < 16) {
+      w.step_mj6i9w_k$();
+      if (w.get_wonNow_lh27hl_k$())
+        return true;
+    }
+    return false;
+  }
+  var properties_initialized_Marble_kt_gjl4bl;
+  function _init_properties_Marble_kt__ndbevx() {
+    if (!properties_initialized_Marble_kt_gjl4bl) {
+      properties_initialized_Marble_kt_gjl4bl = true;
+      var tmp = to('start', new MPieceDef(1, 1, listOf_0([new MSeg(0.06, 0.08, 0.06, 0.62), new MSeg(0.06, 0.62, 1.0, 0.86)]), to(0.32, 0.62)));
+      var tmp_0 = to('ramp', new MPieceDef(1, 1, listOf(new MSeg(0.0, 0.15, 1.0, 0.85))));
+      var tmp_1 = to('ramp2', new MPieceDef(2, 1, listOf(new MSeg(0.0, 0.2, 2.0, 0.8))));
+      var tmp_2 = to('flat', new MPieceDef(1, 1, listOf(new MSeg(0.0, 0.55, 1.0, 0.62))));
+      var tmp_3 = to('uturn', new MPieceDef(1, 1, arcSegs(0.22, 0.5, 0.46, -80.0, 80.0, 7)));
+      var tmp_4 = to('funnel', new MPieceDef(2, 1, listOf_0([new MSeg(0.0, 0.05, 0.72, 0.8), new MSeg(2.0, 0.05, 1.28, 0.8)])));
+      var tmp_5 = to('tramp', new MPieceDef(1, 1, listOf(new MSeg(0.08, 0.66, 0.92, 0.84, 'tramp'))));
+      var tmp_6 = to('wall', new MPieceDef(1, 1, listOf(new MSeg(0.5, 0.02, 0.5, 0.98))));
+      var tmp_7 = to('pin', new MPieceDef(1, 1, listOf(new MSeg(0.5, 0.5, 0.5, 0.5, 'pin'))));
+      var tmp_8 = listOf_0([new MSeg(0.08, 0.12, 0.2, 0.95), new MSeg(0.2, 0.95, 1.8, 0.95), new MSeg(1.8, 0.95, 1.92, 0.12)]);
+      // Inline function 'kotlin.doubleArrayOf' call
+      var tmp$ret$0 = new Float64Array([0.2, 0.35, 1.8, 0.98]);
+      MPIECES = mapOf([tmp, tmp_0, tmp_1, tmp_2, tmp_3, tmp_4, tmp_5, tmp_6, tmp_7, to('goal', new MPieceDef(2, 1, tmp_8, VOID, tmp$ret$0))]);
+    }
+  }
+  function get_MCODE() {
+    _init_properties_MarbleLevels_kt__rwgy8k();
+    return MCODE;
+  }
+  var MCODE;
+  function get_MARBLE_PUZZLES() {
+    _init_properties_MarbleLevels_kt__rwgy8k();
+    var tmp0 = MARBLE_PUZZLES$delegate;
+    // Inline function 'kotlin.getValue' call
+    MARBLE_PUZZLES$factory();
+    return tmp0.get_value_j01efc_k$();
+  }
+  var MARBLE_PUZZLES$delegate;
+  function MarblePuzzle(level, rows, hint, fixed, inv, sol, index) {
+    this.level_1 = level;
+    this.rows_1 = rows;
+    this.hint_1 = hint;
+    this.fixed_1 = fixed;
+    this.inv_1 = inv;
+    this.sol_1 = sol;
+    this.index_1 = index;
+  }
+  protoOf(MarblePuzzle).get_level_ium7h7_k$ = function () {
+    return this.level_1;
+  };
+  protoOf(MarblePuzzle).get_rows_wott7m_k$ = function () {
+    return this.rows_1;
+  };
+  protoOf(MarblePuzzle).get_hint_wonaog_k$ = function () {
+    return this.hint_1;
+  };
+  protoOf(MarblePuzzle).get_fixed_ire1cb_k$ = function () {
+    return this.fixed_1;
+  };
+  protoOf(MarblePuzzle).get_inv_18j3i0_k$ = function () {
+    return this.inv_1;
+  };
+  protoOf(MarblePuzzle).get_sol_18iw2h_k$ = function () {
+    return this.sol_1;
+  };
+  protoOf(MarblePuzzle).get_index_it478p_k$ = function () {
+    return this.index_1;
+  };
+  function piece(s) {
+    _init_properties_MarbleLevels_kt__rwgy8k();
+    var t = getValue(get_MCODE(), new Char(charSequenceGet(s, 0)));
+    // Inline function 'kotlin.text.substring' call
+    // Inline function 'kotlin.js.asDynamic' call
+    var tmp$ret$1 = s.substring(1);
+    var p = split(tmp$ret$1, [',']);
+    return new MPiece(t, toInt(p.get_c1px32_k$(0)), toInt(p.get_c1px32_k$(1)), p.get_c1px32_k$(2) === '-' ? -1 : 1);
+  }
+  function MarbleRound(lang, prompt, puzzle) {
+    this.lang_1 = lang;
+    this.prompt_1 = prompt;
+    this.puzzle_1 = puzzle;
+  }
+  protoOf(MarbleRound).get_lang_wopoon_k$ = function () {
+    return this.lang_1;
+  };
+  protoOf(MarbleRound).get_prompt_i7fii5_k$ = function () {
+    return this.prompt_1;
+  };
+  protoOf(MarbleRound).get_puzzle_i9a6o7_k$ = function () {
+    return this.puzzle_1;
+  };
+  protoOf(MarbleRound).get_autoSpeak_z861qe_k$ = function () {
+    return false;
+  };
+  protoOf(MarbleRound).get_doneDelayMs_jxwjb6_k$ = function () {
+    return new Long(2200, 0);
+  };
+  protoOf(MarbleRound).get_key_18j28a_k$ = function () {
+    return 'marble' + this.puzzle_1.index_1;
+  };
+  protoOf(MarbleRound).component1_7eebsc_k$ = function () {
+    return this.lang_1;
+  };
+  protoOf(MarbleRound).component2_7eebsb_k$ = function () {
+    return this.prompt_1;
+  };
+  protoOf(MarbleRound).component3_7eebsa_k$ = function () {
+    return this.puzzle_1;
+  };
+  protoOf(MarbleRound).copy_surrld_k$ = function (lang, prompt, puzzle) {
+    return new MarbleRound(lang, prompt, puzzle);
+  };
+  protoOf(MarbleRound).copy$default_cawh8c_k$ = function (lang, prompt, puzzle, $super) {
+    lang = lang === VOID ? this.lang_1 : lang;
+    prompt = prompt === VOID ? this.prompt_1 : prompt;
+    puzzle = puzzle === VOID ? this.puzzle_1 : puzzle;
+    return $super === VOID ? this.copy_surrld_k$(lang, prompt, puzzle) : $super.copy_surrld_k$.call(this, lang, prompt, puzzle);
+  };
+  protoOf(MarbleRound).toString = function () {
+    return 'MarbleRound(lang=' + this.lang_1.toString() + ', prompt=' + this.prompt_1 + ', puzzle=' + toString_1(this.puzzle_1) + ')';
+  };
+  protoOf(MarbleRound).hashCode = function () {
+    var result = this.lang_1.hashCode();
+    result = imul(result, 31) + getStringHashCode(this.prompt_1) | 0;
+    result = imul(result, 31) + hashCode(this.puzzle_1) | 0;
+    return result;
+  };
+  protoOf(MarbleRound).equals = function (other) {
+    if (this === other)
+      return true;
+    if (!(other instanceof MarbleRound))
+      return false;
+    var tmp0_other_with_cast = other instanceof MarbleRound ? other : THROW_CCE();
+    if (!this.lang_1.equals(tmp0_other_with_cast.lang_1))
+      return false;
+    if (!(this.prompt_1 === tmp0_other_with_cast.prompt_1))
+      return false;
+    if (!equals(this.puzzle_1, tmp0_other_with_cast.puzzle_1))
+      return false;
+    return true;
+  };
+  function makeMarble(lang, level) {
+    _init_properties_MarbleLevels_kt__rwgy8k();
+    var l = coerceIn(level, 0, 8);
+    var prompt = t(lang, 'H\xFAzd a darabokat a p\xE1ly\xE1ra, hogy a goly\xF3 a kos\xE1rba guruljon! Ha r\xE1koppintasz egy darabra, megfordul. Azt\xE1n nyomd meg a z\xF6ld gombot!', 'Zieh die Teile auf die Bahn, damit die Kugel in den Korb rollt! Tippst du auf ein Teil, dreht es sich um. Dann dr\xFCck den gr\xFCnen Knopf!', 'Drag the pieces onto the track so the marble rolls into the basket! Tap a piece to turn it around. Then press the green button!');
+    // Inline function 'kotlin.collections.filter' call
+    var tmp0 = get_MARBLE_PUZZLES();
+    // Inline function 'kotlin.collections.filterTo' call
+    var destination = ArrayList_init_$Create$();
+    var _iterator__ex2g4s = tmp0.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var element = _iterator__ex2g4s.next_20eer_k$();
+      if (element.level_1 === l) {
+        destination.add_utx5q5_k$(element);
+      }
+    }
+    // Inline function 'kotlin.collections.random' call
+    var tmp$ret$3 = random_0(destination, Default_getInstance());
+    return new MarbleRound(lang, prompt, tmp$ret$3);
+  }
+  function get_MARBLE_DATA() {
+    return MARBLE_DATA;
+  }
+  var MARBLE_DATA;
+  function MARBLE_PUZZLES$delegate$lambda() {
+    _init_properties_MarbleLevels_kt__rwgy8k();
+    // Inline function 'kotlin.text.trim' call
+    var this_0 = '\n0|6|1|S2,0,+ F3,1,+ G5,3,+|R+|R4,2,+\n0|6|1|S0,1,+ R1,2,+ G0,4,+|L-|L2,3,-\n0|6|1|S2,0,+ F3,2,+ G3,4,+|R+|R5,3,+\n0|7|1|S7,1,- R4,4,- G2,5,+|R-|R6,2,-\n0|6|1|S2,1,+ R4,3,+ G5,4,+|R+|R3,2,+\n0|6|1|S5,1,+ F5,3,- G3,4,+|R-|R6,2,-\n0|6|1|S3,0,+ F4,1,+ G3,3,+|R-|R5,2,-\n0|7|1|S5,1,- F4,3,- G4,5,+|R+|R3,4,+\n0|6|1|S0,1,+ R1,2,- G1,4,+|R+|R0,3,+\n0|6|1|S3,0,+ R5,2,+ G6,3,+|R+|R4,1,+\n0|6|1|S5,0,- L4,1,- G0,3,+|F-|F3,2,-\n0|6|1|S0,1,+ R2,3,+ G3,4,+|R+|R1,2,+\n0|6|1|S6,1,- R5,2,+ G7,4,+|L+|L5,3,+\n0|6|1|S4,0,+ F5,1,+ G7,3,+|R+|R6,2,+\n0|6|1|S1,0,+ L1,1,+ G6,4,+|L+|L3,3,+\n0|6|1|S7,0,- F6,2,- G6,4,+|R+|R5,3,+\n1|7|0|S1,0,+ L1,1,+ F4,3,+ G7,5,+|F+|F6,4,+\n1|7|0|S7,1,- R6,2,- R2,4,- G0,5,+|L-|L4,3,-\n1|8|0|S6,1,+ R7,3,+ R7,6,+ G5,6,+|R-|R8,4,-\n1|7|0|S2,1,+ F3,2,+ F5,4,+ G7,5,+|R+|R4,3,+\n1|7|0|S0,0,+ L1,2,+ R2,4,- G0,5,+|L-|L3,3,-\n1|8|0|S5,0,+ L4,3,- L2,5,+ G4,6,+|L-|L6,2,-\n1|8|0|S2,1,+ F3,3,+ F4,4,+ G7,6,+|R+|R6,5,+\n1|8|0|S1,1,+ R2,2,+ L3,3,+ G4,6,+|R-|R6,5,-\n1|9|0|S7,1,- F6,3,- L2,6,+ G0,7,+|L-|L4,4,-\n1|7|0|S0,1,+ F2,4,+ R3,4,+ G4,5,+|F+|F1,2,+\n1|8|0|S2,1,+ R3,3,+ L4,4,- G4,6,+|R-|R6,5,-\n1|6|0|S1,0,+ R3,2,+ F4,3,+ G6,4,+|F+|F2,1,+\n1|8|0|S7,1,- L5,3,- R5,5,+ G6,6,+|L+|L3,4,+\n1|7|0|S0,0,+ L2,3,+ L4,4,+ G7,5,+|R+|R1,1,+\n1|7|0|S1,0,+ R2,2,- R1,3,- G1,5,+|R+|R0,4,+\n1|8|0|S0,1,+ L3,4,+ R6,5,+ G7,6,+|L+|L1,3,+\n2|6|0|S5,0,- F3,2,- G2,4,+|L- R+|L4,1,- R1,3,+\n2|7|0|S2,0,+ R6,4,+ G7,5,+|R+ R+|R4,2,+ R3,1,+\n2|7|0|S7,0,- F6,2,- G1,5,+|F- F-|F5,3,- F3,4,-\n2|6|0|S6,0,- F5,1,- G0,4,+|R- F-|R4,2,- F3,3,-\n2|7|0|S2,1,+ R6,4,+ G7,5,+|L+ R+|L3,3,+ R3,2,+\n2|7|0|S6,1,- R4,3,- G0,5,+|F- L-|F3,4,- L5,2,-\n2|7|0|S6,0,- R5,1,- G3,5,+|L+ L-|L3,3,+ L5,4,-\n2|6|0|S0,0,+ R4,3,- G5,4,+|R+ L+|R1,1,+ L2,2,+\n2|7|0|S6,1,+ R7,2,+ G5,5,+|R- R-|R7,4,- R8,3,-\n2|7|0|S3,1,+ R5,3,+ G4,5,+|R+ R-|R4,2,+ R6,4,-\n2|9|0|S5,1,- R2,5,- G1,7,+|R- R-|R4,3,- R0,6,-\n2|8|0|S0,0,+ R5,4,+ G6,6,+|L+ L+|L2,2,+ L0,1,+\n2|7|0|S1,1,+ R5,4,+ G6,5,+|F+ R+|F3,3,+ R2,2,+\n2|7|0|S7,1,- F5,3,- G1,5,+|L- F-|L6,2,- F3,4,-\n2|7|0|S1,1,+ L4,4,+ G7,5,+|R+ R+|R3,3,+ R2,2,+\n2|8|0|S5,1,- L2,3,- G1,6,+|R- R+|R4,2,- R0,5,+\n3|7|0|S7,1,- U6,2,- G7,5,+|F+ U+|F6,4,+ U5,3,-\n3|6|0|S1,0,+ F3,2,+ G6,4,+|U+ F+|U2,1,+ F4,3,+\n3|7|0|S1,1,+ T3,3,+ G4,5,+|U+ F+|U3,4,- F2,2,+\n3|8|0|S7,1,- T6,2,- G3,6,+|F+ U+|F6,4,- U5,5,-\n3|6|0|S1,0,+ R4,3,+ G5,4,+|F+ U+|F3,2,+ U2,1,+\n3|9|0|S2,0,+ L1,4,- G0,7,+|L+ T+|L3,2,- T0,5,-\n3|6|0|S1,0,+ U3,2,+ G3,4,+|U+ U+|U2,3,- U2,1,+\n3|8|0|S1,0,+ L4,5,- G6,6,+|R+ F+|R4,4,+ F2,2,+\n3|8|0|S2,1,+ U3,3,+ G7,6,+|R+ L+|R4,4,+ L5,5,-\n3|6|0|S0,1,+ R3,4,- G4,4,+|R+ U+|R1,2,+ U2,3,+\n3|8|0|S5,0,- F5,4,+ G5,6,+|U+ L+|U7,5,+ L3,2,+\n3|7|0|S0,1,+ L3,4,+ G5,5,+|U+ F+|U1,2,+ F2,3,+\n3|8|0|S1,1,+ T3,4,+ G5,6,+|F+ R+|F4,5,+ R2,3,+\n3|7|0|S4,0,+ U5,2,+ G7,5,+|T+ L+|T7,4,+ L5,3,+\n3|8|0|S6,1,- U5,3,- G0,6,+|L+ L+|L2,5,- L4,4,-\n3|9|0|S0,1,+ U3,5,+ G3,7,+|T+ R+|T3,6,+ R1,3,+\n4|9|0|S5,1,- U4,2,- T5,4,+ G3,7,+|L+ L+ U+|L5,6,- L3,3,+\n4|8|0|S2,1,+ T2,2,+ U6,6,+ G7,6,+|R+ U+ U+|R3,4,+ U4,5,+\n4|9|0|S6,0,- U4,4,- F5,6,+ G7,7,+|U+ T+ U+|U5,2,- T4,3,-\n4|7|0|S5,0,+ U6,1,+ L6,2,+ G5,5,+|L+ T+ T+|L7,4,- T7,3,+\n4|8|0|S3,0,+ U4,2,+ F4,4,- G0,6,+|L+ R+ R+|L2,5,- R5,3,-\n4|8|0|S2,1,+ T4,3,+ U6,5,+ G7,6,+|L+ R+ U+|L4,4,+ R3,2,+\n4|9|0|S6,0,- U5,2,- L4,3,- G1,7,+|T+ U+ L+|T2,4,- U3,6,+\n4|8|0|S7,0,- U3,4,- U2,4,- G2,6,+|T+ L+ F+|T2,5,+ L5,2,-\n4|9|0|S3,1,+ F4,3,+ R4,5,- G0,7,+|U+ L+ F+|U3,6,- L5,4,-\n4|9|0|S5,0,- L3,2,- U2,5,- G1,7,+|T+ U+ T+|T2,3,- U3,6,+\n4|8|0|S3,1,+ T7,4,+ T7,5,- G7,6,+|L+ L+ U+|L5,3,+ L3,2,+\n4|8|0|S1,0,+ R2,2,+ R3,3,- G4,6,+|R+ F+ U+|R2,4,+ F3,5,+\n4|7|0|S5,0,- R4,1,- T3,2,- G5,5,+|F+ U+ U+|F4,4,+ U3,3,-\n4|8|0|S3,0,+ U4,1,+ T4,3,- G6,6,+|T+ R+ L+|T4,2,+ R5,5,+\n4|9|0|S4,1,+ T4,2,+ T4,3,+ G0,8,+|L+ R+ T+|L2,7,+ R4,5,-\n4|9|0|S3,1,+ L5,3,+ L7,6,- G5,7,+|T+ L+ R+|T7,4,+ L3,2,+\n5|7|0|S0,0,+ F3,3,+ G6,5,+|U+ F+ F+ U+|U1,1,+ F5,4,+ F2,2,+\n5|9|0|S1,0,+ U2,6,- G0,7,+|T+ U+ U+ R+|T2,3,+ U3,5,+ U2,2,+\n5|8|0|S0,1,+ U4,5,+ G6,6,+|F+ R+ F+ U+|F2,3,+ R3,4,+ F1,2,+\n5|6|0|S3,0,+ R6,3,- G7,4,+|R+ U+ U+ R+|R4,1,+ U5,2,+ U7,3,+\n5|9|0|S6,1,- R5,4,+ G3,8,+|T+ T+ L+ U+|T5,5,+ T4,2,- L5,7,-\n5|8|0|S0,0,+ R1,3,- G1,6,+|T+ T+ U+ R+|T0,1,+ T0,4,+ U0,6,-\n5|9|0|S0,0,+ F2,3,+ G2,7,+|U+ T+ U+ R+|U1,2,+ T3,4,+ U4,6,+\n5|8|0|S1,0,+ T2,2,+ G5,6,+|U+ R+ F+ T+|U2,1,+ R2,4,+ F3,5,+\n5|8|0|S2,1,+ T3,2,+ G6,6,+|F+ U+ F+ U+|F5,5,+ U3,4,- F4,4,+\n5|9|0|S7,0,- T1,5,- G3,7,+|F+ F+ R+ T+|F2,6,+ F4,4,- R6,2,-\n5|9|0|S1,0,+ T6,6,- G6,7,+|F+ T+ R+ T+|F4,4,+ T6,5,+ R2,2,+\n5|9|0|S0,1,+ R4,5,+ G7,7,+|F+ F+ F+ F+|F1,3,+ F5,6,+ F2,4,+\n5|9|0|S5,1,- F4,3,- G0,7,+|T+ T+ F+ L+|T2,5,+ T2,4,- F2,6,-\n5|9|0|S6,1,- U2,4,- G0,7,+|R+ L+ U+ R+|R2,6,- L4,3,- U3,5,+\n5|9|0|S1,1,+ T5,4,+ G6,7,+|L+ U+ R+ U+|L3,3,+ U5,5,- R2,2,+\n5|9|0|S3,1,+ U7,5,+ G7,7,+|F+ U+ U+ T+|F5,3,+ U6,6,- U4,2,+\n6|9|0|S4,0,+ L4,1,+ J7,3,- G5,7,+ P1,1,+|R+ R+ J+ L+|R5,4,+ R4,6,+ J3,5,+\n6|9|0|S1,1,+ T7,3,+ T7,4,+ G4,8,+ P0,7,+|J+ L+ R+ R+|J2,2,+ L6,7,- R8,6,-\n6|9|0|S3,1,+ U4,2,+ T2,6,- G2,7,+ W8,2,+|R+ J+ R+ U+|R5,3,+ J5,5,+ R6,4,-\n6|9|0|S3,0,+ U4,2,+ R4,6,- G3,8,+ P6,4,+|T+ T+ U+ J+|T3,4,- T3,7,+ U5,3,+\n6|9|0|S0,0,+ U4,3,+ J4,5,+ G4,4,+ P6,7,+|J+ U+ L+ U+|J1,1,- U5,3,+ L1,2,+\n6|8|0|S2,1,+ U4,3,+ U5,5,+ G4,6,+ P0,4,+|U+ L+ U+ U+|U4,4,- L2,2,+ U5,3,+\n6|9|0|S3,0,+ L4,2,+ U7,4,+ G4,8,+ W3,4,+|U+ J+ T+ J+|U8,4,+ J7,7,+ T7,5,-\n6|8|0|S3,0,+ R5,2,+ U5,4,- G4,6,+ P0,3,+|T+ L+ U+ L+|T4,5,- L6,3,- U4,1,+\n6|8|0|S1,0,+ U2,1,+ T2,3,- G0,6,+ P3,6,+|J+ T+ U+ R+|J2,5,+ T2,2,+ U3,5,+\n6|9|0|S6,0,- L4,2,+ T7,4,+ G4,8,+ P3,4,+|J+ L+ R+ U+|J8,6,- L5,3,+ R3,7,+\n6|8|0|S5,1,- U2,4,- U2,5,+ G1,6,+ P0,3,+|R+ U+ R+ T+|R3,3,- U1,4,- R4,2,-\n6|9|0|S2,0,+ L3,2,+ R6,3,+ G5,7,+ W8,1,+|L+ T+ J+ R+|L7,6,- T7,4,+ J3,1,-\n6|9|0|S1,1,+ U5,4,+ U5,6,+ G7,8,+ P6,2,+|R+ U+ L+ U+|R4,5,+ U6,7,+ L2,3,+\n6|9|0|S7,0,- U5,2,- L5,6,- G7,7,+ P2,5,+|T+ U+ U+ R+|T5,3,+ U5,5,- U6,1,-\n6|9|0|S2,0,+ L2,1,+ R2,7,- G0,8,+ W5,7,+|R+ J+ T+ T+|R3,6,- J5,3,- T3,4,-\n6|9|0|S7,0,- U4,3,- T3,4,- G0,7,+ W8,5,+|U+ J+ L+ R+|U4,6,+ J3,6,+ L6,1,-\n7|9|0|S3,0,+ T2,6,- T0,7,- G0,8,+ P5,6,+ P1,1,+|J+ L+ L+ J+|J4,1,- L5,3,- L4,4,-\n7|9|0|S2,1,+ U6,5,+ U8,7,- G7,8,+ W1,2,+ W6,2,+|R+ T+ R+ U+|R3,2,+ T7,6,+ R4,3,+\n7|9|0|S7,1,- T1,4,- J1,6,- G7,7,+ W1,7,+ P8,2,+|U+ J+ U+ J+|U3,4,- J6,3,+ U1,5,-\n7|8|0|S1,0,+ R3,2,+ U4,3,+ G4,6,+ W7,2,+ P2,4,+|T+ U+ R+ U+|T5,4,+ U2,1,+ R6,5,-\n7|9|0|S5,0,- L3,4,+ U6,5,+ G3,7,+ P6,7,+ W2,5,+|U+ J+ L+ L+|U5,6,- J4,1,+ L2,3,+\n7|9|0|S6,1,- U5,3,- J3,7,+ G0,8,+ W3,2,+ P1,3,+|U+ L+ U+ J+|U4,6,- L5,5,- U4,4,-\n7|8|0|S4,1,+ U5,3,+ R3,4,+ G0,6,+ P3,5,+ P2,2,+|T+ J+ R+ L+|T4,2,+ J4,4,+ R2,5,-\n7|9|0|S6,1,+ R7,2,- L3,5,- G2,8,+ W5,7,+ P8,6,+|J+ U+ T+ U+|J6,3,+ U5,4,- T2,6,-\n7|9|0|S5,0,- T3,3,+ J4,5,- G6,8,+ P0,6,+ P0,3,+|T+ R+ T+ U+|T3,1,- R3,4,+ T6,7,+\n7|9|0|S0,0,+ U1,2,+ U1,6,+ G1,8,+ P5,5,+ W2,5,+|U+ R+ T+ T+|U2,3,+ R0,7,+ T0,4,-\n7|9|0|S6,0,- L5,3,+ U6,5,- G3,7,+ W2,2,+ W3,4,+|R+ T+ L+ R+|R5,6,- T5,1,- L7,4,-\n7|7|0|S3,0,+ U4,1,+ T7,4,+ G7,5,+ P0,4,+ P2,2,+|U+ T+ J+ U+|U4,4,- T4,2,+ J5,4,-\n7|9|0|S1,0,+ R3,3,- T1,5,- G5,7,+ W8,5,+ P7,1,+|R+ U+ J+ U+|R2,2,+ U1,6,- J2,6,-\n7|9|0|S1,0,+ R4,3,+ T5,4,+ G7,7,+ P0,5,+ W2,7,+|U+ R+ R+ U+|U2,1,+ R6,6,+ R3,2,+\n7|8|0|S0,0,+ U2,2,+ U5,5,- G5,6,+ P3,5,+ P8,2,+|R+ R+ T+ L+|R3,3,- R1,1,+ T5,4,+\n7|9|0|S1,0,+ U2,2,+ U2,6,+ G1,7,+ W7,7,+ W4,3,+|U+ T+ U+ L+|U3,3,+ T1,4,- U1,6,-\n8|9|0|S6,0,- T3,3,- U3,4,- L2,6,- G0,7,+ P6,7,+ W7,3,+|U+ J+ R+ T+ U+|U4,4,- J4,5,+ R5,2,-\n8|9|0|S2,0,+ U4,4,+ U5,4,+ T5,6,+ G5,7,+ P7,5,+ P1,6,+|R+ U+ T+ J+ U+|R4,5,+ U3,3,- T3,1,+\n8|9|0|S6,0,+ U7,2,+ L6,3,- T6,5,+ G7,8,+ W8,7,+ P3,3,+|L+ U+ T+ U+ J+|L4,4,+ U6,7,- T6,1,+\n8|9|0|S5,0,+ T5,1,+ U1,5,+ U2,6,+ G1,7,+ W5,7,+ P3,3,+|J+ U+ U+ J+ U+|J5,4,- U6,3,+ U0,5,-\n8|9|0|S7,0,- L5,2,- U4,3,- U1,6,+ G0,7,+ P6,5,+ P6,4,+|L+ U+ U+ U+ U+|L2,4,- U0,5,- U6,1,-\n8|9|0|S6,0,- R5,1,- U1,3,- R4,6,- G7,8,+ W8,3,+ P1,1,+|J+ L+ R+ J+ R+|J3,7,+ L3,2,- R2,4,+\n8|9|0|S5,0,- U4,2,- R2,5,- R1,6,- G1,8,+ P7,6,+ P7,4,+|L+ U+ R+ L+ L+|L3,3,- U1,4,- R0,7,+\n8|9|0|S6,0,- U5,1,- R5,3,+ T4,7,- G4,8,+ P2,7,+ W4,4,+|R+ T+ U+ J+ R+|R6,5,- T5,4,+ U4,2,-\n8|9|0|S2,1,+ L2,2,- L0,3,+ T2,4,+ G6,8,+ P5,2,+ P5,1,+|R+ U+ L+ U+ R+|R3,6,+ U2,5,- L3,7,+\n8|8|0|S2,0,+ L5,3,- J7,4,- U3,5,- G2,6,+ P8,6,+ P0,4,+|R+ U+ R+ J+ U+|R4,2,+ U2,5,- R3,1,+\n8|9|0|S3,0,+ L4,2,+ U4,5,- U2,6,- G7,8,+ W2,1,+ P8,6,+|J+ R+ R+ T+ J+|J3,7,+ R5,4,- R6,3,-\n8|9|0|S3,1,+ J4,3,- L4,6,- L3,7,+ G0,7,+ P5,7,+ W1,2,+|J+ R+ T+ L+ U+|J8,6,- R7,4,+ T7,5,+\n8|9|0|S6,0,- R5,2,- T3,3,- U3,4,- G0,7,+ P0,1,+ P8,1,+|R+ U+ J+ R+ R+|R2,6,- U4,5,+ J3,6,+\n8|9|0|S1,0,+ U6,3,- J5,4,+ U2,5,- G4,6,+ P4,7,+ P0,2,+|L+ J+ L+ T+ U+|L7,2,- J2,1,+ L2,6,-\n8|9|0|S1,0,+ U2,2,+ U1,3,- T6,5,+ G6,7,+ P1,6,+ P5,6,+|U+ J+ J+ U+ U+|U2,4,+ J1,4,+ J3,3,-\n8|9|0|S3,1,+ U4,2,+ L4,4,+ L6,5,- G2,8,+ W0,5,+ P8,2,+|R+ U+ U+ R+ R+|R5,3,- U5,6,- U4,7,-\n';
+    var tmp$ret$0 = toString_1(trim_1(isCharSequence(this_0) ? this_0 : THROW_CCE()));
+    // Inline function 'kotlin.collections.mapIndexed' call
+    var this_1 = lines(tmp$ret$0);
+    // Inline function 'kotlin.collections.mapIndexedTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_1, 10));
+    var index = 0;
+    var _iterator__ex2g4s = this_1.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var _unary__edvuaz = index;
+      index = _unary__edvuaz + 1 | 0;
+      var i = checkIndexOverflow(_unary__edvuaz);
+      var f = split(item, ['|']);
+      var tmp = toInt(f.get_c1px32_k$(0));
+      var tmp_0 = toInt(f.get_c1px32_k$(1));
+      var tmp_1 = f.get_c1px32_k$(2) === '1';
+      // Inline function 'kotlin.collections.filter' call
+      var tmp0 = split(f.get_c1px32_k$(3), [' ']);
+      // Inline function 'kotlin.collections.filterTo' call
+      var destination_0 = ArrayList_init_$Create$();
+      var _iterator__ex2g4s_0 = tmp0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+        var element = _iterator__ex2g4s_0.next_20eer_k$();
+        // Inline function 'kotlin.text.isNotBlank' call
+        if (!isBlank(element)) {
+          destination_0.add_utx5q5_k$(element);
+        }
+      }
+      // Inline function 'kotlin.collections.map' call
+      // Inline function 'kotlin.collections.mapTo' call
+      var destination_1 = ArrayList_init_$Create$_0(collectionSizeOrDefault(destination_0, 10));
+      var _iterator__ex2g4s_1 = destination_0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_1.hasNext_bitz1p_k$()) {
+        var item_0 = _iterator__ex2g4s_1.next_20eer_k$();
+        var tmp$ret$5 = piece(item_0);
+        destination_1.add_utx5q5_k$(tmp$ret$5);
+      }
+      var tmp_2 = destination_1;
+      // Inline function 'kotlin.collections.filter' call
+      var tmp0_0 = split(f.get_c1px32_k$(4), [' ']);
+      // Inline function 'kotlin.collections.filterTo' call
+      var destination_2 = ArrayList_init_$Create$();
+      var _iterator__ex2g4s_2 = tmp0_0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_2.hasNext_bitz1p_k$()) {
+        var element_0 = _iterator__ex2g4s_2.next_20eer_k$();
+        // Inline function 'kotlin.text.isNotBlank' call
+        if (!isBlank(element_0)) {
+          destination_2.add_utx5q5_k$(element_0);
+        }
+      }
+      // Inline function 'kotlin.collections.map' call
+      // Inline function 'kotlin.collections.mapTo' call
+      var destination_3 = ArrayList_init_$Create$_0(collectionSizeOrDefault(destination_2, 10));
+      var _iterator__ex2g4s_3 = destination_2.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_3.hasNext_bitz1p_k$()) {
+        var item_1 = _iterator__ex2g4s_3.next_20eer_k$();
+        var tmp$ret$12 = to(getValue(get_MCODE(), new Char(charSequenceGet(item_1, 0))), charSequenceGet(item_1, 1) === _Char___init__impl__6a9atx(45) ? -1 : 1);
+        destination_3.add_utx5q5_k$(tmp$ret$12);
+      }
+      var tmp_3 = destination_3;
+      // Inline function 'kotlin.collections.filter' call
+      var tmp0_1 = split(f.get_c1px32_k$(5), [' ']);
+      // Inline function 'kotlin.collections.filterTo' call
+      var destination_4 = ArrayList_init_$Create$();
+      var _iterator__ex2g4s_4 = tmp0_1.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_4.hasNext_bitz1p_k$()) {
+        var element_1 = _iterator__ex2g4s_4.next_20eer_k$();
+        // Inline function 'kotlin.text.isNotBlank' call
+        if (!isBlank(element_1)) {
+          destination_4.add_utx5q5_k$(element_1);
+        }
+      }
+      // Inline function 'kotlin.collections.map' call
+      // Inline function 'kotlin.collections.mapTo' call
+      var destination_5 = ArrayList_init_$Create$_0(collectionSizeOrDefault(destination_4, 10));
+      var _iterator__ex2g4s_5 = destination_4.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s_5.hasNext_bitz1p_k$()) {
+        var item_2 = _iterator__ex2g4s_5.next_20eer_k$();
+        var tmp$ret$19 = piece(item_2);
+        destination_5.add_utx5q5_k$(tmp$ret$19);
+      }
+      var tmp$ret$22 = new MarblePuzzle(tmp, tmp_0, tmp_1, tmp_2, tmp_3, destination_5, i);
+      destination.add_utx5q5_k$(tmp$ret$22);
+    }
+    return destination;
+  }
+  function MARBLE_PUZZLES$factory() {
+    return getPropertyCallableRef('MARBLE_PUZZLES', 0, KProperty0, function () {
+      return get_MARBLE_PUZZLES();
+    }, null);
+  }
+  var properties_initialized_MarbleLevels_kt_b17xou;
+  function _init_properties_MarbleLevels_kt__rwgy8k() {
+    if (!properties_initialized_MarbleLevels_kt_b17xou) {
+      properties_initialized_MarbleLevels_kt_b17xou = true;
+      MCODE = mapOf([to(new Char(_Char___init__impl__6a9atx(83)), 'start'), to(new Char(_Char___init__impl__6a9atx(82)), 'ramp'), to(new Char(_Char___init__impl__6a9atx(76)), 'ramp2'), to(new Char(_Char___init__impl__6a9atx(70)), 'flat'), to(new Char(_Char___init__impl__6a9atx(85)), 'uturn'), to(new Char(_Char___init__impl__6a9atx(84)), 'funnel'), to(new Char(_Char___init__impl__6a9atx(74)), 'tramp'), to(new Char(_Char___init__impl__6a9atx(87)), 'wall'), to(new Char(_Char___init__impl__6a9atx(80)), 'pin'), to(new Char(_Char___init__impl__6a9atx(71)), 'goal')]);
+      MARBLE_PUZZLES$delegate = lazy(MARBLE_PUZZLES$delegate$lambda);
     }
   }
   function Emoji(e, label) {
@@ -25933,24 +27277,24 @@ var logic = function (_) {
   function Letter(c) {
     this.c_1 = c;
   }
-  protoOf(Letter).get_c_r0y1fg_k$ = function () {
+  protoOf(Letter).get_c_1mhr5m_k$ = function () {
     return this.c_1;
   };
-  protoOf(Letter).component1_ry142e_k$ = function () {
+  protoOf(Letter).component1_7eebsc_k$ = function () {
     return this.c_1;
   };
-  protoOf(Letter).copy_y8rjc8_k$ = function (c) {
+  protoOf(Letter).copy_a35qlh_k$ = function (c) {
     return new Letter(c);
   };
-  protoOf(Letter).copy$default_phl8se_k$ = function (c, $super) {
+  protoOf(Letter).copy$default_rucx67_k$ = function (c, $super) {
     c = c === VOID ? this.c_1 : c;
-    return $super === VOID ? this.copy_y8rjc8_k$(c) : $super.copy_y8rjc8_k$.call(this, new Char(c));
+    return $super === VOID ? this.copy_a35qlh_k$(c) : $super.copy_a35qlh_k$.call(this, c);
   };
   protoOf(Letter).toString = function () {
-    return 'Letter(c=' + toString(this.c_1) + ')';
+    return 'Letter(c=' + this.c_1 + ')';
   };
   protoOf(Letter).hashCode = function () {
-    return Char__hashCode_impl_otmys(this.c_1);
+    return getStringHashCode(this.c_1);
   };
   protoOf(Letter).equals = function (other) {
     if (this === other)
@@ -26546,7 +27890,7 @@ var logic = function (_) {
       var tmp$ret$0 = item.emoji_1;
       destination.add_utx5q5_k$(tmp$ret$0);
     }
-    return joinToString_0(sorted(destination)) + this.size_1;
+    return joinToString_1(sorted(destination)) + this.size_1;
   };
   protoOf(MemoryRound).component1_7eebsc_k$ = function () {
     return this.lang_1;
@@ -26638,7 +27982,7 @@ var logic = function (_) {
     return false;
   };
   protoOf(MissingRound).get_key_18j28a_k$ = function () {
-    return joinToString_0(sorted(this.items_1)) + toString_1(this.missing_1);
+    return joinToString_1(sorted(this.items_1)) + toString_1(this.missing_1);
   };
   protoOf(MissingRound).component1_7eebsc_k$ = function () {
     return this.lang_1;
@@ -26736,7 +28080,7 @@ var logic = function (_) {
     return this.diffs_1;
   };
   protoOf(DiffRound).get_key_18j28a_k$ = function () {
-    return joinToString_0(this.a_1) + toString_1(this.diffs_1);
+    return joinToString_1(this.a_1) + toString_1(this.diffs_1);
   };
   protoOf(DiffRound).component1_7eebsc_k$ = function () {
     return this.lang_1;
@@ -27391,7 +28735,7 @@ var logic = function (_) {
     return this.spoken_1;
   };
   function build($this, lang, prompt, display, correct, others, spokenLang, speech) {
-    var all = shuffled(plus_1(listOf(correct), others));
+    var all = shuffled(plus_0(listOf(correct), others));
     // Inline function 'kotlin.collections.map' call
     // Inline function 'kotlin.collections.mapTo' call
     var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(all, 10));
@@ -27421,7 +28765,7 @@ var logic = function (_) {
   function choices($this, level) {
     return level === 0 ? 3 : 4;
   }
-  function count($this, lang, level, roundNo) {
+  function count_0($this, lang, level, roundNo) {
     // Inline function 'kotlin.collections.random' call
     var this_0 = get_countObjects();
     var obj = random_0(this_0, Default_getInstance());
@@ -27526,7 +28870,7 @@ var logic = function (_) {
       }
        while (!(element_0 === last_0));
     var rest = shuffled(destination_0);
-    var numbers = sorted(plus_0(take(plus_1(near, rest), n - 1 | 0), answer));
+    var numbers = sorted(plus_1(take(plus_0(near, rest), n - 1 | 0), answer));
     // Inline function 'kotlin.collections.map' call
     // Inline function 'kotlin.collections.mapTo' call
     var destination_1 = ArrayList_init_$Create$_0(collectionSizeOrDefault(numbers, 10));
@@ -27566,7 +28910,7 @@ var logic = function (_) {
         var element = inductionVariable;
         inductionVariable = inductionVariable + 1 | 0;
         var it = element;
-        if (abs_0(it - a | 0) >= minGap) {
+        if (abs_1(it - a | 0) >= minGap) {
           destination.add_utx5q5_k$(element);
         }
       }
@@ -27595,7 +28939,7 @@ var logic = function (_) {
         var _iterator__ex2g4s = words.iterator_jk1svi_k$();
         while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
           var element = _iterator__ex2g4s.next_20eer_k$();
-          if (!(element.get_letter_vbub4f_k$() === target.get_letter_vbub4f_k$())) {
+          if (!(element.letter_1 === target.letter_1)) {
             destination.add_utx5q5_k$(element);
           }
         }
@@ -27608,15 +28952,15 @@ var logic = function (_) {
         var _iterator__ex2g4s_0 = this_0.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
           var e = _iterator__ex2g4s_0.next_20eer_k$();
-          var key = new Char(e.get_letter_vbub4f_k$());
+          var key = e.letter_1;
           if (set.add_utx5q5_k$(key)) {
             list.add_utx5q5_k$(e);
           }
         }
 
         var others = take(list, n - 1 | 0);
-        var l = target.get_letter_vbub4f_k$();
-        var prompt = tf(lang, 'Melyik kezd\u0151dik ezzel a bet\u0171vel: {0}?', 'Was beginnt mit dem Buchstaben {0}?', 'Which one starts with the letter {0}?', [toString(l)]);
+        var l = target.letter_1;
+        var prompt = tf(lang, 'Melyik kezd\u0151dik ezzel a bet\u0171vel: {0}?', 'Was beginnt mit dem Buchstaben {0}?', 'Which one starts with the letter {0}?', [l]);
         var tmp_0 = new Big(new Letter(l));
         // Inline function 'kotlin.text.uppercase' call
 
@@ -27653,7 +28997,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_2 = words.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_2.hasNext_bitz1p_k$()) {
           var element_0 = _iterator__ex2g4s_2.next_20eer_k$();
-          if (!(element_0.get_letter_vbub4f_k$() === target_0.get_letter_vbub4f_k$())) {
+          if (!(element_0.letter_1 === target_0.letter_1)) {
             destination_1.add_utx5q5_k$(element_0);
           }
         }
@@ -27666,7 +29010,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_3 = this_1.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_3.hasNext_bitz1p_k$()) {
           var e_0 = _iterator__ex2g4s_3.next_20eer_k$();
-          var key_0 = new Char(e_0.get_letter_vbub4f_k$());
+          var key_0 = e_0.letter_1;
           if (set_0.add_utx5q5_k$(key_0)) {
             list_0.add_utx5q5_k$(e_0);
           }
@@ -27676,7 +29020,7 @@ var logic = function (_) {
         var w = target_0.text_1;
         var prompt_0 = tf(lang, 'Milyen bet\u0171vel kezd\u0151dik: {0}?', 'Mit welchem Buchstaben beginnt {0}?', 'Which letter does {0} start with?', [w]);
         var tmp_2 = new Big(new Emoji(target_0.emoji_1));
-        var tmp_3 = new Opt(new Letter(target_0.get_letter_vbub4f_k$()), toString(target_0.get_letter_vbub4f_k$()));
+        var tmp_3 = new Opt(new Letter(target_0.letter_1), toString_1(target_0.letter_1));
         // Inline function 'kotlin.collections.map' call
 
         // Inline function 'kotlin.collections.mapTo' call
@@ -27685,7 +29029,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_4 = others_0.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_4.hasNext_bitz1p_k$()) {
           var item_0 = _iterator__ex2g4s_4.next_20eer_k$();
-          var tmp$ret$19 = new Opt(new Letter(item_0.get_letter_vbub4f_k$()), toString(item_0.get_letter_vbub4f_k$()));
+          var tmp$ret$19 = new Opt(new Letter(item_0.letter_1), toString_1(item_0.letter_1));
           destination_2.add_utx5q5_k$(tmp$ret$19);
         }
 
@@ -27700,7 +29044,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_5 = words.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_5.hasNext_bitz1p_k$()) {
           var element_1 = _iterator__ex2g4s_5.next_20eer_k$();
-          var key_1 = new Char(element_1.get_letter_vbub4f_k$());
+          var key_1 = element_1.letter_1;
           // Inline function 'kotlin.collections.getOrPut' call
           var value = destination_3.get_wei43m_k$(key_1);
           var tmp_4;
@@ -27743,7 +29087,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_7 = words.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_7.hasNext_bitz1p_k$()) {
           var element_3 = _iterator__ex2g4s_7.next_20eer_k$();
-          if (!(element_3.get_letter_vbub4f_k$() === target_1.get_letter_vbub4f_k$())) {
+          if (!(element_3.letter_1 === target_1.letter_1)) {
             destination_5.add_utx5q5_k$(element_3);
           }
         }
@@ -27756,7 +29100,7 @@ var logic = function (_) {
         var _iterator__ex2g4s_8 = this_2.iterator_jk1svi_k$();
         while (_iterator__ex2g4s_8.hasNext_bitz1p_k$()) {
           var e_1 = _iterator__ex2g4s_8.next_20eer_k$();
-          var key_2 = new Char(e_1.get_letter_vbub4f_k$());
+          var key_2 = e_1.letter_1;
           if (set_1.add_utx5q5_k$(key_2)) {
             list_2.add_utx5q5_k$(e_1);
           }
@@ -27942,7 +29286,7 @@ var logic = function (_) {
     var seq = list;
     var answer = unit.get_c1px32_k$(len % unit.get_size_woubt6_k$() | 0);
     // Inline function 'kotlin.collections.filter' call
-    var tmp0 = distinct(plus_1(symbols, take(drop(pool, 3), 1)));
+    var tmp0 = distinct(plus_0(symbols, take(drop(pool, 3), 1)));
     // Inline function 'kotlin.collections.filterTo' call
     var destination_0 = ArrayList_init_$Create$();
     var _iterator__ex2g4s_0 = tmp0.iterator_jk1svi_k$();
@@ -27963,7 +29307,7 @@ var logic = function (_) {
       var tmp$ret$13 = new Emoji(item_0);
       destination_1.add_utx5q5_k$(tmp$ret$13);
     }
-    var tmp_0 = new Sequence_1(plus_0(destination_1, Question_getInstance()));
+    var tmp_0 = new Sequence_1(plus_1(destination_1, Question_getInstance()));
     var tmp_1 = new Opt(new Emoji(answer), null);
     // Inline function 'kotlin.collections.map' call
     // Inline function 'kotlin.collections.mapTo' call
@@ -28239,7 +29583,7 @@ var logic = function (_) {
           destination_0.add_utx5q5_k$(element_0);
         }
       }
-      tmp = take(plus_1(animals, destination_0), sets);
+      tmp = take(plus_0(animals, destination_0), sets);
     } else {
       tmp = take(all, sets);
     }
@@ -28309,7 +29653,7 @@ var logic = function (_) {
       var tmp$ret$9 = items.get_c1px32_k$(item_0);
       destination_1.add_utx5q5_k$(tmp$ret$9);
     }
-    return new MissingRound(lang, prompt, tmp_0, items, missing, shuffled(plus_1(plus_1(destination_1, otherShown), distract)), viewMs);
+    return new MissingRound(lang, prompt, tmp_0, items, missing, shuffled(plus_0(plus_0(destination_1, otherShown), distract)), viewMs);
   }
   function diff($this, lang, level) {
     var l = coerceIn(level, 0, 8);
@@ -28446,7 +29790,7 @@ var logic = function (_) {
     var tmp;
     switch (game.ordinal_1) {
       case 0:
-        tmp = count(this, lang, level, roundNo);
+        tmp = count_0(this, lang, level, roundNo);
         break;
       case 1:
         tmp = letters(this, lang, level, roundNo);
@@ -28524,6 +29868,9 @@ var logic = function (_) {
         tmp = makeIce(lang, level);
         break;
       case 19:
+        tmp = makeMarble(lang, level);
+        break;
+      case 20:
         tmp = new ColorRound(lang, t(lang, 'Sz\xEDnezd ki a k\xE9pet! V\xE1lassz sz\xEDnt, azt\xE1n koppints a k\xE9pre.', 'Mal das Bild aus! W\xE4hle eine Farbe und tippe auf das Bild.', 'Color the picture! Pick a color, then tap the picture.'), Default_getInstance().nextInt_kn2qxo_k$(13));
         break;
       default:
@@ -28542,70 +29889,23 @@ var logic = function (_) {
       new RoundFactory();
     return RoundFactory_instance;
   }
-  function Companion_33() {
-    Companion_instance_33 = this;
-    this.White_1 = new Color(new Long(-1, 0));
-    this.Black_1 = new Color(new Long(-16777216, 0));
-    this.Transparent_1 = new Color(new Long(0, 0));
+  function get_worlds() {
+    _init_properties_WebApi_kt__6t4sxm();
+    return worlds;
   }
-  protoOf(Companion_33).get_White_ij46ow_k$ = function () {
-    return this.White_1;
-  };
-  protoOf(Companion_33).get_Black_i7mvue_k$ = function () {
-    return this.Black_1;
-  };
-  protoOf(Companion_33).get_Transparent_cxh4g9_k$ = function () {
-    return this.Transparent_1;
-  };
-  var Companion_instance_33;
-  function Companion_getInstance_33() {
-    if (Companion_instance_33 == null)
-      new Companion_33();
-    return Companion_instance_33;
+  var worlds;
+  function set_nextWorld(_set____db54di) {
+    _init_properties_WebApi_kt__6t4sxm();
+    nextWorld = _set____db54di;
   }
-  function Color(v) {
-    Companion_getInstance_33();
-    this.v_1 = v;
+  function get_nextWorld() {
+    _init_properties_WebApi_kt__6t4sxm();
+    return nextWorld;
   }
-  protoOf(Color).get_v_1mhr65_k$ = function () {
-    return this.v_1;
-  };
-  protoOf(Color).component1_7eebsc_k$ = function () {
-    return this.v_1;
-  };
-  protoOf(Color).copy_dtzw2h_k$ = function (v) {
-    return new Color(v);
-  };
-  protoOf(Color).copy$default_cekcsp_k$ = function (v, $super) {
-    v = v === VOID ? this.v_1 : v;
-    return $super === VOID ? this.copy_dtzw2h_k$(v) : $super.copy_dtzw2h_k$.call(this, v);
-  };
-  protoOf(Color).toString = function () {
-    return 'Color(v=' + this.v_1.toString() + ')';
-  };
-  protoOf(Color).hashCode = function () {
-    return this.v_1.hashCode();
-  };
-  protoOf(Color).equals = function (other) {
-    if (this === other)
-      return true;
-    if (!(other instanceof Color))
-      return false;
-    var tmp0_other_with_cast = other instanceof Color ? other : THROW_CCE();
-    if (!this.v_1.equals(tmp0_other_with_cast.v_1))
-      return false;
-    return true;
-  };
-  function webRound(game, l, level, roundNo, foreign) {
-    var lang = get_entries_17().get_c1px32_k$(l);
-    var g = valueOf_7(game);
-    return roundJson(RoundFactory_getInstance().make_ypn42j_k$(g, lang, level, roundNo, get_entries_17().get_c1px32_k$(foreign)));
-  }
-  function webT(l, hu, de, en) {
-    return t(get_entries_17().get_c1px32_k$(l), hu, de, en);
-  }
+  var nextWorld;
   function webData(l) {
-    var lang = get_entries_17().get_c1px32_k$(l);
+    _init_properties_WebApi_kt__6t4sxm();
+    var lang_0 = lang(l);
     // Inline function 'kotlin.collections.map' call
     var this_0 = get_entries_7();
     // Inline function 'kotlin.collections.mapTo' call
@@ -28613,11 +29913,11 @@ var logic = function (_) {
     var _iterator__ex2g4s = this_0.iterator_jk1svi_k$();
     while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
       var item = _iterator__ex2g4s.next_20eer_k$();
-      var tmp$ret$0 = obj_0([to('id', q(item.name_1)), to('emoji', q(item.emoji_1)), to('title', txt(item.title_1, lang)), to('color', q(hex(item.color_1))), to('maxLevel', '' + maxLevel(item)), to('difficulty', '' + hasDifficulty(item))]);
+      var tmp$ret$0 = obj_0([to('id', q(item.name_1)), to('emoji', q(item.emoji_1)), to('title', txt(item.title_1, lang_0)), to('color', q(hex(item.color_1))), to('maxLevel', '' + maxLevel(item)), to('difficulty', '' + hasDifficulty(item)), to('pic', q(get_GAME_PIC_IDS().get_wei43m_k$(item)))]);
       destination.add_utx5q5_k$(tmp$ret$0);
     }
     var games = destination;
-    var tmp = to('welcome', txt(Texts_getInstance().welcome_1, lang));
+    var tmp = to('welcome', txt(Texts_getInstance().welcome_1, lang_0));
     // Inline function 'kotlin.collections.map' call
     var this_1 = Texts_getInstance().praise_1;
     // Inline function 'kotlin.collections.mapTo' call
@@ -28625,7 +29925,7 @@ var logic = function (_) {
     var _iterator__ex2g4s_0 = this_1.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
       var item_0 = _iterator__ex2g4s_0.next_20eer_k$();
-      var tmp$ret$3 = item_0.of_tiej2t_k$(lang);
+      var tmp$ret$3 = item_0.of_tiej2t_k$(lang_0);
       destination_0.add_utx5q5_k$(tmp$ret$3);
     }
     var tmp_0 = to('praise', strs(destination_0));
@@ -28636,10 +29936,10 @@ var logic = function (_) {
     var _iterator__ex2g4s_1 = this_2.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_1.hasNext_bitz1p_k$()) {
       var item_1 = _iterator__ex2g4s_1.next_20eer_k$();
-      var tmp$ret$6 = item_1.of_tiej2t_k$(lang);
+      var tmp$ret$6 = item_1.of_tiej2t_k$(lang_0);
       destination_1.add_utx5q5_k$(tmp$ret$6);
     }
-    var texts = obj_0([tmp, tmp_0, to('tryAgain', strs(destination_1)), to('reward', txt(Texts_getInstance().reward_1, lang)), to('newSticker', txt(Texts_getInstance().newSticker_1, lang)), to('album', txt(Texts_getInstance().album_1, lang)), to('harder', txt(Texts_getInstance().harder_1, lang)), to('hardest', txt(Texts_getInstance().hardest_1, lang)), to('pickLanguage', txt(Texts_getInstance().pickLanguage_1, lang)), to('more', txt(Texts_getInstance().more_1, lang)), to('oneMinute', txt(Texts_getInstance().oneMinute_1, lang)), to('timeUpMorning', txt(Texts_getInstance().timeUpMorning_1, lang)), to('timeUpAfternoon', txt(Texts_getInstance().timeUpAfternoon_1, lang))]);
+    var texts = obj_0([tmp, tmp_0, to('tryAgain', strs(destination_1)), to('reward', txt(Texts_getInstance().reward_1, lang_0)), to('newSticker', txt(Texts_getInstance().newSticker_1, lang_0)), to('album', txt(Texts_getInstance().album_1, lang_0)), to('harder', txt(Texts_getInstance().harder_1, lang_0)), to('hardest', txt(Texts_getInstance().hardest_1, lang_0)), to('pickLanguage', txt(Texts_getInstance().pickLanguage_1, lang_0)), to('more', txt(Texts_getInstance().more_1, lang_0)), to('oneMinute', txt(Texts_getInstance().oneMinute_1, lang_0)), to('timeUpMorning', txt(Texts_getInstance().timeUpMorning_1, lang_0)), to('timeUpAfternoon', txt(Texts_getInstance().timeUpAfternoon_1, lang_0))]);
     // Inline function 'kotlin.collections.map' call
     var this_3 = get_entries_17();
     // Inline function 'kotlin.collections.mapTo' call
@@ -28664,7 +29964,7 @@ var logic = function (_) {
       var _iterator__ex2g4s_4 = item_3.iterator_jk1svi_k$();
       while (_iterator__ex2g4s_4.hasNext_bitz1p_k$()) {
         var item_4 = _iterator__ex2g4s_4.next_20eer_k$();
-        var tmp$ret$12 = item_4.of_tiej2t_k$(lang);
+        var tmp$ret$12 = item_4.of_tiej2t_k$(lang_0);
         destination_4.add_utx5q5_k$(tmp$ret$12);
       }
       var tmp$ret$15 = strs(destination_4);
@@ -28673,64 +29973,165 @@ var logic = function (_) {
     var board = destination_3;
     var tmp_1 = to('games', arr(games));
     var tmp_2 = to('texts', texts);
-    var tmp_3 = to('stickers', strs(get_allStickers()));
-    var tmp_4 = to('langs', arr(langs));
+    var tmp_3 = to('stickers', strs(get_normalStickers()));
+    var tmp_4 = to('bigStickers', strs(get_bigStickers()));
+    var tmp_5 = to('langs', arr(langs));
     // Inline function 'kotlin.collections.map' call
-    var this_5 = get_palette();
+    var this_5 = get_APP_LANGS();
     // Inline function 'kotlin.collections.mapTo' call
     var destination_5 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_5, 10));
     var _iterator__ex2g4s_5 = this_5.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_5.hasNext_bitz1p_k$()) {
       var item_5 = _iterator__ex2g4s_5.next_20eer_k$();
-      var tmp$ret$18 = obj_0([to('color', q(hex(item_5.color_1))), to('name', q(item_5.name_u2l3xb_k$(lang)))]);
+      var tmp$ret$18 = item_5.ordinal_1;
       destination_5.add_utx5q5_k$(tmp$ret$18);
     }
-    var tmp_5 = to('palette', arr(destination_5));
-    var tmp_6 = to('board', arr(board));
+    var tmp_6 = to('appLangs', ints(destination_5));
     // Inline function 'kotlin.collections.map' call
-    var this_6 = get_entries_14();
+    var this_6 = get_palette();
     // Inline function 'kotlin.collections.mapTo' call
     var destination_6 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_6, 10));
     var _iterator__ex2g4s_6 = this_6.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_6.hasNext_bitz1p_k$()) {
       var item_6 = _iterator__ex2g4s_6.next_20eer_k$();
-      var tmp$ret$21 = obj_0([to('id', q(item_6.name_1)), to('icon', q(item_6.icon_1)), to('word', q(item_6.word_1.of_tiej2t_k$(lang)))]);
+      var tmp$ret$21 = obj_0([to('color', q(hex(item_6.color_1))), to('name', q(item_6.name_u2l3xb_k$(lang_0)))]);
       destination_6.add_utx5q5_k$(tmp$ret$21);
     }
-    var tmp_7 = to('holders', arr(destination_6));
+    var tmp_7 = to('palette', arr(destination_6));
+    var tmp_8 = to('board', arr(board));
     // Inline function 'kotlin.collections.map' call
-    var this_7 = get_entries_15();
+    var this_7 = get_entries_14();
     // Inline function 'kotlin.collections.mapTo' call
     var destination_7 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_7, 10));
     var _iterator__ex2g4s_7 = this_7.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_7.hasNext_bitz1p_k$()) {
       var item_7 = _iterator__ex2g4s_7.next_20eer_k$();
-      var tmp$ret$24 = obj_0([to('id', q(item_7.name_1)), to('color', q(hexL(item_7.argb_1))), to('icon', q(item_7.icon_1)), to('word', q(item_7.word_1.of_tiej2t_k$(lang)))]);
+      var tmp$ret$24 = obj_0([to('id', q(item_7.name_1)), to('icon', q(item_7.icon_1)), to('word', q(item_7.word_1.of_tiej2t_k$(lang_0))), to('pic', q(get_pic(item_7)))]);
       destination_7.add_utx5q5_k$(tmp$ret$24);
     }
-    var tmp_8 = to('flavors', arr(destination_7));
+    var tmp_9 = to('holders', arr(destination_7));
     // Inline function 'kotlin.collections.map' call
-    var this_8 = get_entries_16();
+    var this_8 = get_entries_15();
     // Inline function 'kotlin.collections.mapTo' call
     var destination_8 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_8, 10));
     var _iterator__ex2g4s_8 = this_8.iterator_jk1svi_k$();
     while (_iterator__ex2g4s_8.hasNext_bitz1p_k$()) {
       var item_8 = _iterator__ex2g4s_8.next_20eer_k$();
-      var tmp$ret$27 = obj_0([to('id', q(item_8.name_1)), to('icon', q(item_8.icon_1)), to('word', q(item_8.word_1.of_tiej2t_k$(lang)))]);
+      var tmp$ret$27 = obj_0([to('id', q(item_8.name_1)), to('color', q(hexL(item_8.argb_1))), to('icon', q(item_8.icon_1)), to('word', q(item_8.word_1.of_tiej2t_k$(lang_0))), to('pic', q(get_pic_0(item_8)))]);
       destination_8.add_utx5q5_k$(tmp$ret$27);
     }
-    return obj_0([tmp_1, tmp_2, tmp_3, tmp_4, tmp_5, tmp_6, tmp_7, tmp_8, to('toppings', arr(destination_8)), to('levelLabel', q(levelLabel(lang, 0)))]);
+    var tmp_10 = to('flavors', arr(destination_8));
+    // Inline function 'kotlin.collections.map' call
+    var this_9 = get_entries_16();
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination_9 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_9, 10));
+    var _iterator__ex2g4s_9 = this_9.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s_9.hasNext_bitz1p_k$()) {
+      var item_9 = _iterator__ex2g4s_9.next_20eer_k$();
+      var tmp$ret$30 = obj_0([to('id', q(item_9.name_1)), to('icon', q(item_9.icon_1)), to('word', q(item_9.word_1.of_tiej2t_k$(lang_0))), to('pic', q(get_pic_1(item_9)))]);
+      destination_9.add_utx5q5_k$(tmp$ret$30);
+    }
+    return obj_0([tmp_1, tmp_2, tmp_3, tmp_4, tmp_5, tmp_6, tmp_7, tmp_8, tmp_9, tmp_10, to('toppings', arr(destination_9)), to('levelLabel', q(levelLabel(lang_0, 0)))]);
   }
-  function J() {
-    this.sb_1 = StringBuilder_init_$Create$_1();
+  function webPics() {
+    _init_properties_WebApi_kt__6t4sxm();
+    var tmp = get_PIC_IDS().get_entries_p20ztl_k$();
+    return joinToString_1(tmp, ',', '{', '}', VOID, VOID, webPics$lambda);
   }
-  protoOf(J).get_sb_kntnoo_k$ = function () {
-    return this.sb_1;
-  };
-  protoOf(J).toString = function () {
-    return this.sb_1.toString();
-  };
+  function webPickSticker(have) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var tmp0_elvis_lhs = pickSticker(toSet(have));
+    return tmp0_elvis_lhs == null ? '' : tmp0_elvis_lhs;
+  }
+  function webT(l, hu, de, en) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return t(lang(l), hu, de, en);
+  }
+  function webRound(game, l, level, roundNo, foreign) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var g = valueOf_7(game);
+    return roundJson(RoundFactory_getInstance().make_ypn42j_k$(g, lang(l), level, roundNo, lang(foreign)));
+  }
+  function webMarbleDefs() {
+    _init_properties_WebApi_kt__6t4sxm();
+    var tmp = get_MPIECES().get_entries_p20ztl_k$();
+    return joinToString_1(tmp, ',', '{', '}', VOID, VOID, webMarbleDefs$lambda);
+  }
+  function webMarbleConst() {
+    _init_properties_WebApi_kt__6t4sxm();
+    return obj_0([to('C', num(45.0)), to('COLS', '9'), to('ROWS', '9'), to('MR', num(9.0)), to('DT', num(0.004166666666666667))]);
+  }
+  function webMarbleNew(pieces) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var w = new MWorld(parsePieces(pieces));
+    w.spawnStarts_h8hk2k_k$();
+    var _unary__edvuaz = get_nextWorld();
+    set_nextWorld(_unary__edvuaz + 1 | 0);
+    var id = _unary__edvuaz;
+    // Inline function 'kotlin.collections.set' call
+    get_worlds().put_4fpzoq_k$(id, w);
+    return id;
+  }
+  function webMarbleStep(id, steps) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var tmp0_elvis_lhs = get_worlds().get_wei43m_k$(id);
+    var tmp;
+    if (tmp0_elvis_lhs == null) {
+      return 'null';
+    } else {
+      tmp = tmp0_elvis_lhs;
+    }
+    var w = tmp;
+    // Inline function 'kotlin.repeat' call
+    var inductionVariable = 0;
+    if (inductionVariable < steps)
+      do {
+        var index = inductionVariable;
+        inductionVariable = inductionVariable + 1 | 0;
+        w.step_mj6i9w_k$();
+      }
+       while (inductionVariable < steps);
+    var tmp_0 = to('t', num(w.t_1));
+    var tmp_1 = to('won', '' + w.get_won_18it3n_k$());
+    var tmp_2 = to('wonNow', '' + w.get_wonNow_lh27hl_k$());
+    // Inline function 'kotlin.collections.map' call
+    var this_0 = w.marbles_1;
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+    var _iterator__ex2g4s = this_0.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var tmp$ret$2 = '[' + num(item.x_1) + ',' + num(item.y_1) + ',' + num(item.vx_1) + ',' + num(item.vy_1) + ',' + item.lost_1 + ',' + item.inGoal_1 + ']';
+      destination.add_utx5q5_k$(tmp$ret$2);
+    }
+    return obj_0([tmp_0, tmp_1, tmp_2, to('marbles', arr(destination))]);
+  }
+  function webMarbleFree(id) {
+    _init_properties_WebApi_kt__6t4sxm();
+    get_worlds().remove_gppy8k_k$(id);
+  }
+  function webMarbleStart(t, c, r, m) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var _destruct__k2r9zo = marbleStartPos(new MPiece(t, c, r, m));
+    var x = _destruct__k2r9zo.component1_7eebsc_k$();
+    var y = _destruct__k2r9zo.component2_7eebsb_k$();
+    return '[' + num(x) + ',' + num(y) + ']';
+  }
+  function webMarbleSolves(pieces) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return marbleSolves(parsePieces(pieces));
+  }
+  function webMarbleCount() {
+    _init_properties_WebApi_kt__6t4sxm();
+    return get_MARBLE_PUZZLES().get_size_woubt6_k$();
+  }
+  function webMarbleCheck(i) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var p = get_MARBLE_PUZZLES().get_c1px32_k$(i);
+    return marbleSolves(plus_0(p.fixed_1, p.sol_1)) && !marbleSolves(p.fixed_1);
+  }
   function q(s) {
+    _init_properties_WebApi_kt__6t4sxm();
     if (s == null)
       return 'null';
     var b = new StringBuilder('"');
@@ -28754,15 +30155,19 @@ var logic = function (_) {
     return b.append_am5a4z_k$(_Char___init__impl__6a9atx(34)).toString();
   }
   function hex(c) {
+    _init_properties_WebApi_kt__6t4sxm();
     return '#' + padStart(toString_2(c.v_1.and_4spn93_k$(new Long(16777215, 0)), 16), 6, _Char___init__impl__6a9atx(48));
   }
   function hexL(v) {
+    _init_properties_WebApi_kt__6t4sxm();
     return '#' + padStart(toString_2(v.and_4spn93_k$(new Long(16777215, 0)), 16), 6, _Char___init__impl__6a9atx(48));
   }
   function arr(items) {
-    return joinToString_0(items, ',', '[', ']');
+    _init_properties_WebApi_kt__6t4sxm();
+    return joinToString_1(items, ',', '[', ']');
   }
   function strs(items) {
+    _init_properties_WebApi_kt__6t4sxm();
     // Inline function 'kotlin.collections.map' call
     // Inline function 'kotlin.collections.mapTo' call
     var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(items, 10));
@@ -28775,15 +30180,31 @@ var logic = function (_) {
     return arr(destination);
   }
   function ints(items) {
-    return joinToString_0(items, ',', '[', ']');
+    _init_properties_WebApi_kt__6t4sxm();
+    return joinToString_1(items, ',', '[', ']');
   }
   function bools(items) {
-    return joinToString_0(items, ',', '[', ']');
+    _init_properties_WebApi_kt__6t4sxm();
+    return joinToString_1(items, ',', '[', ']');
   }
   function obj_0(kv) {
-    return joinToString(kv, ',', '{', '}', VOID, VOID, obj$lambda);
+    _init_properties_WebApi_kt__6t4sxm();
+    return joinToString_0(kv, ',', '{', '}', VOID, VOID, obj$lambda);
+  }
+  function num(d) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return d === numberToLong(d).toDouble_ygsx0s_k$() ? numberToLong(d).toString() : d.toString();
+  }
+  function txt(x, l) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return q(x.of_tiej2t_k$(l));
+  }
+  function lang(l) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return get_entries_17().get_c1px32_k$(l);
   }
   function item(i) {
+    _init_properties_WebApi_kt__6t4sxm();
     var tmp;
     if (i instanceof Emoji) {
       tmp = obj_0([to('t', q('emoji')), to('e', q(i.e_1)), to('label', q(i.label_1))]);
@@ -28792,7 +30213,7 @@ var logic = function (_) {
         tmp = obj_0([to('t', q('num')), to('n', '' + i.n_1)]);
       } else {
         if (i instanceof Letter) {
-          tmp = obj_0([to('t', q('letter')), to('c', q(toString(i.c_1)))]);
+          tmp = obj_0([to('t', q('letter')), to('c', q(i.c_1))]);
         } else {
           if (i instanceof Shape) {
             tmp = obj_0([to('t', q('shape')), to('kind', q(i.kind_1.name_1)), to('color', q(hex(i.color_1)))]);
@@ -28817,6 +30238,7 @@ var logic = function (_) {
     return tmp;
   }
   function display(d) {
+    _init_properties_WebApi_kt__6t4sxm();
     var tmp;
     if (equals(d, None_getInstance())) {
       tmp = obj_0([to('t', q('none'))]);
@@ -28861,9 +30283,15 @@ var logic = function (_) {
     return tmp;
   }
   function pt(p) {
+    _init_properties_WebApi_kt__6t4sxm();
     return '[' + p.first_1 + ',' + p.second_1 + ']';
   }
+  function piece_0(p) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return obj_0([to('t', q(p.t_1)), to('c', '' + p.c_1), to('r', '' + p.r_1), to('m', '' + p.m_1)]);
+  }
   function roundJson(r) {
+    _init_properties_WebApi_kt__6t4sxm();
     var tmp = to('prompt', q(r.get_prompt_i7fii5_k$()));
     // Inline function 'kotlin.collections.map' call
     var this_0 = r.get_speech_jla8dn_k$();
@@ -29021,7 +30449,7 @@ var logic = function (_) {
                               var _iterator__ex2g4s_8 = this_8.iterator_jk1svi_k$();
                               while (_iterator__ex2g4s_8.hasNext_bitz1p_k$()) {
                                 var item_9 = _iterator__ex2g4s_8.next_20eer_k$();
-                                var tmp$ret$30 = obj_0([to('e', q(item_9.emoji_1)), to('text', q(item_9.text_1.of_tiej2t_k$(r.lang_1)))]);
+                                var tmp$ret$30 = obj_0([to('e', q(item_9.emoji_1)), to('text', q(item_9.text_1.of_tiej2t_k$(r.lang_1))), to('pic', q(item_9.pic_1))]);
                                 destination_8.add_utx5q5_k$(tmp$ret$30);
                               }
                               tmp_0 = listOf_0([tmp_16, to('steps', arr(destination_8)), to('shuffled', ints(r.shuffled_1))]);
@@ -29046,7 +30474,48 @@ var logic = function (_) {
                                 var tmp2_safe_receiver = r.order_1.topping_1;
                                 tmp_0 = listOf_0([tmp_17, tmp_18, tmp_19, to('order', obj_0([tmp_20, tmp_21, to('topping', q(tmp2_safe_receiver == null ? null : tmp2_safe_receiver.name_1))]))]);
                               } else {
-                                noWhenBranchMatchedException();
+                                if (r instanceof MarbleRound) {
+                                  var tmp_22 = to('type', q('marble'));
+                                  var tmp_23 = to('rows', '' + r.puzzle_1.rows_1);
+                                  var tmp_24 = to('hint', '' + r.puzzle_1.hint_1);
+                                  // Inline function 'kotlin.collections.map' call
+                                  var this_10 = r.puzzle_1.fixed_1;
+                                  // Inline function 'kotlin.collections.mapTo' call
+                                  var destination_10 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_10, 10));
+                                  var _iterator__ex2g4s_10 = this_10.iterator_jk1svi_k$();
+                                  while (_iterator__ex2g4s_10.hasNext_bitz1p_k$()) {
+                                    var item_11 = _iterator__ex2g4s_10.next_20eer_k$();
+                                    var tmp$ret$36 = piece_0(item_11);
+                                    destination_10.add_utx5q5_k$(tmp$ret$36);
+                                  }
+                                  var tmp_25 = to('fixed', arr(destination_10));
+                                  // Inline function 'kotlin.collections.map' call
+                                  var this_11 = r.puzzle_1.inv_1;
+                                  // Inline function 'kotlin.collections.mapTo' call
+                                  var destination_11 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_11, 10));
+                                  var _iterator__ex2g4s_11 = this_11.iterator_jk1svi_k$();
+                                  while (_iterator__ex2g4s_11.hasNext_bitz1p_k$()) {
+                                    var item_12 = _iterator__ex2g4s_11.next_20eer_k$();
+                                    var t = item_12.component1_7eebsc_k$();
+                                    var m = item_12.component2_7eebsb_k$();
+                                    var tmp$ret$39 = obj_0([to('t', q(t)), to('m', '' + m)]);
+                                    destination_11.add_utx5q5_k$(tmp$ret$39);
+                                  }
+                                  var tmp_26 = to('inv', arr(destination_11));
+                                  // Inline function 'kotlin.collections.map' call
+                                  var this_12 = r.puzzle_1.sol_1;
+                                  // Inline function 'kotlin.collections.mapTo' call
+                                  var destination_12 = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_12, 10));
+                                  var _iterator__ex2g4s_12 = this_12.iterator_jk1svi_k$();
+                                  while (_iterator__ex2g4s_12.hasNext_bitz1p_k$()) {
+                                    var item_13 = _iterator__ex2g4s_12.next_20eer_k$();
+                                    var tmp$ret$42 = piece_0(item_13);
+                                    destination_12.add_utx5q5_k$(tmp$ret$42);
+                                  }
+                                  tmp_0 = listOf_0([tmp_22, tmp_23, tmp_24, tmp_25, tmp_26, to('sol', arr(destination_12))]);
+                                } else {
+                                  noWhenBranchMatchedException();
+                                }
                               }
                             }
                           }
@@ -29063,16 +30532,165 @@ var logic = function (_) {
     }
     var own = tmp_0;
     // Inline function 'kotlin.collections.toTypedArray' call
-    var this_10 = plus_1(own, common);
-    var tmp$ret$36 = copyToArray(this_10);
-    return obj_0(tmp$ret$36.slice());
+    var this_13 = plus_0(own, common);
+    var tmp$ret$45 = copyToArray(this_13);
+    return obj_0(tmp$ret$45.slice());
   }
-  function txt(x, l) {
-    return q(x.of_tiej2t_k$(l));
+  function parsePieces(s) {
+    _init_properties_WebApi_kt__6t4sxm();
+    var tmp;
+    if (isBlank(s)) {
+      tmp = emptyList();
+    } else {
+      // Inline function 'kotlin.collections.map' call
+      var this_0 = split(s, [';']);
+      // Inline function 'kotlin.collections.mapTo' call
+      var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+      var _iterator__ex2g4s = this_0.iterator_jk1svi_k$();
+      while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+        var item = _iterator__ex2g4s.next_20eer_k$();
+        // Inline function 'kotlin.let' call
+        var it = split(item, [',']);
+        var tmp$ret$2 = new MPiece(it.get_c1px32_k$(0), toInt(it.get_c1px32_k$(1)), toInt(it.get_c1px32_k$(2)), toInt(it.get_c1px32_k$(3)));
+        destination.add_utx5q5_k$(tmp$ret$2);
+      }
+      tmp = destination;
+    }
+    return tmp;
+  }
+  function webPics$lambda(it) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return q(it.get_key_18j28a_k$()) + ':' + q(it.get_value_j01efc_k$());
+  }
+  function webMarbleDefs$lambda(_destruct__k2r9zo) {
+    _init_properties_WebApi_kt__6t4sxm();
+    // Inline function 'kotlin.collections.component1' call
+    var t = _destruct__k2r9zo.get_key_18j28a_k$();
+    // Inline function 'kotlin.collections.component2' call
+    var d = _destruct__k2r9zo.get_value_j01efc_k$();
+    var tmp = q(t) + ':';
+    var tmp_0 = to('w', '' + d.w_1);
+    var tmp_1 = to('h', '' + d.h_1);
+    // Inline function 'kotlin.collections.map' call
+    var this_0 = d.segs_1;
+    // Inline function 'kotlin.collections.mapTo' call
+    var destination = ArrayList_init_$Create$_0(collectionSizeOrDefault(this_0, 10));
+    var _iterator__ex2g4s = this_0.iterator_jk1svi_k$();
+    while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
+      var item = _iterator__ex2g4s.next_20eer_k$();
+      var tmp$ret$2 = '[' + num(item.x1__1) + ',' + num(item.y1__1) + ',' + num(item.x2__1) + ',' + num(item.y2__1) + ',' + q(item.kind_1) + ']';
+      destination.add_utx5q5_k$(tmp$ret$2);
+    }
+    var tmp_2 = to('segs', arr(destination));
+    var tmp0_safe_receiver = d.spawn_1;
+    var tmp_3;
+    if (tmp0_safe_receiver == null) {
+      tmp_3 = null;
+    } else {
+      // Inline function 'kotlin.let' call
+      tmp_3 = '[' + num(tmp0_safe_receiver.first_1) + ',' + num(tmp0_safe_receiver.second_1) + ']';
+    }
+    var tmp1_elvis_lhs = tmp_3;
+    var tmp_4 = to('spawn', tmp1_elvis_lhs == null ? 'null' : tmp1_elvis_lhs);
+    var tmp2_safe_receiver = d.goal_1;
+    var tmp_5;
+    if (tmp2_safe_receiver == null) {
+      tmp_5 = null;
+    } else {
+      // Inline function 'kotlin.let' call
+      tmp_5 = joinToString(tmp2_safe_receiver, ',', '[', ']', VOID, VOID, webMarbleDefs$lambda$lambda);
+    }
+    var tmp3_elvis_lhs = tmp_5;
+    return tmp + obj_0([tmp_0, tmp_1, tmp_2, tmp_4, to('goal', tmp3_elvis_lhs == null ? 'null' : tmp3_elvis_lhs)]);
+  }
+  function webMarbleDefs$lambda$lambda(it) {
+    _init_properties_WebApi_kt__6t4sxm();
+    return num(it);
   }
   function obj$lambda(it) {
+    _init_properties_WebApi_kt__6t4sxm();
     return q(it.first_1) + ':' + it.second_1;
   }
+  var properties_initialized_WebApi_kt_8p2s9k;
+  function _init_properties_WebApi_kt__6t4sxm() {
+    if (!properties_initialized_WebApi_kt_8p2s9k) {
+      properties_initialized_WebApi_kt_8p2s9k = true;
+      worlds = HashMap_init_$Create$_0();
+      nextWorld = 1;
+    }
+  }
+  function get_PIC_IDS() {
+    _init_properties_WebPics_kt__pd6xhx();
+    return PIC_IDS;
+  }
+  var PIC_IDS;
+  function get_GAME_PIC_IDS() {
+    _init_properties_WebPics_kt__pd6xhx();
+    return GAME_PIC_IDS;
+  }
+  var GAME_PIC_IDS;
+  var properties_initialized_WebPics_kt_atv3u5;
+  function _init_properties_WebPics_kt__pd6xhx() {
+    if (!properties_initialized_WebPics_kt_atv3u5) {
+      properties_initialized_WebPics_kt_atv3u5 = true;
+      PIC_IDS = mapOf([to('\uD83D\uDC36', 'kutya'), to('\uD83D\uDC31', 'macska'), to('\uD83D\uDC2D', 'eger'), to('\uD83D\uDC30', 'nyuszi'), to('\uD83E\uDD8A', 'roka'), to('\uD83D\uDC3B', 'maci'), to('\uD83D\uDC3C', 'panda'), to('\uD83D\uDC2F', 'tigris'), to('\uD83E\uDD81', 'oroszlan'), to('\uD83C\uDF4E', 'alma'), to('\uD83C\uDF4C', 'banan'), to('\uD83C\uDF53', 'eper'), to('\uD83C\uDF47', 'szolo'), to('\uD83C\uDF49', 'gorogdinnye'), to('\uD83C\uDF50', 'korte'), to('\uD83C\uDF52', 'cseresznye'), to('\uD83C\uDF4A', 'narancs'), to('\uD83D\uDE97', 'auto'), to('\uD83D\uDE8C', 'busz'), to('\uD83D\uDE82', 'vonat'), to('\u2708', 'repulo'), to('\uD83D\uDE80', 'raketa'), to('\uD83D\uDEB2', 'bicikli'), to('\uD83D\uDE9C', 'traktor'), to('\u26F5', 'vitorlas'), to('\uD83D\uDC28', 'koala'), to('\uD83D\uDC38', 'beka'), to('\uD83E\uDD84', 'egyszarvu'), to('\uD83D\uDC32', 'sarkany'), to('\uD83D\uDC35', 'majom'), to('\uD83D\uDC27', 'pingvin'), to('\uD83E\uDD89', 'bagoly'), to('\uD83D\uDC19', 'polip'), to('\u2B50', 'csillag'), to('\uD83D\uDCD2', 'album'), to('\u2699', 'beallitasok'), to('\uD83D\uDEAA', 'kilepes'), to('\uD83C\uDF88', 'lufi'), to('\u23F3', 'homokora'), to('\uD83C\uDFE0', 'haz'), to('kabala', 'kabala'), to('\uD83D\uDC1F', 'hal'), to('\uD83D\uDC1E', 'katica'), to('\uD83D\uDC25', 'csibe'), to('\uD83E\uDD86', 'kacsa'), to('\uD83D\uDC2C', 'delfin'), to('\uD83E\uDD95', 'dino'), to('\uD83D\uDC18', 'elefant'), to('\uD83D\uDC0D', 'kigyo'), to('\uD83D\uDC34', 'lo'), to('\uD83D\uDC12', 'majom_egesz'), to('\uD83D\uDC1D', 'mehecske'), to('\uD83D\uDC37', 'malac'), to('\uD83E\uDD8B', 'pillango'), to('\uD83E\uDD94', 'sun'), to('\uD83D\uDC22', 'teknos'), to('\uD83E\uDD93', 'zebra'), to('\uD83E\uDD92', 'zsiraf'), to('\uD83D\uDC1C', 'hangya'), to('\uD83D\uDC10', 'kecske'), to('\uD83E\uDD98', 'kenguru'), to('\uD83D\uDC2E', 'tehen_fej'), to('\uD83D\uDC04', 'tehen'), to('\uD83D\uDC13', 'kakas'), to('\uD83D\uDC14', 'tyuk'), to('\uD83D\uDC11', 'barany'), to('\uD83D\uDC2A', 'teve'), to('\uD83E\uDD85', 'sas'), to('\uD83D\uDC15', 'kutya_egesz'), to('\uD83D\uDC33', 'balna'), to('\uD83E\uDD9B', 'vizilo'), to('\uD83D\uDC3A', 'farkas'), to('\uD83D\uDC0A', 'krokodil'), to('\uD83E\uDD96', 'trex'), to('\uD83E\uDD80', 'rak'), to('\uD83E\uDD9C', 'papagaj'), to('\uD83D\uDC20', 'tropusi_hal'), to('\uD83E\uDDA9', 'flamingo'), to('\uD83D\uDC3F', 'mokus'), to('\uD83D\uDD77', 'pok'), to('\uD83D\uDC1B', 'hernyo'), to('\uD83D\uDC23', 'kikelo_csibe'), to('\uD83D\uDC26', 'madar'), to('\uD83D\uDE48', 'majom_szem'), to('\uD83D\uDC3E', 'mancs'), to('\uD83C\uDF4F', 'zold_alma'), to('\uD83C\uDF4D', 'ananasz'), to('\uD83C\uDF4B', 'citrom'), to('\uD83E\uDD5D', 'kivi'), to('\uD83C\uDF51', 'barack'), to('\uD83E\uDED0', 'afonya'), to('\uD83C\uDF44', 'gomba'), to('\uD83E\uDD55', 'repa'), to('\uD83C\uDF45', 'paradicsom'), to('\uD83E\uDD54', 'krumpli'), to('\uD83C\uDF30', 'gesztenye'), to('\uD83C\uDF5E', 'kenyer'), to('\uD83E\uDDC0', 'sajt'), to('\uD83E\uDD5A', 'tojas'), to('\uD83E\uDD5B', 'tej'), to('\uD83C\uDF55', 'pizza'), to('\uD83C\uDF70', 'suti'), to('\uD83C\uDF82', 'torta'), to('\uD83C\uDF72', 'leves'), to('\u2615', 'tea'), to('\uD83C\uDF69', 'fank'), to('\uD83C\uDF6D', 'nyaloka'), to('\uD83E\uDDC1', 'muffin'), to('\uD83C\uDF6F', 'mez'), to('\uD83E\uDD63', 'muzli'), to('\uD83C\uDF73', 'tukortojas'), to('\uD83E\uDD5E', 'palacsinta'), to('\uD83C\uDF6B', 'csoki'), to('\uD83C\uDF6A', 'keksz'), to('\uD83C\uDF66', 'fagyi'), to('\uD83D\uDE92', 'tuzolto'), to('\uD83D\uDE81', 'helikopter'), to('\uD83D\uDE91', 'mento'), to('\uD83D\uDEF5', 'robogo'), to('\uD83D\uDEF8', 'ufo'), to('\uD83C\uDFCE', 'versenyauto'), to('\uD83D\uDE95', 'taxi'), to('\uD83D\uDC55', 'polo'), to('\uD83D\uDC56', 'farmer'), to('\uD83E\uDDE6', 'zokni'), to('\uD83E\uDDE2', 'baseballsapka'), to('\uD83D\uDC5F', 'cipo'), to('\uD83E\uDDE4', 'kesztyu'), to('\uD83D\uDC57', 'ruha'), to('\uD83E\uDDE5', 'kabat'), to('\uD83E\uDDE3', 'sal'), to('\uD83D\uDC52', 'szalmakalap'), to('\uD83E\uDD7E', 'bakancs'), to('\uD83D\uDD76', 'napszemuveg'), to('\uD83E\uDE73', 'rovidnadrag'), to('\uD83D\uDC59', 'bikini'), to('\uD83C\uDFA9', 'cilinder'), to('\uD83C\uDF38', 'virag'), to('\uD83C\uDF33', 'fa'), to('\u2601', 'felho'), to('\uD83C\uDF19', 'hold'), to('\u26C4', 'hoember'), to('\u2600', 'nap'), to('\uD83C\uDF1E', 'nap_arc'), to('\uD83C\uDF39', 'rozsa'), to('\uD83C\uDF08', 'szivarvany'), to('\uD83C\uDFD6', 'tengerpart'), to('\uD83C\uDF3B', 'napraforgo'), to('\uD83C\uDF42', 'falevelek'), to('\uD83C\uDF37', 'tulipan'), to('\u26C8', 'vihar'), to('\uD83C\uDF35', 'kaktusz'), to('\uD83C\uDF43', 'level'), to('\uD83C\uDF8B', 'bambusz'), to('\uD83C\uDF3C', 'sarga_virag'), to('\uD83C\uDF32', 'fenyo'), to('\uD83C\uDF31', 'csira'), to('\uD83C\uDF3F', 'noveny'), to('\uD83C\uDF28', 'havazas'), to('\uD83C\uDF27', 'eso'), to('\uD83C\uDF05', 'napfelkelte'), to('\uD83D\uDCA7', 'csepp'), to('\uD83C\uDF2C', 'szel'), to('\uD83D\uDCA8', 'fuvas'), to('\uD83C\uDFB2', 'dobokocka'), to('\uD83E\uDD16', 'robot'), to('\uD83C\uDFB8', 'gitar'), to('\u26BD', 'labda'), to('\u2702', 'ollo'), to('\uD83D\uDCA1', 'lampa'), to('\uD83D\uDD11', 'kulcs'), to('\u2602', 'esernyo'), to('\uD83C\uDF81', 'ajandek'), to('\uD83E\uDDF8', 'plussmaci'), to('\uD83E\uDDF1', 'tegla'), to('\uD83C\uDF89', 'buli'), to('\uD83D\uDD8D', 'zsirkreta'), to('\uD83C\uDFA4', 'mikrofon'), to('\uD83C\uDFC0', 'kosarlabda'), to('\uD83E\uDD41', 'dob'), to('\uD83C\uDFF0', 'kastely'), to('\uD83C\uDFA1', 'orisker'), to('\uD83C\uDFB6', 'hangjegyek'), to('\uD83D\uDC8E', 'gyemant'), to('\uD83C\uDFC6', 'serleg'), to('\uD83E\uDDB4', 'csont'), to('\uD83D\uDD6F', 'gyertya'), to('\u23F0', 'ebreszto'), to('\uD83C\uDF92', 'iskolataska'), to('\uD83D\uDCDD', 'jegyzet'), to('\uD83D\uDED2', 'bevasarlokocsi'), to('\uD83D\uDCB3', 'bankkartya'), to('\uD83D\uDECD', 'szatyor'), to('\u23F2', 'idozito'), to('\uD83E\uDDFA', 'kosar'), to('\uD83E\uDDF3', 'borond'), to('\u270F', 'ceruza'), to('\u2764', 'sziv'), to('\uD83D\uDC4D', 'lajk'), to('\uD83D\uDD0D', 'nagyito'), to('\uD83D\uDCD6', 'konyv'), to('\uD83D\uDE00', 'arc_vidam'), to('\uD83D\uDE0A', 'arc_mosoly'), to('\uD83D\uDE22', 'arc_szomoru'), to('\uD83D\uDE20', 'arc_morcos'), to('\uD83D\uDE28', 'arc_ijedt'), to('\uD83D\uDE32', 'arc_meglepett'), to('\uD83D\uDE34', 'arc_alszik'), to('\uD83D\uDE33', 'arc_zavarban'), to('\uD83D\uDE0C', 'arc_nyugodt'), to('\uD83E\uDD17', 'arc_olel'), to('\uD83E\uDD21', 'bohoc'), to('\uD83E\uDD71', 'arc_asit'), to('\uD83D\uDE02', 'arc_nevet'), to('\uD83D\uDE31', 'arc_sikit'), to('\uD83D\uDE2D', 'arc_sir'), to('\uD83E\uDD15', 'arc_kotes'), to('\uD83D\uDE14', 'arc_lehangolt'), to('\uD83D\uDE21', 'arc_duhos'), to('\uD83D\uDE0B', 'arc_finom'), to('\uD83D\uDE2C', 'arc_feszeng'), to('\uD83D\uDE01', 'arc_vigyor'), to('\uD83E\uDD14', 'arc_gondolkodik'), to('\uD83D\uDC43', 'orr'), to('\uD83D\uDC42', 'ful'), to('\uD83D\uDC41', 'szem'), to('\uD83D\uDC44', 'szaj'), to('\uD83E\uDDB6', 'lab'), to('\uD83D\uDC4B', 'integet'), to('\uD83E\uDD1D', 'kezfogas'), to('\uD83E\uDDD2', 'gyerek'), to('\uD83D\uDC76', 'baba'), to('\uD83E\uDDD1', 'felnott'), to('\uD83C\uDFC3', 'futo'), to('\uD83C\uDFCA', 'uszo'), to('\uD83E\uDDD6', 'torolkozo'), to('\uD83D\uDCAC', 'beszed'), to('\uD83D\uDECF', 'agy'), to('\uD83D\uDEC1', 'kad'), to('\uD83E\uDEA5', 'fogkefe'), to('\uD83E\uDDFC', 'szappan'), to('\uD83D\uDEBF', 'zuhany'), to('\uD83E\uDDF4', 'flakon'), to('\uD83E\uDDFD', 'szivacs'), to('\uD83C\uDF7E', 'uvegpalack'), to('\uD83D\uDCF0', 'ujsag'), to('\uD83D\uDCE6', 'kartondoboz'), to('\u2709', 'boritek'), to('\uD83E\uDD6B', 'konzerv'), to('\uD83E\uDDC3', 'gyumolcsle_doboz'), to('\uD83E\uDE79', 'sebtapasz'), to('\uD83D\uDD8A', 'toll'), to('\uD83D\uDCC4', 'papir'), to('\uD83D\uDDD1', 'kuka'), to('\uD83D\uDC0C', 'csiga'), to('\uD83D\uDE99', 'dzsip'), to('\uD83E\uDD8E', 'gyik'), to('\uD83D\uDC54', 'nyakkendo'), to('\uD83D\uDD26', 'zseblampa'), to('\uD83E\uDE99', 'erme'), to('\uD83C\uDFEB', 'iskola'), to('\uD83C\uDFF9', 'ij'), to('\uD83E\uDE80', 'jojo'), to('\uD83E\uDDCA', 'jegkocka'), to('\uD83D\uDD73', 'lyuk'), to('\uD83D\uDD70', 'ora'), to('\uD83D\uDC02', 'okor'), to('\uD83E\uDD8C', 'oz'), to('\uD83E\uDD52', 'uborka'), to('\uD83D\uDEDF', 'uszogumi'), to('\u2604', 'ustokos'), to('\uD83E\uDDD1\u200D\uD83D\uDE80', 'urhajos'), to('\uD83D\uDEBD', 'wc'), to('\uD83C\uDF3E', 'kalasz'), to('\uD83D\uDCBB', 'szamitogep'), to('\uD83E\uDEBC', 'meduza'), to('\uD83D\uDEE2', 'olajhordo'), to('\uD83E\uDDD8', 'joga')]);
+      GAME_PIC_IDS = mapOf([to(GameType_COUNT_getInstance(), 'jatek_szamolas'), to(GameType_LETTERS_getInstance(), 'jatek_betuk'), to(GameType_SHAPES_getInstance(), 'jatek_formak'), to(GameType_LOGIC_getInstance(), 'jatek_gondolkodo'), to(GameType_WORDS_getInstance(), 'jatek_idegen'), to(GameType_WORLD_getInstance(), 'jatek_vilag'), to(GameType_FEELINGS_getInstance(), 'jatek_erzesek'), to(GameType_MEMORY_getInstance(), 'jatek_memoria'), to(GameType_MISSING_getInstance(), 'jatek_hianyzo'), to(GameType_DIFF_getInstance(), 'jatek_kulonbseg'), to(GameType_ORDER_getInstance(), 'jatek_sorrend'), to(GameType_PUZZLE_getInstance(), 'jatek_kirako'), to(GameType_BOARD_getInstance(), 'jatek_tarsas'), to(GameType_MAZE_getInstance(), 'jatek_labirintus'), to(GameType_WASTE_getInstance(), 'jatek_szelektiv'), to(GameType_TRACE_getInstance(), 'jatek_vonal'), to(GameType_ROBOT_getInstance(), 'jatek_robot'), to(GameType_STORY_getInstance(), 'jatek_tortenet'), to(GameType_ICECREAM_getInstance(), 'jatek_fagyi'), to(GameType_MARBLE_getInstance(), 'jatek_golyopalya'), to(GameType_COLORING_getInstance(), 'jatek_szinezo')]);
+    }
+  }
+  function Companion_33() {
+    Companion_instance_33 = this;
+    this.White_1 = new Color(new Long(-1, 0));
+    this.Black_1 = new Color(new Long(-16777216, 0));
+    this.Transparent_1 = new Color(new Long(0, 0));
+  }
+  protoOf(Companion_33).get_White_ij46ow_k$ = function () {
+    return this.White_1;
+  };
+  protoOf(Companion_33).get_Black_i7mvue_k$ = function () {
+    return this.Black_1;
+  };
+  protoOf(Companion_33).get_Transparent_cxh4g9_k$ = function () {
+    return this.Transparent_1;
+  };
+  var Companion_instance_33;
+  function Companion_getInstance_33() {
+    if (Companion_instance_33 == null)
+      new Companion_33();
+    return Companion_instance_33;
+  }
+  function Color(v) {
+    Companion_getInstance_33();
+    this.v_1 = v;
+  }
+  protoOf(Color).get_v_1mhr65_k$ = function () {
+    return this.v_1;
+  };
+  protoOf(Color).component1_7eebsc_k$ = function () {
+    return this.v_1;
+  };
+  protoOf(Color).copy_dtzw2h_k$ = function (v) {
+    return new Color(v);
+  };
+  protoOf(Color).copy$default_cekcsp_k$ = function (v, $super) {
+    v = v === VOID ? this.v_1 : v;
+    return $super === VOID ? this.copy_dtzw2h_k$(v) : $super.copy_dtzw2h_k$.call(this, v);
+  };
+  protoOf(Color).toString = function () {
+    return 'Color(v=' + this.v_1.toString() + ')';
+  };
+  protoOf(Color).hashCode = function () {
+    return this.v_1.hashCode();
+  };
+  protoOf(Color).equals = function (other) {
+    if (this === other)
+      return true;
+    if (!(other instanceof Color))
+      return false;
+    var tmp0_other_with_cast = other instanceof Color ? other : THROW_CCE();
+    if (!this.v_1.equals(tmp0_other_with_cast.v_1))
+      return false;
+    return true;
+  };
   //region block: post-declaration
   protoOf(AbstractMutableList).asJsArrayView_ialsn1_k$ = asJsArrayView;
   protoOf(AbstractMutableList).asJsReadonlyArrayView_ch6hjz_k$ = asJsReadonlyArrayView;
@@ -29095,6 +30713,8 @@ var logic = function (_) {
   protoOf(StoryRound).get_speech_jla8dn_k$ = get_speech;
   protoOf(StoryRound).get_autoSpeak_z861qe_k$ = get_autoSpeak;
   protoOf(IceRound).get_autoSpeak_z861qe_k$ = get_autoSpeak;
+  protoOf(MarbleRound).get_speech_jla8dn_k$ = get_speech;
+  protoOf(MarbleRound).get_autoRepeat_r7excd_k$ = get_autoRepeat;
   protoOf(Round).get_autoSpeak_z861qe_k$ = get_autoSpeak;
   protoOf(Round).get_autoRepeat_r7excd_k$ = get_autoRepeat;
   protoOf(Round).get_doneDelayMs_jxwjb6_k$ = get_doneDelayMs;
@@ -29131,19 +30751,33 @@ var logic = function (_) {
   _stableSortingIsSupported = null;
   SETS = '0,1,2;3,4,5;6,7,8;9,10,11;12,13,14;15,16,17;18,19,20;21,22,23;24,25,2;26,27,5;28,7,8;29,10,30;31,13,32;33,16,17;34,19,35;36,22,23;37,38,2;39,40,41;42,7,8;43,44,45;46,13,47;48,16,17;49,19,50;51,52,53;0,1,54;55,5,56;57,58,59;60,10,61;62,63,64;65,16,17;66,19,67;68,22,69;24,25,70;71,72,56;73,7,74;75,76,77;78,63,79;80,16,17;81,19,50;82,52,83;37,38,84;85,40,86;87,58,88;89,10,90;91,63,92;93,16,17;94,19,95;96,22,97;0,1,98;99,100,101;102,58,103;104,105,106;107,63,108;109,16,17;110,19,111;112,52,113;24,25,114;115,56,116;117,58,118;119,10,120;121,122,123;124,19,125;126,22,53;37,38,127;128,129,130;131,58,132;9,10,133;31,63,134;135,19,67;136,52,23;0,1,137;138,139,140;141,58,103;29,10,120;142,63,143;144,19,145;68,22,146;24,25,147;71,148,149;57,58,8;78,63,150;151,19,152;37,38,153;85,86,154;73,58,132;60,10,155;62,63,156;157,19,158;21,22,159;0,1,160;161,162,163;87,58,164;89,10,165;166,19,167;24,25,168;99,56,169;42,58,8;75,170,171;142,63,172;173,19,174;96,52,175;37,38,176;115,56,177;119,10,178;12,63,59;179,19,20;0,1,180;3,129,181;104,182,183;31,63,184;185,19,186;24,25,187;188,139,189;21,22,53;37,38,190;39,162,191;29,10,178;142,63,184;192,19,193;0,1,194;195,40,56;43,44,164;62,63,196;197,19,158;24,25,198;99,86,177;91,63,199;200,19,20;37,38,201;89,10,164;202,19,186;0,1,203;161,162,189;204,19,20;21,52,53;205,129,181;142,63,206;207,19,208;37,38,209;85,86,177;210,19,211;0,1,212;213,56,214;102,58,215;75,170,77;216,19,20';
   PICTURE_COUNT = 13;
+  STICKER_KABALA = 'kabala';
+  STICKER_TROPHY = '\uD83C\uDFC6';
   TRACE_STEP = 0.25;
   SIMPLE_LETTERS = 'CIJLOSUVZ\u0413\u041B\u041F\u0421\u041E\u0417';
   MAX_SCOOPS = 3;
   MAX_LEVEL = 2;
+  MARBLE_DATA = '\n0|6|1|S2,0,+ F3,1,+ G5,3,+|R+|R4,2,+\n0|6|1|S0,1,+ R1,2,+ G0,4,+|L-|L2,3,-\n0|6|1|S2,0,+ F3,2,+ G3,4,+|R+|R5,3,+\n0|7|1|S7,1,- R4,4,- G2,5,+|R-|R6,2,-\n0|6|1|S2,1,+ R4,3,+ G5,4,+|R+|R3,2,+\n0|6|1|S5,1,+ F5,3,- G3,4,+|R-|R6,2,-\n0|6|1|S3,0,+ F4,1,+ G3,3,+|R-|R5,2,-\n0|7|1|S5,1,- F4,3,- G4,5,+|R+|R3,4,+\n0|6|1|S0,1,+ R1,2,- G1,4,+|R+|R0,3,+\n0|6|1|S3,0,+ R5,2,+ G6,3,+|R+|R4,1,+\n0|6|1|S5,0,- L4,1,- G0,3,+|F-|F3,2,-\n0|6|1|S0,1,+ R2,3,+ G3,4,+|R+|R1,2,+\n0|6|1|S6,1,- R5,2,+ G7,4,+|L+|L5,3,+\n0|6|1|S4,0,+ F5,1,+ G7,3,+|R+|R6,2,+\n0|6|1|S1,0,+ L1,1,+ G6,4,+|L+|L3,3,+\n0|6|1|S7,0,- F6,2,- G6,4,+|R+|R5,3,+\n1|7|0|S1,0,+ L1,1,+ F4,3,+ G7,5,+|F+|F6,4,+\n1|7|0|S7,1,- R6,2,- R2,4,- G0,5,+|L-|L4,3,-\n1|8|0|S6,1,+ R7,3,+ R7,6,+ G5,6,+|R-|R8,4,-\n1|7|0|S2,1,+ F3,2,+ F5,4,+ G7,5,+|R+|R4,3,+\n1|7|0|S0,0,+ L1,2,+ R2,4,- G0,5,+|L-|L3,3,-\n1|8|0|S5,0,+ L4,3,- L2,5,+ G4,6,+|L-|L6,2,-\n1|8|0|S2,1,+ F3,3,+ F4,4,+ G7,6,+|R+|R6,5,+\n1|8|0|S1,1,+ R2,2,+ L3,3,+ G4,6,+|R-|R6,5,-\n1|9|0|S7,1,- F6,3,- L2,6,+ G0,7,+|L-|L4,4,-\n1|7|0|S0,1,+ F2,4,+ R3,4,+ G4,5,+|F+|F1,2,+\n1|8|0|S2,1,+ R3,3,+ L4,4,- G4,6,+|R-|R6,5,-\n1|6|0|S1,0,+ R3,2,+ F4,3,+ G6,4,+|F+|F2,1,+\n1|8|0|S7,1,- L5,3,- R5,5,+ G6,6,+|L+|L3,4,+\n1|7|0|S0,0,+ L2,3,+ L4,4,+ G7,5,+|R+|R1,1,+\n1|7|0|S1,0,+ R2,2,- R1,3,- G1,5,+|R+|R0,4,+\n1|8|0|S0,1,+ L3,4,+ R6,5,+ G7,6,+|L+|L1,3,+\n2|6|0|S5,0,- F3,2,- G2,4,+|L- R+|L4,1,- R1,3,+\n2|7|0|S2,0,+ R6,4,+ G7,5,+|R+ R+|R4,2,+ R3,1,+\n2|7|0|S7,0,- F6,2,- G1,5,+|F- F-|F5,3,- F3,4,-\n2|6|0|S6,0,- F5,1,- G0,4,+|R- F-|R4,2,- F3,3,-\n2|7|0|S2,1,+ R6,4,+ G7,5,+|L+ R+|L3,3,+ R3,2,+\n2|7|0|S6,1,- R4,3,- G0,5,+|F- L-|F3,4,- L5,2,-\n2|7|0|S6,0,- R5,1,- G3,5,+|L+ L-|L3,3,+ L5,4,-\n2|6|0|S0,0,+ R4,3,- G5,4,+|R+ L+|R1,1,+ L2,2,+\n2|7|0|S6,1,+ R7,2,+ G5,5,+|R- R-|R7,4,- R8,3,-\n2|7|0|S3,1,+ R5,3,+ G4,5,+|R+ R-|R4,2,+ R6,4,-\n2|9|0|S5,1,- R2,5,- G1,7,+|R- R-|R4,3,- R0,6,-\n2|8|0|S0,0,+ R5,4,+ G6,6,+|L+ L+|L2,2,+ L0,1,+\n2|7|0|S1,1,+ R5,4,+ G6,5,+|F+ R+|F3,3,+ R2,2,+\n2|7|0|S7,1,- F5,3,- G1,5,+|L- F-|L6,2,- F3,4,-\n2|7|0|S1,1,+ L4,4,+ G7,5,+|R+ R+|R3,3,+ R2,2,+\n2|8|0|S5,1,- L2,3,- G1,6,+|R- R+|R4,2,- R0,5,+\n3|7|0|S7,1,- U6,2,- G7,5,+|F+ U+|F6,4,+ U5,3,-\n3|6|0|S1,0,+ F3,2,+ G6,4,+|U+ F+|U2,1,+ F4,3,+\n3|7|0|S1,1,+ T3,3,+ G4,5,+|U+ F+|U3,4,- F2,2,+\n3|8|0|S7,1,- T6,2,- G3,6,+|F+ U+|F6,4,- U5,5,-\n3|6|0|S1,0,+ R4,3,+ G5,4,+|F+ U+|F3,2,+ U2,1,+\n3|9|0|S2,0,+ L1,4,- G0,7,+|L+ T+|L3,2,- T0,5,-\n3|6|0|S1,0,+ U3,2,+ G3,4,+|U+ U+|U2,3,- U2,1,+\n3|8|0|S1,0,+ L4,5,- G6,6,+|R+ F+|R4,4,+ F2,2,+\n3|8|0|S2,1,+ U3,3,+ G7,6,+|R+ L+|R4,4,+ L5,5,-\n3|6|0|S0,1,+ R3,4,- G4,4,+|R+ U+|R1,2,+ U2,3,+\n3|8|0|S5,0,- F5,4,+ G5,6,+|U+ L+|U7,5,+ L3,2,+\n3|7|0|S0,1,+ L3,4,+ G5,5,+|U+ F+|U1,2,+ F2,3,+\n3|8|0|S1,1,+ T3,4,+ G5,6,+|F+ R+|F4,5,+ R2,3,+\n3|7|0|S4,0,+ U5,2,+ G7,5,+|T+ L+|T7,4,+ L5,3,+\n3|8|0|S6,1,- U5,3,- G0,6,+|L+ L+|L2,5,- L4,4,-\n3|9|0|S0,1,+ U3,5,+ G3,7,+|T+ R+|T3,6,+ R1,3,+\n4|9|0|S5,1,- U4,2,- T5,4,+ G3,7,+|L+ L+ U+|L5,6,- L3,3,+\n4|8|0|S2,1,+ T2,2,+ U6,6,+ G7,6,+|R+ U+ U+|R3,4,+ U4,5,+\n4|9|0|S6,0,- U4,4,- F5,6,+ G7,7,+|U+ T+ U+|U5,2,- T4,3,-\n4|7|0|S5,0,+ U6,1,+ L6,2,+ G5,5,+|L+ T+ T+|L7,4,- T7,3,+\n4|8|0|S3,0,+ U4,2,+ F4,4,- G0,6,+|L+ R+ R+|L2,5,- R5,3,-\n4|8|0|S2,1,+ T4,3,+ U6,5,+ G7,6,+|L+ R+ U+|L4,4,+ R3,2,+\n4|9|0|S6,0,- U5,2,- L4,3,- G1,7,+|T+ U+ L+|T2,4,- U3,6,+\n4|8|0|S7,0,- U3,4,- U2,4,- G2,6,+|T+ L+ F+|T2,5,+ L5,2,-\n4|9|0|S3,1,+ F4,3,+ R4,5,- G0,7,+|U+ L+ F+|U3,6,- L5,4,-\n4|9|0|S5,0,- L3,2,- U2,5,- G1,7,+|T+ U+ T+|T2,3,- U3,6,+\n4|8|0|S3,1,+ T7,4,+ T7,5,- G7,6,+|L+ L+ U+|L5,3,+ L3,2,+\n4|8|0|S1,0,+ R2,2,+ R3,3,- G4,6,+|R+ F+ U+|R2,4,+ F3,5,+\n4|7|0|S5,0,- R4,1,- T3,2,- G5,5,+|F+ U+ U+|F4,4,+ U3,3,-\n4|8|0|S3,0,+ U4,1,+ T4,3,- G6,6,+|T+ R+ L+|T4,2,+ R5,5,+\n4|9|0|S4,1,+ T4,2,+ T4,3,+ G0,8,+|L+ R+ T+|L2,7,+ R4,5,-\n4|9|0|S3,1,+ L5,3,+ L7,6,- G5,7,+|T+ L+ R+|T7,4,+ L3,2,+\n5|7|0|S0,0,+ F3,3,+ G6,5,+|U+ F+ F+ U+|U1,1,+ F5,4,+ F2,2,+\n5|9|0|S1,0,+ U2,6,- G0,7,+|T+ U+ U+ R+|T2,3,+ U3,5,+ U2,2,+\n5|8|0|S0,1,+ U4,5,+ G6,6,+|F+ R+ F+ U+|F2,3,+ R3,4,+ F1,2,+\n5|6|0|S3,0,+ R6,3,- G7,4,+|R+ U+ U+ R+|R4,1,+ U5,2,+ U7,3,+\n5|9|0|S6,1,- R5,4,+ G3,8,+|T+ T+ L+ U+|T5,5,+ T4,2,- L5,7,-\n5|8|0|S0,0,+ R1,3,- G1,6,+|T+ T+ U+ R+|T0,1,+ T0,4,+ U0,6,-\n5|9|0|S0,0,+ F2,3,+ G2,7,+|U+ T+ U+ R+|U1,2,+ T3,4,+ U4,6,+\n5|8|0|S1,0,+ T2,2,+ G5,6,+|U+ R+ F+ T+|U2,1,+ R2,4,+ F3,5,+\n5|8|0|S2,1,+ T3,2,+ G6,6,+|F+ U+ F+ U+|F5,5,+ U3,4,- F4,4,+\n5|9|0|S7,0,- T1,5,- G3,7,+|F+ F+ R+ T+|F2,6,+ F4,4,- R6,2,-\n5|9|0|S1,0,+ T6,6,- G6,7,+|F+ T+ R+ T+|F4,4,+ T6,5,+ R2,2,+\n5|9|0|S0,1,+ R4,5,+ G7,7,+|F+ F+ F+ F+|F1,3,+ F5,6,+ F2,4,+\n5|9|0|S5,1,- F4,3,- G0,7,+|T+ T+ F+ L+|T2,5,+ T2,4,- F2,6,-\n5|9|0|S6,1,- U2,4,- G0,7,+|R+ L+ U+ R+|R2,6,- L4,3,- U3,5,+\n5|9|0|S1,1,+ T5,4,+ G6,7,+|L+ U+ R+ U+|L3,3,+ U5,5,- R2,2,+\n5|9|0|S3,1,+ U7,5,+ G7,7,+|F+ U+ U+ T+|F5,3,+ U6,6,- U4,2,+\n6|9|0|S4,0,+ L4,1,+ J7,3,- G5,7,+ P1,1,+|R+ R+ J+ L+|R5,4,+ R4,6,+ J3,5,+\n6|9|0|S1,1,+ T7,3,+ T7,4,+ G4,8,+ P0,7,+|J+ L+ R+ R+|J2,2,+ L6,7,- R8,6,-\n6|9|0|S3,1,+ U4,2,+ T2,6,- G2,7,+ W8,2,+|R+ J+ R+ U+|R5,3,+ J5,5,+ R6,4,-\n6|9|0|S3,0,+ U4,2,+ R4,6,- G3,8,+ P6,4,+|T+ T+ U+ J+|T3,4,- T3,7,+ U5,3,+\n6|9|0|S0,0,+ U4,3,+ J4,5,+ G4,4,+ P6,7,+|J+ U+ L+ U+|J1,1,- U5,3,+ L1,2,+\n6|8|0|S2,1,+ U4,3,+ U5,5,+ G4,6,+ P0,4,+|U+ L+ U+ U+|U4,4,- L2,2,+ U5,3,+\n6|9|0|S3,0,+ L4,2,+ U7,4,+ G4,8,+ W3,4,+|U+ J+ T+ J+|U8,4,+ J7,7,+ T7,5,-\n6|8|0|S3,0,+ R5,2,+ U5,4,- G4,6,+ P0,3,+|T+ L+ U+ L+|T4,5,- L6,3,- U4,1,+\n6|8|0|S1,0,+ U2,1,+ T2,3,- G0,6,+ P3,6,+|J+ T+ U+ R+|J2,5,+ T2,2,+ U3,5,+\n6|9|0|S6,0,- L4,2,+ T7,4,+ G4,8,+ P3,4,+|J+ L+ R+ U+|J8,6,- L5,3,+ R3,7,+\n6|8|0|S5,1,- U2,4,- U2,5,+ G1,6,+ P0,3,+|R+ U+ R+ T+|R3,3,- U1,4,- R4,2,-\n6|9|0|S2,0,+ L3,2,+ R6,3,+ G5,7,+ W8,1,+|L+ T+ J+ R+|L7,6,- T7,4,+ J3,1,-\n6|9|0|S1,1,+ U5,4,+ U5,6,+ G7,8,+ P6,2,+|R+ U+ L+ U+|R4,5,+ U6,7,+ L2,3,+\n6|9|0|S7,0,- U5,2,- L5,6,- G7,7,+ P2,5,+|T+ U+ U+ R+|T5,3,+ U5,5,- U6,1,-\n6|9|0|S2,0,+ L2,1,+ R2,7,- G0,8,+ W5,7,+|R+ J+ T+ T+|R3,6,- J5,3,- T3,4,-\n6|9|0|S7,0,- U4,3,- T3,4,- G0,7,+ W8,5,+|U+ J+ L+ R+|U4,6,+ J3,6,+ L6,1,-\n7|9|0|S3,0,+ T2,6,- T0,7,- G0,8,+ P5,6,+ P1,1,+|J+ L+ L+ J+|J4,1,- L5,3,- L4,4,-\n7|9|0|S2,1,+ U6,5,+ U8,7,- G7,8,+ W1,2,+ W6,2,+|R+ T+ R+ U+|R3,2,+ T7,6,+ R4,3,+\n7|9|0|S7,1,- T1,4,- J1,6,- G7,7,+ W1,7,+ P8,2,+|U+ J+ U+ J+|U3,4,- J6,3,+ U1,5,-\n7|8|0|S1,0,+ R3,2,+ U4,3,+ G4,6,+ W7,2,+ P2,4,+|T+ U+ R+ U+|T5,4,+ U2,1,+ R6,5,-\n7|9|0|S5,0,- L3,4,+ U6,5,+ G3,7,+ P6,7,+ W2,5,+|U+ J+ L+ L+|U5,6,- J4,1,+ L2,3,+\n7|9|0|S6,1,- U5,3,- J3,7,+ G0,8,+ W3,2,+ P1,3,+|U+ L+ U+ J+|U4,6,- L5,5,- U4,4,-\n7|8|0|S4,1,+ U5,3,+ R3,4,+ G0,6,+ P3,5,+ P2,2,+|T+ J+ R+ L+|T4,2,+ J4,4,+ R2,5,-\n7|9|0|S6,1,+ R7,2,- L3,5,- G2,8,+ W5,7,+ P8,6,+|J+ U+ T+ U+|J6,3,+ U5,4,- T2,6,-\n7|9|0|S5,0,- T3,3,+ J4,5,- G6,8,+ P0,6,+ P0,3,+|T+ R+ T+ U+|T3,1,- R3,4,+ T6,7,+\n7|9|0|S0,0,+ U1,2,+ U1,6,+ G1,8,+ P5,5,+ W2,5,+|U+ R+ T+ T+|U2,3,+ R0,7,+ T0,4,-\n7|9|0|S6,0,- L5,3,+ U6,5,- G3,7,+ W2,2,+ W3,4,+|R+ T+ L+ R+|R5,6,- T5,1,- L7,4,-\n7|7|0|S3,0,+ U4,1,+ T7,4,+ G7,5,+ P0,4,+ P2,2,+|U+ T+ J+ U+|U4,4,- T4,2,+ J5,4,-\n7|9|0|S1,0,+ R3,3,- T1,5,- G5,7,+ W8,5,+ P7,1,+|R+ U+ J+ U+|R2,2,+ U1,6,- J2,6,-\n7|9|0|S1,0,+ R4,3,+ T5,4,+ G7,7,+ P0,5,+ W2,7,+|U+ R+ R+ U+|U2,1,+ R6,6,+ R3,2,+\n7|8|0|S0,0,+ U2,2,+ U5,5,- G5,6,+ P3,5,+ P8,2,+|R+ R+ T+ L+|R3,3,- R1,1,+ T5,4,+\n7|9|0|S1,0,+ U2,2,+ U2,6,+ G1,7,+ W7,7,+ W4,3,+|U+ T+ U+ L+|U3,3,+ T1,4,- U1,6,-\n8|9|0|S6,0,- T3,3,- U3,4,- L2,6,- G0,7,+ P6,7,+ W7,3,+|U+ J+ R+ T+ U+|U4,4,- J4,5,+ R5,2,-\n8|9|0|S2,0,+ U4,4,+ U5,4,+ T5,6,+ G5,7,+ P7,5,+ P1,6,+|R+ U+ T+ J+ U+|R4,5,+ U3,3,- T3,1,+\n8|9|0|S6,0,+ U7,2,+ L6,3,- T6,5,+ G7,8,+ W8,7,+ P3,3,+|L+ U+ T+ U+ J+|L4,4,+ U6,7,- T6,1,+\n8|9|0|S5,0,+ T5,1,+ U1,5,+ U2,6,+ G1,7,+ W5,7,+ P3,3,+|J+ U+ U+ J+ U+|J5,4,- U6,3,+ U0,5,-\n8|9|0|S7,0,- L5,2,- U4,3,- U1,6,+ G0,7,+ P6,5,+ P6,4,+|L+ U+ U+ U+ U+|L2,4,- U0,5,- U6,1,-\n8|9|0|S6,0,- R5,1,- U1,3,- R4,6,- G7,8,+ W8,3,+ P1,1,+|J+ L+ R+ J+ R+|J3,7,+ L3,2,- R2,4,+\n8|9|0|S5,0,- U4,2,- R2,5,- R1,6,- G1,8,+ P7,6,+ P7,4,+|L+ U+ R+ L+ L+|L3,3,- U1,4,- R0,7,+\n8|9|0|S6,0,- U5,1,- R5,3,+ T4,7,- G4,8,+ P2,7,+ W4,4,+|R+ T+ U+ J+ R+|R6,5,- T5,4,+ U4,2,-\n8|9|0|S2,1,+ L2,2,- L0,3,+ T2,4,+ G6,8,+ P5,2,+ P5,1,+|R+ U+ L+ U+ R+|R3,6,+ U2,5,- L3,7,+\n8|8|0|S2,0,+ L5,3,- J7,4,- U3,5,- G2,6,+ P8,6,+ P0,4,+|R+ U+ R+ J+ U+|R4,2,+ U2,5,- R3,1,+\n8|9|0|S3,0,+ L4,2,+ U4,5,- U2,6,- G7,8,+ W2,1,+ P8,6,+|J+ R+ R+ T+ J+|J3,7,+ R5,4,- R6,3,-\n8|9|0|S3,1,+ J4,3,- L4,6,- L3,7,+ G0,7,+ P5,7,+ W1,2,+|J+ R+ T+ L+ U+|J8,6,- R7,4,+ T7,5,+\n8|9|0|S6,0,- R5,2,- T3,3,- U3,4,- G0,7,+ P0,1,+ P8,1,+|R+ U+ J+ R+ R+|R2,6,- U4,5,+ J3,6,+\n8|9|0|S1,0,+ U6,3,- J5,4,+ U2,5,- G4,6,+ P4,7,+ P0,2,+|L+ J+ L+ T+ U+|L7,2,- J2,1,+ L2,6,-\n8|9|0|S1,0,+ U2,2,+ U1,3,- T6,5,+ G6,7,+ P1,6,+ P5,6,+|U+ J+ J+ U+ U+|U2,4,+ J1,4,+ J3,3,-\n8|9|0|S3,1,+ U4,2,+ L4,4,+ L6,5,- G2,8,+ W0,5,+ P8,2,+|R+ U+ U+ R+ R+|R5,3,- U5,6,- U4,7,-\n';
   //endregion
   //region block: exports
   function $jsExportAll$(_) {
     var $hu = _.hu || (_.hu = {});
     var $hu$feri = $hu.feri || ($hu.feri = {});
     var $hu$feri$cleveradventure = $hu$feri.cleveradventure || ($hu$feri.cleveradventure = {});
-    $hu$feri$cleveradventure.webRound = webRound;
-    $hu$feri$cleveradventure.webT = webT;
     $hu$feri$cleveradventure.webData = webData;
+    $hu$feri$cleveradventure.webPics = webPics;
+    $hu$feri$cleveradventure.webPickSticker = webPickSticker;
+    $hu$feri$cleveradventure.webT = webT;
+    $hu$feri$cleveradventure.webRound = webRound;
+    $hu$feri$cleveradventure.webMarbleDefs = webMarbleDefs;
+    $hu$feri$cleveradventure.webMarbleConst = webMarbleConst;
+    $hu$feri$cleveradventure.webMarbleNew = webMarbleNew;
+    $hu$feri$cleveradventure.webMarbleStep = webMarbleStep;
+    $hu$feri$cleveradventure.webMarbleFree = webMarbleFree;
+    $hu$feri$cleveradventure.webMarbleStart = webMarbleStart;
+    $hu$feri$cleveradventure.webMarbleSolves = webMarbleSolves;
+    $hu$feri$cleveradventure.webMarbleCount = webMarbleCount;
+    $hu$feri$cleveradventure.webMarbleCheck = webMarbleCheck;
   }
   $jsExportAll$(_);
   //endregion

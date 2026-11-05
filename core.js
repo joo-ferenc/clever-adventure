@@ -1,6 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
+const APP_VERSION = '1.2.1';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
@@ -80,10 +81,10 @@ const Store = {
   stickersOf(id) { return LS.get(this.k('stickers', id), []); },
   get stickers() { return this.stickersOf(); },
   awardStickerTo(id) {
+    // The same rule as in the app: the mascot after 50 stickers, the golden cup as the very last one.
     const have = this.stickersOf(id);
-    const free = data().stickers.filter(s => !have.includes(s));
-    if (!free.length) return null;
-    const s = pick(free);
+    const s = API.webPickSticker(have);
+    if (!s) return null;
     LS.set(this.k('stickers', id), [...have, s]);
     return s;
   },
@@ -92,8 +93,16 @@ const Store = {
     LS.del(this.k('stickers', id));
     if (everything) {
       LS.del(this.k('stars', id));
-      LS.keys().filter(k => k.startsWith(`p${id}_solved_`) || k.startsWith(`p${id}_level_`)).forEach(k => LS.del(k));
+      LS.keys().filter(k => k.startsWith(`p${id}_solved_`) || k.startsWith(`p${id}_level_`) || k.startsWith(`p${id}_answered_`)).forEach(k => LS.del(k));
     }
+  },
+  // Questions answered without a mistake, per game and difficulty: they don't come again on the next levels.
+  answeredKeys(g, band) { return LS.get(this.k(`answered_${g}_${band}`), []); },
+  addAnswered(g, band, key) {
+    const now = this.answeredKeys(g, band);
+    if (now.includes(key)) return;
+    // When (almost) everything was asked, start over, so there are always new questions.
+    LS.set(this.k(`answered_${g}_${band}`), now.length >= 400 ? [key] : [...now, key]);
   },
   solved(g) { return LS.get(this.k('solved_' + g), 0); },
   addSolved(g) { LS.set(this.k('solved_' + g), this.solved(g) + 1); },
@@ -131,6 +140,83 @@ function game(id) { return data().games.find(g => g.id === id); }
 function levelLabel(n) { return data().levelLabel.replace('0', String(n)); }
 const praise = () => pick(data().texts.praise);
 const tryAgain = () => pick(data().texts.tryAgain);
+
+// ---------------------------------------------------------------- pictures
+// The app's own pictures instead of emojis (kepek/*.webp). An emoji without a picture simply stays an emoji.
+// Every text put on the screen is checked: emojis that have a picture are replaced by it.
+const PICS = (() => {
+  const all = JSON.parse(API.webPics());
+  const m = {};
+  // Only real emojis (the mascot's id "kabala" is a word, it is drawn by stickerEl).
+  for (const [e, name] of Object.entries(all)) if (PIC_FILES.has(name) && !/^[\x00-\x7f]+$/.test(e)) m[e.replace(/\uFE0F/g, '')] = name;
+  return m;
+})();
+const PIC_RE = (() => {
+  const keys = Object.keys(PICS).sort((a, b) => b.length - a.length);
+  const esc = k => [...k].map(ch => ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\uFE0F?') + '\uFE0F?';
+  return keys.length ? new RegExp(keys.map(esc).join('|'), 'gu') : null;
+})();
+function picSrc(name) { return 'kepek/' + name + '.webp'; }
+function picImg(name, cls) {
+  return h('img', { class: 'pic' + (cls ? ' ' + cls : ''), src: picSrc(name), alt: '', draggable: 'false' });
+}
+/** The picture name of an emoji, or null. */
+function picOf(e) { return PICS[String(e).replace(/\uFE0F/g, '')] || null; }
+const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'OPTION', 'CANVAS', 'TITLE']);
+function picify(root) {
+  if (!PIC_RE || !root) return;
+  if (root.nodeType === 3) { picText(root); return; }
+  if (root.nodeType !== 1 || skipEl(root)) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => (skipEl(n.parentElement) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT)
+  });
+  const list = []; while (walker.nextNode()) list.push(walker.currentNode);
+  list.forEach(picText);
+}
+function skipEl(el) {
+  for (let e = el; e && e !== document.body; e = e.parentElement) {
+    if (SKIP_TAGS.has(e.tagName) || e.namespaceURI === 'http://www.w3.org/2000/svg' || (e.classList && e.classList.contains('nopic'))) return true;
+  }
+  return false;
+}
+function picText(node) {
+  const text = node.nodeValue;
+  if (!text || !node.parentNode || skipEl(node.parentElement)) return;
+  PIC_RE.lastIndex = 0;
+  if (!PIC_RE.test(text)) return;
+  PIC_RE.lastIndex = 0;
+  const frag = document.createDocumentFragment();
+  let last = 0, m;
+  while ((m = PIC_RE.exec(text))) {
+    if (m.index > last) frag.append(text.slice(last, m.index));
+    const img = picImg(PICS[m[0].replace(/\uFE0F/g, '')]);
+    const em = m[0];
+    img.onerror = () => img.replaceWith(em);
+    frag.append(img);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) frag.append(text.slice(last));
+  node.replaceWith(frag);
+}
+function startPictures() {
+  const app = document.getElementById('app');
+  picify(app);
+  new MutationObserver(muts => {
+    for (const mu of muts) {
+      if (mu.type === 'characterData') picify(mu.target);
+      else mu.addedNodes.forEach(n => picify(n));
+    }
+  }).observe(app, { childList: true, subtree: true, characterData: true });
+}
+/** A sticker as an element: an emoji, or a picture for the mascot. */
+function stickerEl(s, size, faded) {
+  const st = { fontSize: size + 'px', lineHeight: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' };
+  if (s === 'kabala') {
+    const img = picImg('kabala'); img.style.height = img.style.width = size * 1.15 + 'px';
+    return h('span', { class: faded ? 'shadow' : '', style: Object.assign(st, faded ? { opacity: .2 } : {}) }, img);
+  }
+  return h('span', { class: faded ? 'shadow' : '', style: Object.assign(st, faded ? { opacity: .2 } : {}) }, s);
+}
 
 // ---------------------------------------------------------------- speech
 const Speech = {
@@ -183,10 +269,19 @@ function go(name, render, opts = {}) {
   current.scope.end();
   Speech.stop();
   const scope = new Scope();
-  current = { name, scope, counts: !!opts.counts, exempt: !!opts.exempt };
+  current = { name, scope, counts: !!opts.counts, exempt: !!opts.exempt, render, opts };
   const root = app(); root.innerHTML = '';
   render(root, scope);
 }
+
+// Turning the phone: screens without a running game are simply drawn again in the new shape.
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (['home', 'album'].includes(current.name)) go(current.name, current.render, current.opts);
+  }, 250);
+});
 
 // ---------------------------------------------------------------- shared widgets
 function roundBtn(e, onclick, extra) { return h('button', { class: 'roundbtn' + (extra ? ' ' + extra : ''), onclick }, e); }

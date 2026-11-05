@@ -225,7 +225,7 @@ function playBoard(players) {
         h('div', { style: { fontSize: '46px' } }, ['🎉', '🏆', '🎉'].map((e, i) => h('span', { class: 'bounce', style: { animationDelay: (i % 2) * .45 + 's' } }, e))),
         h('div', { style: { fontSize: '86px' } }, r.p.avatar), h('div', { class: 'title' }, finishedFor(r)), starsRow(5, 36),
         sticker ? h('div', { style: { fontWeight: 800, fontSize: '20px' } }, data().texts.newSticker) : null,
-        sticker ? h('div', { class: 'pop', style: { fontSize: '86px' } }, sticker) : null,
+        sticker ? h('div', { class: 'pop' }, stickerEl(sticker, 86)) : null,
         bigBtn('🎲  ' + T('Új játék', 'Neues Spiel', 'New game'), '#43A047', () => playBoard(players), { width: '100%' }),
         bigBtn('🏠', '#42A5F5', enterApp, { width: '100%' })));
     };
