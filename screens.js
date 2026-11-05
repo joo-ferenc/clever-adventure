@@ -6,8 +6,8 @@ let welcomedFor = -1;
 function showSplash() {
   go('splash', root => {
     root.append(h('div', { class: 'screen center', style: { flexDirection: 'column', gap: '18px' } },
-      h('div', { style: { fontSize: '110px' } }, '🦉'),
-      h('div', { class: 'title', style: { fontSize: '36px' } }, 'Clever Adventure'),
+      mascotEl(140),
+      appTitle(36),
       h('div', { class: 'row', style: { justifyContent: 'center' } }, UI_LANGS.map(l => h('button', {
         class: 'pill' + (l === L() ? ' on' : ''), onclick: () => { Store.lang = l; showSplash(); }
       }, data().langs[l].flag + ' ' + data().langs[l].name))),
@@ -46,7 +46,7 @@ function showWelcome() {
     };
     draw();
     root.append(h('div', { class: 'screen scroll' },
-      h('div', { class: 'col' }, h('div', { style: { fontSize: '56px' } }, '🦉'), h('div', { class: 'title' }, 'Clever Adventure')),
+      h('div', { class: 'col' }, mascotEl(80), appTitle()),
       h('div', { class: 'row', style: { justifyContent: 'center', flexWrap: 'wrap' } }, UI_LANGS.map(l => h('button', {
         class: 'pill' + (l === L() ? ' on' : ''), onclick: () => { Store.lang = l; showWelcome(); }
       }, data().langs[l].flag + ' ' + data().langs[l].name))),
@@ -69,8 +69,7 @@ function showHome() {
     const tile = g => g.pic && PIC_FILES.has(g.pic)
       ? h('div', { class: 'tile pictile press', onclick: () => startGame(g.id) }, h('img', { class: 'gamepic', src: picSrc(g.pic), alt: g.title, draggable: 'false' }), h('div', { class: 't' }, g.title))
       : h('div', { class: 'tile', style: { background: g.color }, onclick: () => startGame(g.id) }, h('div', { class: 'e' }, g.emoji), h('div', { class: 't' }, g.title));
-    const title = h('div', { class: 'title nopic', style: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' } },
-      PIC_FILES.has('kabala') ? h('img', { src: picSrc('kabala'), alt: '', style: { height: '44px' } }) : '🦉', 'Clever Adventure');
+    const title = h('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' } }, mascotEl(44), appTitle());
     root.append(h('div', { class: 'screen' },
       h('div', { class: 'row' },
         roundBtn(p.avatar, () => parentGate(showPlayers)),

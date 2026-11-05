@@ -1,7 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.2.2';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
@@ -216,6 +216,17 @@ function stickerEl(s, size, faded) {
     return h('span', { class: faded ? 'shadow' : '', style: Object.assign(st, faded ? { opacity: .2 } : {}) }, img);
   }
   return h('span', { class: faded ? 'shadow' : '', style: Object.assign(st, faded ? { opacity: .2 } : {}) }, s);
+}
+
+/** The app's name: "Clever" in orange, "Adventure" in purple. */
+function appTitle(size) {
+  return h('div', { class: 'title nopic', style: size ? { fontSize: size + 'px' } : null },
+    h('span', { style: { color: '#FF8A1F' } }, 'Clever'), ' ', h('span', { style: { color: '#7E57C2' } }, 'Adventure'));
+}
+/** The mascot (the star explorer), or a star while its picture is missing. */
+function mascotEl(px) {
+  return PIC_FILES.has('kabala') ? h('img', { src: picSrc('kabala'), alt: '', draggable: 'false', style: { height: px + 'px', width: px + 'px', objectFit: 'contain' } })
+    : h('div', { style: { fontSize: px * 0.8 + 'px' } }, '⭐');
 }
 
 // ---------------------------------------------------------------- speech
