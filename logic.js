@@ -24845,7 +24845,7 @@ var logic = function (_) {
         tmp = 'tolcser';
         break;
       case 1:
-        tmp = 'fagyikehely';
+        tmp = 'kehely';
         break;
       default:
         noWhenBranchMatchedException();

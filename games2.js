@@ -334,7 +334,14 @@ function iceSvg(ice, w, hh) {
   const base = ice.holder === 'CONE' ? hh * 0.56 : ice.holder === 'CUP' ? hh * 0.62 : hh * 0.85;
   const sy = i => base - r * 0.55 - i * r * 1.3;
   let s = `<svg width="${w}" height="${hh}" viewBox="0 0 ${w} ${hh}" xmlns="http://www.w3.org/2000/svg">`;
-  if (ice.holder === 'CONE') {
+  // The app's own pictures of the empty cone and cup (tightly cropped), drawn like in the app.
+  if (ice.holder === 'CONE' && PIC_FILES.has('tolcser_alap')) {
+    const dw = r * 2.3, dh = dw * 320 / 212;
+    s += `<image href="${picSrc('tolcser_alap')}" x="${cx - dw / 2}" y="${base - dh * 0.145}" width="${dw}" height="${dh}"/>`;
+  } else if (ice.holder === 'CUP' && PIC_FILES.has('kehely')) {
+    const dw = r * 3.2, dh = dw * 268 / 320;
+    s += `<image href="${picSrc('kehely')}" x="${cx - dw / 2}" y="${base - dh * 0.115}" width="${dw}" height="${dh}"/>`;
+  } else if (ice.holder === 'CONE') {
     const tip = hh * 0.98;
     s += `<path d="M${cx - r * 1.05} ${base} L${cx + r * 1.05} ${base} L${cx} ${tip} Z" fill="#E0A85C" stroke="#B9813A" stroke-width="3"/>`;
     for (let k = 1; k <= 3; k++) {
