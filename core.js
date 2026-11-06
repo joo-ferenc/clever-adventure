@@ -1,7 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
-const APP_VERSION = '1.3.1';
+const APP_VERSION = '1.3.2';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
@@ -290,7 +290,7 @@ function levelBadge(text) { return h('span', { class: 'lvl' }, text); }
 function mascotBubble(prompt, onclick) {
   const spk = h('span', { class: 'spk' }, picOrEmoji('beszed', '🔊', 28));
   const el = h('div', { class: 'mbubble' }, picOrEmoji('kabala', '⭐', 68),
-    h('button', { class: 'bubble', onclick }, h('span', { class: 'btxt' }, prompt), spk));
+    h('button', { class: 'bubble', onclick }, h('span', { class: 'btxt' + (String(prompt).length > 110 ? ' long' : String(prompt).length > 60 ? ' mid' : '') }, prompt), spk));
   el.calm = () => spk.classList.add('still');
   return el;
 }
