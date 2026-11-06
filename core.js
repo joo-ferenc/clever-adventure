@@ -1,7 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
-const APP_VERSION = '1.3.4';
+const APP_VERSION = '1.3.5';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
