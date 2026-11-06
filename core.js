@@ -1,7 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
-const APP_VERSION = '1.2.3';
+const APP_VERSION = '1.3.1';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
@@ -227,6 +227,88 @@ function appTitle(size) {
 function mascotEl(px) {
   return PIC_FILES.has('kabala') ? h('img', { src: picSrc('kabala'), alt: '', draggable: 'false', style: { height: px + 'px', width: px + 'px', objectFit: 'contain' } })
     : h('div', { style: { fontSize: px * 0.8 + 'px' } }, '⭐');
+}
+
+// ---------------------------------------------------------------- the new look (1.3)
+// Three worlds of seven games each, so every row is the same length (the same as in the app).
+const WORLDS = [
+  { title: ['Tanulás', 'Lernen', 'Learning'], color: '#E8660A', soft: '#FFF1E3', games: ['COUNT', 'LETTERS', 'TRACE', 'SHAPES', 'ORDER', 'WORDS', 'FEELINGS'] },
+  { title: ['Gondolkodás', 'Denken', 'Thinking'], color: '#7E57C2', soft: '#F1ECFA', games: ['LOGIC', 'MEMORY', 'MISSING', 'DIFF', 'PUZZLE', 'MAZE', 'STORY'] },
+  { title: ['Kaland és alkotás', 'Abenteuer und Kreativität', 'Adventure and creativity'], color: '#00897B', soft: '#E3F5F2', games: ['ROBOT', 'MARBLE', 'ICECREAM', 'WASTE', 'WORLD', 'BOARD', 'COLORING'] },
+];
+/** A picture by name, or the emoji while the picture is missing. */
+function picOrEmoji(name, emoji, px) {
+  if (PIC_FILES.has(name)) { const i = picImg(name); i.style.width = i.style.height = px + 'px'; i.style.verticalAlign = 'middle'; return h('span', { class: 'nopic', style: { display: 'inline-flex' } }, i); }
+  return h('span', { style: { fontSize: px * 0.8 + 'px', lineHeight: 1 } }, emoji);
+}
+/** A round white button with a picture. */
+function picButton(name, emoji, onclick, size = 52, dim = false, label = '') {
+  return h('button', { class: 'picbtn', 'aria-label': label, style: { width: size + 'px', height: size + 'px', opacity: dim ? .55 : 1 }, onclick }, picOrEmoji(name, emoji, Math.round(size * 0.62)));
+}
+/** The child's capsule: figure and stars; a tap changes the player. */
+function playerPill(onclick) {
+  return h('button', { class: 'pill2', onclick }, h('span', { class: 'pillav' }, Store.current.avatar), picOrEmoji('csillag', '⭐', 22), h('b', null, String(Store.stars)));
+}
+function calmChip(onclick) {
+  return h('button', { class: 'calmchip', onclick }, picOrEmoji('lufi', '🎈', 26), T('Nyugi-lufi', 'Ruhe-Ballon', 'Calm balloon'));
+}
+/** Slim play-time bar with "x more minutes" (updates every second). */
+function slimTimeBar() {
+  const fill = h('div', { class: 'fill' }), txt = h('span', { class: 'tlabel' });
+  const el = h('div', { class: 'slimtime live-time' }, h('div', { class: 'track' }, fill), txt);
+  el.update = () => {
+    const total = Store.limitMinutes * 60, rem = Store.remaining(), f = total > 0 ? clamp(rem / total, 0, 1) : 0;
+    fill.style.width = f * 100 + '%'; fill.style.background = f > .5 ? '#43A047' : f > .2 ? '#FFB300' : '#E53935';
+    const m = Math.ceil(rem / 60); txt.textContent = T(`még ${m} perc`, `noch ${m} Min.`, `${m} min left`);
+  };
+  el.update(); return el;
+}
+/** The thin time line at the very top of a game; orange and pulsing in the last minute. */
+function topTimeLine() {
+  const fill = h('div', { class: 'fill' });
+  const el = h('div', { class: 'topline live-time' }, fill);
+  el.update = () => {
+    const total = Store.limitMinutes * 60, rem = Store.remaining(), f = total > 0 ? clamp(rem / total, 0, 1) : 0;
+    fill.style.width = f * 100 + '%';
+    el.classList.toggle('last', rem > 0 && rem <= 60);
+  };
+  el.update(); return el;
+}
+/** Progress of a set: stars for the solved tasks, the mascot at the current one, empty dots after it. */
+function pathProgress(stars, compact) {
+  const el = h('div', { class: 'path' + (compact ? ' compact' : ''), role: 'img', 'aria-label': `${stars}/5` });
+  for (let i = 0; i < 5; i++) {
+    if (i < stars) el.append(picOrEmoji('csillag', '⭐', compact ? 22 : 26));
+    else if (i === stars) el.append(picOrEmoji('kabala', '⭐', compact ? 30 : 34));
+    else el.append(h('span', { class: 'dot' }));
+    if (i < 4) el.append(h('span', { class: 'link' + (i < stars ? ' on' : '') }));
+  }
+  return el;
+}
+function levelBadge(text) { return h('span', { class: 'lvl' }, text); }
+/** The mascot says the task: a tap on the bubble reads it again; the speaker pulses until it is solved. */
+function mascotBubble(prompt, onclick) {
+  const spk = h('span', { class: 'spk' }, picOrEmoji('beszed', '🔊', 28));
+  const el = h('div', { class: 'mbubble' }, picOrEmoji('kabala', '⭐', 68),
+    h('button', { class: 'bubble', onclick }, h('span', { class: 'btxt' }, prompt), spk));
+  el.calm = () => spk.classList.add('still');
+  return el;
+}
+/** One game tile: its own picture (or a coloured tile with the emoji) and the name below. */
+function gameTile(g, size) {
+  const pic = g.pic && PIC_FILES.has(g.pic)
+    ? h('img', { class: 'gpic', src: picSrc(g.pic), alt: '', draggable: 'false', style: { width: size + 'px', height: size + 'px' } })
+    : h('div', { class: 'gpic center', style: { width: size + 'px', height: size + 'px', background: g.color, fontSize: size * .45 + 'px' } }, g.emoji);
+  return h('button', { class: 'gtile', style: { width: size + 'px' }, onclick: () => startGame(g.id) }, pic, h('span', { class: 'gname' }, g.title));
+}
+/** A world: coloured card with its name and its games in a row that scrolls sideways. */
+function worldSection(w, size) {
+  return h('section', { class: 'world', style: { background: w.soft } },
+    h('div', { class: 'wtitle' }, h('span', { class: 'wdot', style: { background: w.color } }), h('h2', { style: { color: w.color } }, w.title[L()])),
+    h('div', { class: 'wrow' }, w.games.map(id => game(id)).filter(Boolean).map(g => gameTile(g, size))));
+}
+function exitButton(onclick) {
+  return h('button', { class: 'exitbtn', onclick }, picOrEmoji('kilepes', '🚪', 30), T('Kilépés', 'Beenden', 'Exit'));
 }
 
 // ---------------------------------------------------------------- speech

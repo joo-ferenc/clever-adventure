@@ -63,25 +63,35 @@ function showHome() {
       welcomedFor = p.id;
       scope.later(300, () => Speech.say(p.name ? TF('Szia, {0}! Mit játsszunk?', 'Hallo {0}! Was spielen wir?', 'Hi {0}! What shall we play?', p.name) : data().texts.welcome));
     }
-    // Own icons: 3 per row on a phone, 4–5 on a tablet, sideways as many as fit (about 150 px each).
-    const w = Math.min(innerWidth, 900), wide = innerWidth > innerHeight * 1.15;
-    const perRow = wide ? clamp(Math.floor(w / 150), 5, 8) : w >= 840 ? 5 : w >= 600 ? 4 : 3;
-    const tile = g => g.pic && PIC_FILES.has(g.pic)
-      ? h('div', { class: 'tile pictile press', onclick: () => startGame(g.id) }, h('img', { class: 'gamepic', src: picSrc(g.pic), alt: g.title, draggable: 'false' }), h('div', { class: 't' }, g.title))
-      : h('div', { class: 'tile', style: { background: g.color }, onclick: () => startGame(g.id) }, h('div', { class: 'e' }, g.emoji), h('div', { class: 't' }, g.title));
-    const title = h('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' } }, mascotEl(44), appTitle());
-    root.append(h('div', { class: 'screen' },
-      h('div', { class: 'row' },
-        roundBtn(p.avatar, () => parentGate(showPlayers)),
-        h('span', { style: { fontSize: '22px', fontWeight: 800 } }, '⭐ ' + Store.stars),
-        roundBtn('📒', showAlbum),
-        wide ? h('div', { class: 'spacer center' }, title) : h('div', { class: 'spacer' }),
-        h('span', { style: { fontSize: '22px', opacity: .5, padding: '8px', cursor: 'pointer' }, onclick: () => parentGate(showParent) }, '⚙️')),
-      wide ? null : title,
-      wide ? h('div', { class: 'row' }, h('div', { style: { flex: 1 } }, timeBar()), h('div', { style: { width: '280px' } }, calmButton(showCalm))) : timeBar(),
-      wide ? null : calmButton(showCalm),
-      h('div', { class: 'grow scroll' },
-        h('div', { class: 'tilegrid', style: { gridTemplateColumns: `repeat(${perRow}, 1fr)` } }, data().games.map(tile)))));
+    // The new look: a calm header, a greeting card and three worlds of seven games.
+    const wide = innerWidth > innerHeight * 1.15;
+    const greet = p.name ? TF('Szia, {0}! Mit játsszunk?', 'Hallo {0}! Was spielen wir?', 'Hi {0}! What shall we play?', p.name) : data().texts.welcome;
+    const askExit = () => dialog(root, T('Kilépsz a játékból?', 'Spiel beenden?', 'Leave the game?'), null, [
+      [T('Maradok', 'Bleiben', 'Stay'), null, '#43A047'],
+      [T('Kilépés', 'Beenden', 'Exit'), () => { Speech.stop(); showSplash(); }, '#E53935']]);
+    const topBar = size => h('div', { class: 'row' },
+      playerPill(() => parentGate(showPlayers)),
+      picButton('album', '📒', showAlbum, size, false, data().texts.album),
+      h('div', { class: 'spacer' }),
+      picButton('beallitasok', '⚙️', () => parentGate(showParent), 40, true, T('Szülők', 'Eltern', 'Parents')));
+    const hero = col => h('div', { class: 'hero' + (col ? ' col' : '') },
+      mascotEl(col ? 96 : 64),
+      h('div', { class: 'col', style: { flex: 1, gap: '4px', alignItems: col ? 'center' : 'flex-start', minWidth: 0, width: col ? '100%' : 'auto' } },
+        appTitle(22), h('div', { class: 'hi', onclick: () => Speech.say(greet) }, greet), slimTimeBar()));
+    const tileSize = wide ? 76 : innerWidth >= 600 ? 96 : 84;
+    const worlds = () => WORLDS.map(w => worldSection(w, tileSize));
+    if (wide) {
+      root.append(h('div', { class: 'screen', style: { flexDirection: 'row', gap: '14px', maxWidth: '1100px' } },
+        h('div', { class: 'col', style: { width: '260px', flex: 'none', gap: '12px', alignItems: 'stretch' } },
+          topBar(46), hero(true), h('div', null, calmChip(showCalm))),
+        h('div', { class: 'grow scroll col', style: { gap: '12px', alignItems: 'stretch' } }, worlds(), exitButton(askExit), h('div', { style: { height: '6px', flex: 'none' } }))));
+    } else {
+      root.append(h('div', { class: 'screen' },
+        h('div', { class: 'grow scroll col', style: { gap: '12px', alignItems: 'stretch' } },
+          topBar(52), hero(false),
+          h('div', { style: { display: 'flex', justifyContent: 'flex-end' } }, calmChip(showCalm)),
+          worlds(), h('div', { style: { height: '4px', flex: 'none' } }), exitButton(askExit), h('div', { style: { height: '8px', flex: 'none' } }))));
+    }
   }, { counts: true });
 }
 

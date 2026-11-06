@@ -106,31 +106,31 @@ function runGame(id, band, foreign) {
           else { answered.add(thisRound.key); Store.addAnswered(id, bandKey, thisRound.key); }
           if (idle) clearTimeout(idle);
           Speech.sayParts([...(spoken ? [[spoken, l]] : []), [praise(), lang]]);
-          starsEl.replaceWith(starsEl = starsRow(stars));
-          listen.classList.add('calm');
+          const np = pathProgress(stars, starsEl.classList.contains('compact')); starsEl.replaceWith(np); starsEl = np;
+          bubble.calm();
           rs.later(r.doneDelay, () => { if (stars >= 5) celebrate(); else { roundNo++; nextRound(); } });
           return true;
         },
       };
-      let starsEl = starsRow(stars);
-      const listen = h('div', { class: 'listen', onclick: () => ctx.repeatPrompt() }, '🔊👂');
+      const wide = innerWidth > innerHeight * 1.15;
+      let starsEl = pathProgress(stars, wide);
+      const bubble = mascotBubble(r.prompt, () => ctx.repeatPrompt());
       const area = h('div', { class: 'grow' });
       screen.innerHTML = '';
-      if (innerWidth > innerHeight * 1.15) {
-        // Sideways: the task text on the left, the game gets the full height on the right.
-        const left = h('div', { class: 'col', style: { width: '27%', flex: 'none', gap: '10px', justifyContent: 'flex-start', paddingTop: '4px' } },
-          h('div', { class: 'row', style: { width: '100%' } }, roundBtn('🏠', showHome), h('div', { class: 'level', style: { flex: 1, textAlign: 'right' } }, levelLabel(level + 1))),
-          starsEl, timeBar(), listen, h('div', { class: 'prompt' }, r.prompt));
-        left.querySelector('.timebar').style.width = '100%';
-        screen.append(h('div', { style: { display: 'flex', gap: '12px', flex: 1, minHeight: 0 } }, left, area));
+      const home = picButton('haz', '🏠', showHome, wide ? 48 : 52, false, T('Haza', 'Startseite', 'Home'));
+      if (wide) {
+        // Sideways: the task on the left, the game gets the full height on the right.
+        const left = h('div', { class: 'col', style: { width: '27%', minWidth: '220px', flex: 'none', gap: '12px', justifyContent: 'flex-start', alignItems: 'stretch', paddingTop: '4px' } },
+          h('div', { class: 'row', style: { width: '100%' } }, home, h('div', { class: 'spacer' }), levelBadge(levelLabel(level + 1))),
+          h('div', { style: { display: 'flex', justifyContent: 'center' } }, starsEl), bubble);
+        bubble.style.flexDirection = 'column'; bubble.style.alignItems = 'center';
+        screen.append(topTimeLine(), h('div', { style: { display: 'flex', gap: '12px', flex: 1, minHeight: 0 } }, left, area));
         area.style.flex = '1'; area.style.minWidth = '0';
       } else {
-        screen.append(
-          h('div', { class: 'row' }, roundBtn('🏠', showHome), h('div', { class: 'spacer center' }, starsEl), h('div', { class: 'level' }, levelLabel(level + 1))),
-          timeBar(), listen, h('div', { class: 'prompt' }, r.prompt), area);
+        screen.append(topTimeLine(),
+          h('div', { class: 'row' }, home, h('div', { class: 'spacer center' }, starsEl), levelBadge(levelLabel(level + 1))),
+          bubble, area);
       }
-      // Some games use the whole height: the starsEl reference must stay in the header.
-      starsEl = screen.querySelector('.stars');
       if (r.autoSpeak) rs.later(300, speakPrompt);
       armIdle();
       requestAnimationFrame(() => { if (!rs.dead) (GAME_UIS[r.type] || (() => area.append('?')))(r, ctx, area, rs); });
