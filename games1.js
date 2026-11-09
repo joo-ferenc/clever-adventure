@@ -59,6 +59,15 @@ GAME_UIS.quiz = (r, ctx, area) => {
   ch.style.margin = '0 auto'; ch.style.width = '100%';
   area.style.display = 'flex'; area.style.flexDirection = 'column';
   area.append(top, ch);
+  // Every picture the same size: if the group is wider than its place, all of them get smaller together.
+  requestAnimationFrame(() => {
+    top.querySelectorAll('.emgrid').forEach(g => {
+      let fs = parseFloat(g.style.fontSize) || 40;
+      const room = () => top.clientWidth * 0.94;
+      const width = () => [...top.children].reduce((w, c) => Math.max(w, c.scrollWidth), 0);
+      for (let i = 0; i < 20 && width() > room() && fs > 16; i++) { fs *= 0.9; top.querySelectorAll('.emgrid').forEach(x => x.style.fontSize = fs + 'px'); }
+    });
+  });
 };
 
 // ---------------------------------------------------------------- memory

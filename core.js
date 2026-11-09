@@ -1,7 +1,7 @@
 'use strict';
 // Clever Adventure – web version. Task generators and texts come from the Android app's Kotlin code (logic.js).
 const API = logic.hu.feri.cleveradventure;
-const APP_VERSION = '1.3.8';
+const APP_VERSION = '1.4.0';
 
 // ---------------------------------------------------------------- helpers
 function h(tag, props, ...kids) {
@@ -368,13 +368,29 @@ function go(name, render, opts = {}) {
 }
 
 // Turning the phone: screens without a running game are simply drawn again in the new shape.
-let resizeTimer = null;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (['home', 'album'].includes(current.name)) go(current.name, current.render, current.opts);
-  }, 250);
-});
+// A running game draws its current task again, but only when the shape really changed
+// (not when the browser bar slides in or out).
+// Phones report the new size at different moments after turning (sometimes late, sometimes
+// in several steps), so the check runs after every size/orientation event and once more later,
+// and a game is redrawn whenever its drawn shape no longer matches the screen.
+let resizeTimer = null, lateTimer = null, redrawGame = null, gameWide = null, lastW = innerWidth, lastH = innerHeight;
+const isWide = () => innerWidth > innerHeight * 1.15;
+function checkShape() {
+  const sizeChanged = Math.abs(innerWidth - lastW) > 40 || Math.abs(innerHeight - lastH) > 160;
+  if (current.name === 'game') {
+    if (redrawGame && gameWide !== null && gameWide !== isWide()) redrawGame();
+  } else if (['home', 'album'].includes(current.name) && sizeChanged) go(current.name, current.render, current.opts);
+  if (sizeChanged || current.name === 'game') { lastW = innerWidth; lastH = innerHeight; }
+}
+function onShapeEvent() {
+  clearTimeout(resizeTimer); clearTimeout(lateTimer);
+  resizeTimer = setTimeout(checkShape, 250);
+  lateTimer = setTimeout(checkShape, 900);
+}
+window.addEventListener('resize', onShapeEvent);
+window.addEventListener('orientationchange', onShapeEvent);
+try { screen.orientation.addEventListener('change', onShapeEvent); } catch (e) { }
+try { visualViewport.addEventListener('resize', onShapeEvent); } catch (e) { }
 
 // ---------------------------------------------------------------- shared widgets
 function roundBtn(e, onclick, extra) { return h('button', { class: 'roundbtn' + (extra ? ' ' + extra : ''), onclick }, e); }

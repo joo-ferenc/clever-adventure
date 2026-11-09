@@ -112,7 +112,8 @@ function runGame(id, band, foreign) {
           return true;
         },
       };
-      const wide = innerWidth > innerHeight * 1.15;
+      const wide = isWide();
+      gameWide = wide;
       let starsEl = pathProgress(stars, wide);
       const bubble = mascotBubble(r.prompt, () => ctx.repeatPrompt());
       const area = h('div', { class: 'grow' });
@@ -124,6 +125,9 @@ function runGame(id, band, foreign) {
           h('div', { class: 'row', style: { width: '100%' } }, home, h('div', { class: 'spacer' }), levelBadge(levelLabel(level + 1))),
           h('div', { style: { display: 'flex', justifyContent: 'center' } }, starsEl), bubble);
         bubble.style.flexDirection = 'column'; bubble.style.alignItems = 'center';
+        // A phone held sideways is short: the big mascot goes, the task text stays readable.
+        if (innerHeight < 520) bubble.firstChild.style.display = 'none';
+        left.style.overflowY = 'auto'; left.style.paddingBottom = '8px';
         screen.append(topTimeLine(), h('div', { style: { display: 'flex', gap: '12px', flex: 1, minHeight: 0 } }, left, area));
         area.style.flex = '1'; area.style.minWidth = '0';
       } else {
@@ -131,6 +135,12 @@ function runGame(id, band, foreign) {
           h('div', { class: 'row' }, home, h('div', { class: 'spacer center' }, starsEl), levelBadge(levelLabel(level + 1))),
           bubble, area);
       }
+      // Turning the phone: the same task is drawn again in the new shape (core.js calls this).
+      redrawGame = () => {
+        if (solved) return;
+        asked.delete(thisRound.key); replayQueue.unshift(thisRound); nextRound();
+      };
+      rs.onEnd(() => { redrawGame = null; gameWide = null; });
       if (r.autoSpeak) rs.later(300, speakPrompt);
       armIdle();
       requestAnimationFrame(() => { if (!rs.dead) (GAME_UIS[r.type] || (() => area.append('?')))(r, ctx, area, rs); });
@@ -150,7 +160,7 @@ function runGame(id, band, foreign) {
         sticker ? h('div', { style: { fontSize: '21px', fontWeight: 800 } }, t.newSticker) : null,
         sticker ? h('div', { class: 'pop' }, stickerEl(sticker, 90)) : null,
         bigBtn('▶  ' + t.more, '#43A047', again, { width: '100%' }),
-        level < topLevel ? bigBtn('⬆️  ' + t.harder, '#FF7043', () => {
+        level < topLevel ? bigBtn('⏫  ' + t.harder, '#FF7043', () => {
           level = Math.min(level + 1, topLevel);
           if (band != null) Store.setBandLevel(id, band, level); else Store.setLevel(id, level);
           again();

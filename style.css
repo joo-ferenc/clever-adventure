@@ -143,3 +143,5 @@ body { font-family: "Baloo 2", -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 .exitbtn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; height: 56px; flex: none; border: 2px solid #CFD8DC; border-radius: 28px; background: #fff; color: #556870; font-size: 18px; font-weight: 800; cursor: pointer; font-family: inherit; }
 
 button, input, select, textarea { font-family: inherit; }
+
+.emgrid img.pic { min-width: 1.15em; }
