@@ -144,4 +144,5 @@ body { font-family: "Baloo 2", -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 
 button, input, select, textarea { font-family: inherit; }
 
-.emgrid img.pic { min-width: 1.15em; }
+.emgrid img.pic { min-width: 1.15em; flex: none; }
+.emgrid > span { display: flex; justify-content: center; }

@@ -19,7 +19,16 @@ function choicesEl(items, onTap) {
 function displayEl(d) {
   const wrap = h('div', { class: 'col' });
   const emGrid = (e, n, perRow, size, crossFrom) => {
-    const g = h('div', { class: 'emgrid', style: { gridTemplateColumns: `repeat(${Math.min(perRow, n)}, auto)`, fontSize: size + 'px' } });
+    // Fixed, equal columns: every picture is the same size. If the row is too wide for its place
+    // (e.g. sideways, next to the answer cards), the whole grid gets smaller together.
+    const cols = Math.min(perRow, n);
+    const g = h('div', { class: 'emgrid', style: { gridTemplateColumns: `repeat(${cols}, 1.3em)`, fontSize: size + 'px' } });
+    requestAnimationFrame(() => {
+      const box = g.closest('.display') || g.parentElement;
+      if (!box) return;
+      const room = box.clientWidth - 16;
+      if (room > 0 && g.scrollWidth > room) g.style.fontSize = Math.max(18, size * room / g.scrollWidth) + 'px';
+    });
     for (let i = 0; i < n; i++) {
       const gone = crossFrom != null && i >= crossFrom;
       g.append(h('span', { style: { position: 'relative', opacity: gone ? .35 : 1 } }, e,
